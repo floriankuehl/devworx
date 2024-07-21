@@ -3,6 +3,7 @@
 <strong>PHP Framework für schnelles Prototyping</strong>
 
 <p>Diese Struktur erleichtert es anderen Entwicklern, sich schnell in das Projekt einzuarbeiten und Prototypen effizient zu erstellen.</p>
+<p>Es werden keine 3rd Party PHP Libraries benutzt.</p>
 
 <h2>Architektur</h2>
 <h3>Kontext-basisierte MVC Lösung</h3>
@@ -10,6 +11,20 @@
 
 <h3>Credential Hashing</h3>
 <p>Der LoginHash besteht aus dem Login-Namen und dem Passwort. Weder Login-Name noch Passwort werden im Klartext in der Datenbank gespeichert. Der Abgleich des Hashs erfolgt direkt mit dem Wert in der Datenbank.</p>
+
+<h3>Datenbank</h3>
+<p>Datenbank-Einträge in Devworx haben ein Grundraster, welches ein einfaches Datenhandling ermöglicht.</p>
+<ul>
+  <li><b>uid</b> <span>PK int (Unique ID of the row)</span></li>
+  <li><b>cruser</b> <span>int (UserID of the creation user)</span></li>
+  <li><b>created</b> <span>timestamp (Creation timestamp)</span></li>
+  <li><b>updated</b> <span>timestamp (Timestamp of last update)</span></li>
+  <li><b>hidden</b> <span>tinyint (Hidden-Flag)</span></li>
+  <li><b>deleted</b> <span>tinyint (Deleted-Flag)</span></li>
+</ul>
+
+<h3>Repository</h3>
+<p>Die <code>Repository-Klasse</code> ermöglicht ein direktes Datenbankinterface mit Caching der Schemen. Die Systemfelder wie <code>hidden</code> und <code>deleted</code> werden automatisch hinzugefügt.</p>
 
 <h3>Daten-Behandlung</h3>
 <p>Die Ergebnisse der Datenbankabfragen werden grundsätzlich mit assoziativen Arrays dargestellt. Klassen wie die ArrayWalker ermöglichen das Anreichern von relationalen Daten wie MySQL-Ergebnisse um mehrdimensionale Ergebnisse und Zusatzdaten zu ermöglichen. Es können zusätzlich auch Models genutzt werden um die Ergebnisbehandlung zu modifizieren.</p>
