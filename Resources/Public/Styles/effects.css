@@ -1,0 +1,8 @@
+.mi-btn { overflow-x: hidden; }
+.mi-btn small { 
+  max-width: 0px;
+  overflow: hidden; 
+  transition: max-width .8s;
+}
+
+.mi-btn:hover small { max-width:200px; }
