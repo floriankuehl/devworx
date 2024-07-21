@@ -1,6 +1,6 @@
 Devworx
 
-PHP Framework für schnelles Prototyping
+<h1>PHP Framework für schnelles Prototyping</h1>
 
 Diese Struktur erleichtert es anderen Entwicklern, sich schnell in das Projekt einzuarbeiten und Prototypen effizient zu erstellen.
 
