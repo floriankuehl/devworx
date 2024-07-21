@@ -6,13 +6,28 @@
 
 <h2>Architektur</h2>
 <h3>Kontext-basisierte MVC Lösung</h3>
-<p>Die Lösung kann im Frontend- und API-Kontext über Controller und Actions angesteuert werden. Es können Models erzeugt werden um die Ergebnisbehandlung zu modifizieren.</p>
+<p>Die Lösung kann im Frontend- und API-Kontext über Controller und Actions angesteuert werden.</p>
+
+<h3>Credential Hashing</h3>
+<p>Der LoginHash besteht aus dem Login-Namen und dem Passwort. Weder Login-Name noch Passwort werden im Klartext in der Datenbank gespeichert. Der Abgleich des Hashs erfolgt direkt mit dem Wert in der Datenbank.</p>
 
 <h3>Daten-Behandlung</h3>
-<p>Klassen wie die ArrayWalker ermöglichen das Anreichern von relationalen Daten wie MySQL-Ergebnisse um mehrdimensionale Ergebnisse und Zusatzdaten zu ermöglichen.</p>
+<p>Die Ergebnisse der Datenbankabfragen werden grundsätzlich mit assoziativen Arrays dargestellt. Klassen wie die ArrayWalker ermöglichen das Anreichern von relationalen Daten wie MySQL-Ergebnisse um mehrdimensionale Ergebnisse und Zusatzdaten zu ermöglichen. Es können zusätzlich auch Models genutzt werden um die Ergebnisbehandlung zu modifizieren.</p>
+
+<h3>Templating</h3>
+<p>Die Lösung bedient sich dem Prinzip von Layout, Template und Partial. Das Layout gibt den äußeren Rahmen vor, der für alle Ergebnisse gleiche ist und rendert das entsprechende Template der angefragten Action. Partials sind kleine Codesnippets, die in Templates und Layouts, sowie in den Actions benutzt werden können um Ausgaben zu erzeugen.</p>
 
 <h3>Rendering</h3>
-<p>Das Rendering erfolgt über AbstractRenderer. Der FluidRenderer ermöglicht ein String-Templating mit Platzhaltern. Es stehen (noch) keine ViewHelper zur Verfügung.</p>
+<p>Das Rendering erfolgt über AbstractRenderer. Der FluidRenderer ermöglicht ein String-Templating mit Platzhaltern. Der JSON-Renderer ermöglicht direkte Ausgabe in JSON. Es stehen (noch) keine ViewHelper zur Verfügung.</p>
+
+<h3>Resourcen</h3>
+<p>Hier wird zwischen Private- und Public Resources unterschieden. Die Private Resources sind z.B. Layouts, Templates und Partials. Public sind alle Styles, Bilder, Icons und Scripts.</p>
+
+<h3>Styling</h3>
+<p>Hier ist Bootstrap 5.3 im Einsatz, sowie die Material Icons von Google.</p>
+
+<h3>Eigene HTML Elemente</h3>
+<p>Die Lösung enthält eigene HTML-Elemente um Listen und Formate zu behandeln. Diese werden per Modul importiert.</p>
 
 <h3>Caches</h3>
 <p>Die Lösung verfügt über automatisches File-Caching von MySQL-Datenbankschemen. Dies ermöglicht die Typen-Verwendung ohne Datenbankabfrage.</p>
@@ -34,7 +49,4 @@
 <p>Utility-Klassen wie DebugUtility und ErrorUtility erleichtern die Implementierung von Debugging- und Fehlerbehandlungslogik.</p>
 
 <h3>Sicherheitsfunktionen</h3>
-<p>Klassen wie AuthUtility, SessionUtility und TokenUtility bieten grundlegende Sicherheitsfunktionen, die schnell integriert werden können.</p>
-
-  
-</ul>
+<p>AuthUtility bietet grundlegende Sicherheitsfunktionen, die schnell integriert werden können.</p>
