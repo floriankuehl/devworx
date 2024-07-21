@@ -38,7 +38,9 @@ class LoginController extends \Devworx\AbstractController {
       ]);
       
       if( $user['password'] === $user['password2'] ){
-        $user['login'] = hash('sha256', $user['name'] . "|" . $user['password'], true);
+        $user['login'] = hash('md5', $user['name'] . "|" . $user['password'], true);
+        //TODO: global hashing method, integration in AuthUtility
+        //$user['login'] = hash('sha256', $user['name'] . "|" . $user['password'], true);
         
         unset($user['password']);
         unset($user['password2']);
