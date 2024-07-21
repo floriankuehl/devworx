@@ -8,6 +8,9 @@ use \Devworx\Utility\AuthUtility;
 use \Devworx\Utility\FlashMessageUtility;
 
 class LoginController extends \Devworx\AbstractController {
+
+  const START_CONTROLLER = 'dashboard';
+  const START_ACTION = 'index';
   
   function initialize(){
     
@@ -54,7 +57,7 @@ class LoginController extends \Devworx\AbstractController {
   function loginAction(){
     if( AuthUtility::cookie() || AuthUtility::post() ){
       //Referrer Tracking?
-      Frontend::redirect('project','list');
+      Frontend::redirect(self::START_CONTROLLER,self::START_ACTION);
       return;
     }
     
