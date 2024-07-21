@@ -1,0 +1,57 @@
+{
+  "doctype": "html",
+  "lang": "en",
+  "charset": "utf-8",
+  "controller": "",
+  "action": "",
+  "head": {
+    "title": "Devworx",
+    "meta": {
+      "viewport": "width=device-width, initial-scale=1.0",
+      "author": "Florian Kühl",
+      "description": "",
+      "generator": "Devworx Engine",
+      "robots": "NOINDEX,NOFOLLOW"
+    },
+    "metaHttpEquiv": {
+      "Content-Type": "text/html",
+      "Content-Script-Type": "text/javascript",
+      "Content-Style-Type": "text/css"
+    },
+    "styles": {
+      "index": "Resources/Public/Styles/index.css"
+    },
+    "scripts": {
+      
+    },
+    "content": ""
+  },
+  "body": {
+    "content": "",
+    "styles": {
+      
+    },
+    "scripts": {
+      "setup": "Resources/Public/Scripts/setup.js"
+    }
+  },
+  "system": {
+    "defaultNamespace": "Frontend",
+    "controllerArgument": "controller",
+    "actionArgument": "action",
+    "defaultController": "Login",
+    "defaultAction": "Login" 
+  },
+  "view": {
+    "renderer": "Devworx\\Renderer\\FluidRenderer",
+    "layout": "Page",
+    "configurationRootPath": "Configuration",
+    "documentRootPath": "Documents",
+    "layoutRootPath": "Resources/Private/Layouts",
+    "templateRootPath": "Resources/Private/Templates",
+    "partialRootPath": "Resources/Private/Partials"
+  },
+  "namespaces": {
+    "f": "Frontend\\ViewHelper"
+  }
+}
