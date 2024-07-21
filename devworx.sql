@@ -33,8 +33,11 @@ CREATE TABLE `user` (
   `deleted` timestamp NULL DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
+-- loginname: admin
+-- loginpw: devworx
+-- hash: md5(admin|devworx)
 INSERT INTO `user` (`uid`, `login`, `name`, `salutation`, `firstName`, `lastName`, `address`, `address2`, `zip`, `city`, `country`, `email`, `tel`) VALUES
-(1, '4c4f839c5ca38d881fa7dcd42eace9c4', 'Developer', 'Mr.', 'John', 'Doe', 'Test Avenue', '2c', '00000', 'Somecity', 'XX', 'me@myorganisation.de', '+01');
+(1, '579f92e55fedaa462bc45b91bde26a91', 'Developer', 'Mr.', 'John', 'Doe', 'Test Avenue', '2c', '00000', 'Somecity', 'XX', 'me@myorganisation.de', '+01');
 
 ALTER TABLE `user`
   ADD PRIMARY KEY (`uid`),
