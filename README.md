@@ -18,6 +18,7 @@
 <p>Der LoginHash besteht aus dem Login-Namen und dem Passwort. Weder Login-Name noch Passwort werden im Klartext in der Datenbank gespeichert. Der Abgleich des Hashs erfolgt direkt mit dem Wert in der Datenbank.</p>
 
 <h3>Datenbank</h3>
+<p>Die <code>Database</code>-Klasse dient als Datenbankinterface und ist unter <code>global $DB</code> erreichbar.</p>
 <p>Datenbank-Einträge in Devworx haben ein Grundraster, welches ein einfaches Datenhandling ermöglicht.</p>
 <ul>
   <li><b>uid</b> <span>PK int (Unique ID of the row)</span></li>
@@ -29,7 +30,7 @@
 </ul>
 
 <h3>Repository</h3>
-<p>Die <code>Repository-Klasse</code> ermöglicht ein direktes Datenbankinterface mit Caching der Schemen. Die Systemfelder wie <code>hidden</code> und <code>deleted</code> werden automatisch hinzugefügt.</p>
+<p>Die <code>Repository</code>-Klasse ermöglicht mit Caching der Schemen. Die Systemfelder wie <code>hidden</code> und <code>deleted</code> werden automatisch hinzugefügt.</p>
 
 <h3>Daten-Behandlung</h3>
 <p>Die Ergebnisse der Datenbankabfragen werden grundsätzlich mit assoziativen Arrays dargestellt. Klassen wie die ArrayWalker ermöglichen das Anreichern von relationalen Daten wie MySQL-Ergebnisse um mehrdimensionale Ergebnisse und Zusatzdaten zu ermöglichen. Es können zusätzlich auch Models genutzt werden um die Ergebnisbehandlung zu modifizieren.</p>
@@ -44,10 +45,10 @@
 <p>Hier wird zwischen Private- und Public Resources unterschieden. Die Private Resources sind z.B. Layouts, Templates und Partials. Public sind alle Styles, Bilder, Icons und Scripts.</p>
 
 <h3>Styling</h3>
-<p>Hier ist Bootstrap 5.3 im Einsatz, sowie die Material Icons von Google.</p>
+<p>Hier ist <code>Bootstrap 5.3</code> im Einsatz, sowie die <code>Material Icons von Google</code>.</p>
 
 <h3>Eigene HTML Elemente</h3>
-<p>Die Lösung enthält eigene HTML-Elemente um Listen und Formate zu behandeln. Diese werden per Modul importiert.</p>
+<p>Die Lösung enthält eigene HTML-Elemente um Listen und Formate zu behandeln. Diese werden per JavaScript Modul importiert.</p>
 
 <h3>Caches</h3>
 <p>Die Lösung verfügt über automatisches File-Caching von MySQL-Datenbankschemen. Dies ermöglicht die Typen-Verwendung ohne Datenbankabfrage.</p>
