@@ -4,6 +4,7 @@
 
 <p>Diese Struktur erleichtert es anderen Entwicklern, sich schnell in das Projekt einzuarbeiten und Prototypen effizient zu erstellen.</p>
 <p>Es werden keine 3rd Party PHP Libraries benutzt.</p>
+<p>Die Software kann nach Wunsch angepasst und erweitert werden, da sie eine Zeitersparnis für Entwickler ermöglichen soll.</p>
 
 <h2>Architektur</h2>
 <h3>Kontext-basisierte MVC Lösung</h3>
