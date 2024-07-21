@@ -6,6 +6,10 @@
 <p>Es werden keine 3rd Party PHP Libraries benutzt.</p>
 <p>Die Software kann nach Wunsch angepasst und erweitert werden, da sie eine Zeitersparnis für Entwickler ermöglichen soll.</p>
 
+<h2>Roadmap</h2>
+<p>Die Lösung wird im Lauf der Zeit erweitert und durch Funktionalität ergänzt.</p>
+<p>Im Laufe der Zeit werden weitere Repositories veröffentlicht, die Devworx als Basis haben.</p>
+
 <h2>Architektur</h2>
 <h3>Kontext-basisierte MVC Lösung</h3>
 <p>Die Lösung kann im Frontend- und API-Kontext über Controller und Actions angesteuert werden.</p>
