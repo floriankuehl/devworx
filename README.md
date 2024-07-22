@@ -40,7 +40,7 @@
 </ul>
 
 <h3>Repository</h3>
-<p>The <code>Repository</code> class enables caching of schemas. System fields such as <code>hidden</code> and <code>deleted</code> are automatically added.</p>
+<p>The <code>Repository</code> class enables caching of schemas. System fields such as <code>hidden</code> and <code>deleted</code> are automatically added to the queries.</p>
 
 <h3>Data Handling</h3>
 <p>The results of database queries are generally represented with associative arrays. Classes like <code>ArrayWalker</code> allow enriching relational data such as MySQL results to enable multidimensional results and additional data. Models can also be used to modify result handling.</p>
