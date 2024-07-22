@@ -10,7 +10,7 @@
 <ul>
   <li>L10n Integration</li>
   <li>Better Renderer</li>
-  <li>XML Utilities</li>
+  <li>XML and JSON Utilities</li>
   <li>Dynamic alias-based query building</li>
   <li>Editors for Models, Menus and Users</li>
 </ul>
