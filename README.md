@@ -12,7 +12,8 @@
   <li>Better Renderer</li>
   <li>XML and JSON Utilities</li>
   <li>Dynamic alias-based query building</li>
-  <li>Editors for Models, Menus and Users</li>
+  <li>Editors for models, menus and users</li>
+  <li>User groups and permission management</li>
 </ul>
 <p>Over time, more repositories will be released that are based on Devworx.</p>
 
