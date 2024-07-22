@@ -1,4 +1,4 @@
-<h1>Devworx</h1>
+<h1>Devworx RP</h1>
 
 <strong>PHP framework for rapid prototyping</strong>
 <p>This structure facilitates other developers to quickly get into the project and efficiently create prototypes.</p>
