@@ -5,6 +5,9 @@
 <p>No 3rd Party PHP Libraries are used.</p>
 <p>The software can be customized and extended as desired, as it is intended to save developers time.</p>
 
+<h2>Inspiration</h2>
+<p>As a developer, I wrote the same codes over and over. I repeated the same time-consuming steps for prototype development. Sure, I could have used bigger frameworks like Typo3 (big inspiration for me), because of future compatibility and ability to handle big Web-Projects with ease. But for small prototypes, Typo3 is just too big. Devworx is my personal interpreation of a framework, that was shaped over more than 20 years of development. It might not be perfect, but it will grow.</p>
+
 <h2>Roadmap</h2>
 <p>The solution will be expanded and supplemented with functionality over time. Here are some ideas:</p>
 <ul>
@@ -14,6 +17,7 @@
   <li>Dynamic alias-based query building</li>
   <li>Editors for models, menus and users</li>
   <li>User groups and permission management</li>
+  <li>PSR integration</li>
 </ul>
 <p>Over time, more repositories will be released that are based on Devworx.</p>
 
@@ -54,6 +58,9 @@
 
 <h3>Resources</h3>
 <p>A distinction is made between private and public resources. Private resources are, for example, layouts, templates, and partials. Public are all styles, images, icons, and scripts.</p>
+
+<h3>Configuration</h3>
+<p>The solution can be configured via JSON files, that are stored in the Configuration folder.</p>
 
 <h3>Styling</h3>
 <p><code>Bootstrap 5.3</code> and <code>Material Icons from Google</code> are used here.</p>
