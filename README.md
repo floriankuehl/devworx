@@ -6,8 +6,18 @@
 <p>The software can be customized and extended as desired, as it is intended to save developers time.</p>
 
 <h2>Roadmap</h2>
-<p>The solution will be expanded and supplemented with functionality over time.</p>
+<p>The solution will be expanded and supplemented with functionality over time. Here are some ideas:</p>
+<ul>
+  <li>L10n Integration</li>
+  <li>Better Renderer</li>
+  <li>XML Utilities</li>
+  <li>Dynamic alias-based query building</li>
+  <li>Editors for Models, Menus and Users</li>
+</ul>
 <p>Over time, more repositories will be released that are based on Devworx.</p>
+
+<h3>Want to participate?</h3>
+<p>Feel free to submit changes and be part of the project. I will revise the code and create branches for upcoming changes.</p>
 
 <h2>Architecture</h2>
 
