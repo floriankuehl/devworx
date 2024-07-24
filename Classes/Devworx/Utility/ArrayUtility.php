@@ -33,7 +33,7 @@ class ArrayUtility {
     return $current;
   }
 
-  static function setKeys(array &$var, $value, ...$path): bool{
+  static function set(array &$var, $value, ...$path): bool{
     $key = array_shift($path);
     if( empty($path) ){
       $var[$key] = $value;
@@ -42,7 +42,27 @@ class ArrayUtility {
     if( !( self::has($var,$key) && is_array($var[$key]) ) ){
       $var[$key] = [];
     }
-    return self::setKeys($var[$key], $value, ...$path);
+    return self::set($var[$key], $value, ...$path);
+  }
+  
+  static function group(array &$var, $value, ...$path): bool{
+    $key = array_shift($path);
+    if( empty($path) ){
+      if( self::has($var,$key) ){
+        if( is_string($var[$key]) ){
+          $var[$key] = [$var[$key],$value];
+        } else {
+          $var[$key][] = $value;
+        }
+      } else {
+        $var[$key] = [$value];
+      }
+      return self::has( $var, $key );
+    }
+    if( !( self::has($var,$key) && is_array($var[$key]) ) ){
+      $var[$key] = [];
+    }
+    return self::group($var[$key], $value, ...$path);
   }
   
   static function empty(array $array,$key=null): bool {
