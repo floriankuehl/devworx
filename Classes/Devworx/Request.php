@@ -7,6 +7,7 @@ interface IRequest {
   function hasArgument(string $key): bool;
   function getArgument(string $key);
   function getMethod(): string;
+  function getBody(): string;
   
   function isGet(): bool;
   function isPost(): bool;
@@ -26,6 +27,10 @@ class Request {
   
   function getMethod(): string {
     return $this->method;
+  }
+
+  function getBody(): string {
+    return file_get_contents('php://input');
   }
   
   function isGet(): bool {
