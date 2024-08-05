@@ -23,6 +23,10 @@ abstract class AbstractModel {
   public static function emptyArray(...$args){
     return ModelUtility::toArray( self::empty(...$args) );
   }
+
+  public static function presetArray(array $preset){
+    return array_merge( ModelUtility::toArray( self::empty() ), $preset );
+  }
   
   public function fields():array {
     $result = [];
