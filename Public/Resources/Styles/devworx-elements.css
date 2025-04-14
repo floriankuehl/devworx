@@ -1,0 +1,70 @@
+devworx-app,
+devworx-view,
+devworx-list, 
+devworx-project, 
+devworx-customer, 
+devworx-protocol {
+  display:block;
+  width:100%;
+}
+
+devworx-app {
+  background: rgb(145,85,205);
+  background: linear-gradient(
+    0deg, 
+    rgba(145,85,205,1) 10%, 
+    rgba(183,175,255,1) 30%, 
+    rgba(0,0,0,1) 100%
+  ); 
+  background-attachment: fixed;
+  min-height: 100svh;
+}
+
+devworx-app > main {
+  padding-top: 8vh;
+}
+
+devworx-list {
+    
+}
+
+devworx-project {
+  
+}
+
+devworx-customer {
+  
+}
+
+devworx-protocol:has(devworx-salary[value="0"]) {
+  background-color: rgba(0,255,0,.3)
+}
+
+/* VIEW HELPERS */
+
+devworx-id, 
+devworx-time, 
+devworx-timespan, 
+devworx-salary {
+  
+}
+
+devworx-id {
+  
+}
+
+devworx-time {
+  
+}
+
+devworx-timespan {
+  
+}
+
+devworx-salary {
+  
+}
+
+devworx-project devworx-protocol {
+  font-size: calc( var(--bs-body-font-size) * .8 );
+}

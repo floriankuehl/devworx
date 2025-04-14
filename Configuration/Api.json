@@ -1,0 +1,27 @@
+{
+  "doctype": "json",
+  "lang": "en",
+  "charset": "utf-8",
+  "body": {
+    "content": ""
+  },
+  "system": {
+    "defaultNamespace": "Api",
+    "controllerArgument": "controller",
+    "actionArgument": "action",
+    "defaultController": "auth",
+    "defaultAction": "index",
+    "publicControllerActions": [],
+    "cache": "Cache"
+  },
+  "view": {
+    "renderer": "Devworx\\Renderer\\JsonRenderer",
+    "layout": "Page",
+    "encoding": "",
+    "configurationRootPath": "Configuration",
+    "layoutRootPath": "Resources/Api/Layouts",
+    "templateRootPath": "Resources/Api/Templates",
+    "partialRootPath": "Resources/Api/Partials",
+    "documentRootPath": "Resources/Documents"
+  }
+}
