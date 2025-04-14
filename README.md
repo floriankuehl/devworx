@@ -41,7 +41,7 @@
   <li><b>created</b> <span>timestamp (Creation timestamp)</span></li>
   <li><b>updated</b> <span>timestamp (Timestamp of last update)</span></li>
   <li><b>hidden</b> <span>tinyint (Hidden-Flag)</span></li>
-  <li><b>deleted</b> <span>tinyint (Deleted-Flag)</span></li>
+  <li><b>deleted</b> <span>timestamp (Deletion timestamp)</span></li>
 </ul>
 
 <h3>Repository</h3>
