@@ -1,1 +1,0 @@
-<?php echo \Devworx\Utility\StringUtility::phone($value); ?>
