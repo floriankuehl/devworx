@@ -1,8 +1,24 @@
 <?php
   namespace Devworx;
 
+  $GLOBALS['DEVWORX'] = [
+    'DB' => [
+      "localhost",
+      "root",
+      "",
+      "devworx"
+    ],
+    'CFG' => [
+      
+    ],
+    'PATH' => [
+      'ROOT' => '..',
+      'PUBLIC' => '.',
+    ]
+  ];
+
   spl_autoload_register(function ($class) {
-    $file = "Classes/" . str_replace('\\', DIRECTORY_SEPARATOR, $class).'.php';
+    $file = $GLOBALS['DEVWORX']['PATH']['ROOT'] . "/Classes/" . str_replace('\\', '/', $class) . ".php";
     if (file_exists($file)) {
         require_once $file;
         return true;
@@ -13,16 +29,6 @@
   //Utility::OPCacheUtility::build();
   
   set_exception_handler([Utility\DebugUtility::class,'exception']);
-  
-  $GLOBALS['DEVWORX'] = [
-    'DB' => [
-      "localhost",
-      "root",
-      "",
-      "devworx"
-    ],
-    'CFG' => []
-  ];
   
   $DB = new Database(...$GLOBALS['DEVWORX']['DB']);
   if( !$DB->connected() ) $DB->connect();
