@@ -99,6 +99,24 @@ class FileUtility {
 
     readfile($fileName);
   }
+  
+  public static function findAll(string $path,bool $filesOnly=false): ?array {
+    $files = null;
+    if( is_dir($path) ){
+      $files = array_filter(scandir($path),fn($row) => !in_array($row,self::IGNORE));
+      $files = array_map(fn($row) => "{$path}/{$row}",$files);
+      if( $filesOnly )
+        return array_filter($files,fn($row) => !is_dir($row));
+    }
+    return $files;
+  }
+  
+  public static function unlinkAll(string $path): ?array {
+    $files = self::findAll($path);
+    if( is_null($files) ) return $files;
+    $files = array_map(fn($row) => "{$path}/{$row}",scandir($path));
+    return array_filter($files,fn($row) => is_file($row) && unlink($row));
+  }
 }
 
 ?>

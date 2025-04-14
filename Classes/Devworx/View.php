@@ -186,11 +186,14 @@ class View implements IView {
   */
   static function Layout(string $layout,array $arguments=null,string $renderer='',string $encoding=''): IView {
     $layout = ucfirst($layout);
-    $path = Frontend::getConfig('view','layoutRootPath');
+    $path = Frontend::path( 
+      Frontend::getConfig('view','layoutRootPath'),
+      "{$layout}.php"
+    );
     $renderer = empty($renderer) ? Frontend::getConfig('view','renderer') : $renderer;
     return new View(
       $layout,
-      "{$path}/{$layout}.php",
+      $path,
       $arguments,
       $renderer,
       $encoding
@@ -200,11 +203,15 @@ class View implements IView {
   static function Template(string $controller,string $action,array $arguments=null,string $renderer='',string $encoding=''): IView {
     $controller = ucfirst($controller);
     $action = ucfirst($action);
-    $path = Frontend::getConfig('view','templateRootPath');
+    $path = Frontend::path( 
+      Frontend::getConfig('view','templateRootPath'), 
+      $controller, 
+      "{$action}.php" 
+    );
     $renderer = empty($renderer) ? Frontend::getConfig('view','renderer') : $renderer;
     return new View(
       "{$controller}-{$action}",
-      "{$path}/{$controller}/{$action}.php",
+      $path,
       $arguments,
       $renderer,
       $encoding
@@ -213,11 +220,14 @@ class View implements IView {
   
   static function Partial(string $partial,array $arguments=null,string $renderer='',string $encoding=''): IView {
     $partial = ucfirst($partial);
-    $path = Frontend::getConfig('view','partialRootPath');
+    $path = Frontend::path( 
+      Frontend::getConfig('view','partialRootPath'), 
+      "{$partial}.php" 
+    );
     $renderer = empty($renderer) ? Frontend::getConfig('view','renderer') : $renderer;
     return new View(
       $partial,
-      "{$path}/{$partial}.php",
+      $path,
       $arguments,
       $renderer,
       $encoding

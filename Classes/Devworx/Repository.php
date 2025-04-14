@@ -3,14 +3,18 @@
 namespace Devworx;
 
 use \Devworx\Utility\ModelUtility;
+use \Devworx\Frontend;
 
 class Repository {
   
   const DEFAULT_PK = 'uid';
   
+  const CACHEDIR = 'Repository';
+  
   const SYSTEM_FIELDS = [
     'uid',
     'cruser',
+    'hidden',
     'created',
     'updated',
     'deleted'
@@ -49,6 +53,10 @@ class Repository {
   
   public
     $defaultConditions = [];
+  
+  public static function isSystemField(string $field){
+    return in_array($field,self::SYSTEM_FIELDS);
+  }
   
   public static function getSystemFields(bool $string=false){
     return $string ? implode( ',', self::SYSTEM_FIELDS ) : self::SYSTEM_FIELDS;
@@ -92,7 +100,11 @@ class Repository {
   }
   
   public function getCacheUrl(): string {
-    return 'Cache/Repository/' . ucfirst($this->table) . '.' . Frontend::$context . '.php';
+    return Frontend::path(
+      Frontend::getConfig('system','cache'),
+      self::CACHEDIR,
+      ( ucfirst($this->table) . '.' . Frontend::$context . '.php' )
+    );
   }
   
   public function loadCachedSettings(): bool {
@@ -107,11 +119,37 @@ class Repository {
   
   public function cacheSettings(): bool {
     $data = json_encode($this->toArray(),JSON_PRETTY_PRINT);
-    return file_put_contents($this->getCacheUrl(), $data) !== false;
+    $path = $this->getCacheUrl();
+    return file_put_contents($path, $data) !== false;
   }
   
   public function error(): string {
     return $this->db->error();
+  }
+  
+  public function hasPK(): bool {
+    $result = $this->db->query("
+      SELECT EXISTS(
+        SELECT 1
+        FROM information_schema.columns
+        WHERE 
+           table_name='{$this->table}'
+           AND column_name = '{$this->pk}'
+           AND column_key = 'PRI'
+      ) AS hasPK;
+    ",true,MYSQLI_ASSOC);
+    return intval($result['hasPK']) > 0;
+  }
+  
+  public function getPK(): string {
+    $result = $this->db->query("
+      SELECT column_name AS pk 
+      FROM information_schema.columns
+      WHERE 
+         table_name='{$this->table}'
+         AND column_key = 'PRI';
+    ",true,MYSQLI_ASSOC);
+    return $result['pk'];
   }
   
   public function initialize(){
@@ -121,8 +159,8 @@ class Repository {
     $valueList = [];
     $details = [];    
     
+    $this->pk = $this->getPK();
     $explain = $this->db->query('EXPLAIN '.$this->table.';',false,MYSQLI_ASSOC);
-    
     //echo \Devworx\Utility\DebugUtility::var_dump(['table'=>$this->table,'explain'=>$explain]);
     
     foreach( $explain as $i => $field ){
@@ -181,6 +219,10 @@ class Repository {
   }
   
   //------------------ PROPERTY FUNCTIONS ----------------------------
+  
+  public function getPrimaryKey(){
+    return $this->pk;
+  }
   
   public function getDetails(string $field=''){
     return empty($field) ? $this->details : $this->details[$field];
@@ -297,7 +339,8 @@ class Repository {
             $v = floatval($v);
             if( $v > 0 ) $conditions[]= "{$k} = {$v}";
           }break;
-          case'datetime':{
+          case'datetime':
+          case'timestamp': {
             if( !empty($v) ){
               if( is_array($v) ){
                 $from = $v[0];
@@ -320,7 +363,6 @@ class Repository {
         }
       }
     }
-    
     /*
     if( $this->table == 'protocol' ){
       echo \Devworx\Utility\DebugUtility::var_dump([

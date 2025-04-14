@@ -18,7 +18,8 @@ class ApiUtility {
     CHARSET = 'utf-8',
     HEADER_KEY = 'X-Devworx-Api',
     CONTEXT_KEY = 'X-Devworx-Context',
-    CONTEXT = 'api';
+    CONTEXT = 'api',
+    SELFSIGNED = true;
     
   public static function hasKey(): bool {
     return Frontend::hasHeader(self::HEADER_KEY);
@@ -88,7 +89,9 @@ class ApiUtility {
     curl_setopt_array($ch,[
       CURLOPT_URL => $url,
       CURLOPT_HTTPHEADER => self::getHeader(),
-      CURLOPT_RETURNTRANSFER => TRUE
+      CURLOPT_RETURNTRANSFER => TRUE,
+      //CURLOPT_CAINFO => self::CAINFO,
+      CURLOPT_SSL_VERIFYPEER => self::SELFSIGNED ? 0 : 1
     ]);
     
     $result = curl_exec($ch);
@@ -123,7 +126,8 @@ class ApiUtility {
       CURLOPT_POST => TRUE,
       CURLOPT_POSTFIELDS => json_encode($arguments),
       CURLOPT_HTTPHEADER => self::getHeader(),
-      CURLOPT_RETURNTRANSFER => TRUE
+      CURLOPT_RETURNTRANSFER => TRUE,
+      CURLOPT_SSL_VERIFYPEER => self::SELFSIGNED ? 0 : 1
     ]);
     
     $result = curl_exec($ch);

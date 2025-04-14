@@ -41,6 +41,12 @@ class ModelUtility {
     
     foreach( $model->fields() as $key => $value ){
       $value = $model->{"get".ucfirst($key)}();
+      
+      if( is_null( $value ) ){
+        //$result[$key] = $value;
+        continue;
+      }
+      
       if( is_object($value) ){
         if( $value instanceof \DateTime ){
           $result[$key] = $value->getTimestamp();

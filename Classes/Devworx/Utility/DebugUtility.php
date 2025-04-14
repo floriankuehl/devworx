@@ -4,7 +4,7 @@ namespace Devworx\Utility;
 
 class DebugUtility {
   
-  const STYLE = 'Resources/Public/Styles/debug.css';
+  const STYLE = 'Resources/Styles/debug.css';
   
   static function var_dump(
     $var,

@@ -8,9 +8,6 @@ use \Devworx\Utility\AuthUtility;
 use \Devworx\Utility\FlashMessageUtility;
 
 class LoginController extends \Devworx\AbstractController {
-
-  const START_CONTROLLER = 'dashboard';
-  const START_ACTION = 'index';
   
   function initialize(){
     
@@ -41,9 +38,7 @@ class LoginController extends \Devworx\AbstractController {
       ]);
       
       if( $user['password'] === $user['password2'] ){
-        $user['login'] = hash('md5', $user['name'] . "|" . $user['password'], true);
-        //TODO: global hashing method, integration in AuthUtility
-        //$user['login'] = hash('sha256', $user['name'] . "|" . $user['password'], true);
+        $user['login'] = md5($user['name'] . "|" . $user['password']);
         
         unset($user['password']);
         unset($user['password2']);
@@ -57,7 +52,7 @@ class LoginController extends \Devworx\AbstractController {
   function loginAction(){
     if( AuthUtility::cookie() || AuthUtility::post() ){
       //Referrer Tracking?
-      Frontend::redirect(self::START_CONTROLLER,self::START_ACTION);
+      Frontend::redirect('project','list');
       return;
     }
     

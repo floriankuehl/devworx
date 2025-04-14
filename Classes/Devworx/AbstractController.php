@@ -57,12 +57,12 @@ abstract class AbstractController implements IController {
   abstract function initialize();
    
   function processAction(string $action,...$arguments){
-    $path = Frontend::getConfig('view','templateRootPath');
-    
     $controller = $this->getId();
     $action = ucfirst($action);
     $this->view->setId("{$controller}-{$action}");
-    $this->view->setFile("{$path}/{$controller}/{$action}.php");
+    $file = Frontend::path( Frontend::getConfig('view','templateRootPath'), $controller, "{$action}.php" );
+    
+    $this->view->setFile($file);
     $encoding = Frontend::getConfig('view','encoding');
     if( is_string($encoding) ) $this->view->setEncoding($encoding);
     $this->view->setProvideAll( Frontend::getConfig('doctype') === 'html' );

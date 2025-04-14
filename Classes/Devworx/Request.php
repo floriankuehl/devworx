@@ -28,10 +28,6 @@ class Request {
   function getMethod(): string {
     return $this->method;
   }
-
-  function getBody(): string {
-    return file_get_contents('php://input');
-  }
   
   function isGet(): bool {
     return $this->method === 'GET';
@@ -53,10 +49,18 @@ class Request {
     return array_key_exists($key,$this->arguments);
   }
   
-  function getArgument(string $key){
+  function getArgument(string $key,$fallback=null){
     if( $this->hasArgument($key) )
       return $this->arguments[$key];
-    return null;
+    return $fallback;
+  }
+  
+  function getBody(): string {
+    return file_get_contents('php://input');
+  }
+  
+  function getJson(){
+    return json_decode( $this->getBody(), true );
   }
   
 }

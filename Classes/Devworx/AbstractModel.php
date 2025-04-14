@@ -23,7 +23,7 @@ abstract class AbstractModel {
   public static function emptyArray(...$args){
     return ModelUtility::toArray( self::empty(...$args) );
   }
-
+  
   public static function presetArray(array $preset){
     return array_merge( ModelUtility::toArray( self::empty() ), $preset );
   }
@@ -31,7 +31,7 @@ abstract class AbstractModel {
   public function fields():array {
     $result = [];
     foreach( get_object_vars($this) as $key => $value ){
-      if( substr($key,0,1) == "*" )
+      if( substr($key,0,1) === '*' )
         $key = substr($key,1,strlen($key)-2);
       $result[$key] = $value;
     }
