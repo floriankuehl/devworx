@@ -11,7 +11,6 @@
 <h2>Roadmap</h2>
 <p>The solution will be expanded and supplemented with functionality over time. Here are some ideas:</p>
 <ul>
-  <li>Find a better solution name, because Devworx is taken...</li>
   <li>L10n Integration</li>
   <li>Better Renderer</li>
   <li>XML and JSON Utilities</li>
