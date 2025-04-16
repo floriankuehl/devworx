@@ -66,16 +66,16 @@ class Repository {
   public $defaultConditions = [];
   
   /** Checks if $field is a system field */
-  public static function isSystemField(string $field){
+  public static function isSystemField(string $field): bool {
     return in_array($field,self::SYSTEM_FIELDS);
   }
   /** Returns the system fields as a string if $string is true, otherwise returns an array */
-  public static function getSystemFields(bool $string=false){
+  public static function getSystemFields(bool $string=false): string|array {
     return $string ? implode( ',', self::SYSTEM_FIELDS ) : self::SYSTEM_FIELDS;
   }
   
   /** Returns the system conditions as a string if $string is true, otherwise returns an array */
-  public static function getSystemConditions(bool $string=false){
+  public static function getSystemConditions(bool $string=false): string|array {
     return $string ? implode(" AND ",self::SYSTEM_CONDITIONS) : self::SYSTEM_CONDITIONS;
   }
   
@@ -172,7 +172,7 @@ class Repository {
   }
   
   /** Initializes the repository and reads the type definitions of the set table */
-  public function initialize(){
+  public function initialize(): Repository {
         
     $fieldList = [];
     $typeList = [];
@@ -215,6 +215,8 @@ class Repository {
     $this->fieldList = $fieldList;
     $this->typeList = implode('',$typeList);
     $this->valueList = implode(',',$valueList);
+	
+	return $this;
   }
   
   /** Returns the current configuration as an array */
@@ -243,27 +245,27 @@ class Repository {
   //------------------ PROPERTY FUNCTIONS ----------------------------
   
   /** Getter for the set primary key */
-  public function getPrimaryKey(){
+  public function getPrimaryKey(): string {
     return $this->pk;
   }
   
   /** Returns field details if $field is set, otherwise returns an array of all field details  */
-  public function getDetails(string $field=''){
+  public function getDetails(string $field=''): string|array {
     return empty($field) ? $this->details : $this->details[$field];
   }
   
   /** Returns the field list as an array */
-  public function getFieldList(){
+  public function getFieldList(): array {
     return $this->fieldList;
   }
   
   /** Returns the type list as an array */
-  public function getTypeList(){
+  public function getTypeList(): array {
     return $this->typeList;
   }
   
   /** Returns the value placeholder list as an array */
-  public function getValueList(){
+  public function getValueList(): array {
     return $this->valueList;
   }
   
@@ -280,7 +282,7 @@ class Repository {
   //------------------ QUERY FUNCTIONS ----------------------------
   
   /** Finds all rows of the set $table */
-  public function findAll(string $fields='*',string $order='',int $offset=0,int $limit=0){
+  public function findAll(string $fields='*',string $order='',int $offset=0,int $limit=0): array {
     $limit = $limit > 0 ? " LIMIT {$offset},{$limit}" : "";
     $order = " ORDER BY " . ( empty($order) ? "{$this->pk} ASC" : $order );
     $system = implode(" AND ",$this->defaultConditions);
@@ -289,7 +291,7 @@ class Repository {
   }
   
   /** Finds a subset of rows of the set $table based on $key and $value */
-  public function findBy($key,$value,string $fields='*',string $order='',int $offset=0,int $limit=0){
+  public function findBy($key,$value,string $fields='*',string $order='',int $offset=0,int $limit=0): array {
     $limit = $limit > 0 ? " LIMIT {$offset},{$limit}" : "";
     $order = " ORDER BY " . (empty($order) ? "{$this->pk} ASC" : $order );
     $system = implode(" AND ",$this->defaultConditions);
@@ -298,7 +300,7 @@ class Repository {
   }
   
   /** Finds a single row of the set $table based on $key and $value */
-  public function findOneBy($key,$value,string $fields='*'){
+  public function findOneBy($key,$value,string $fields='*'): array|object {
     $system = implode(" AND ",$this->defaultConditions);
     $result = $this->db->query("SELECT {$fields} FROM {$this->table} WHERE ({$key} = '{$value}') AND {$system} LIMIT 1;",true,MYSQLI_ASSOC);
     return empty($this->mapToClass) ? $result : ModelUtility::toModel( $result, $this->mapToClass );
@@ -311,7 +313,7 @@ class Repository {
     string $order='',
     int $offset=0,
     int $limit=0
-  ){
+  ): array {
     
     if( empty($filter) ) return [];
     $conditions = [...$this->defaultConditions];
@@ -421,7 +423,7 @@ class Repository {
   }
   
   /** Finds a row by the $pk of the set $table with value $uid */
-  public function findByUid($uid,string $fields='*'){
+  public function findByUid($uid,string $fields='*'): array|object {
     $system = implode(" AND ",$this->defaultConditions);
     $result = $this->db->query("SELECT {$fields} FROM {$this->table} WHERE ({$this->pk} = {$uid}) AND {$system} LIMIT 1;",true,MYSQLI_ASSOC);
     return empty($this->mapToClass) ? $result : ModelUtility::toModel( $result, $this->mapToClass );
@@ -480,7 +482,7 @@ class Repository {
   }
   
   /** Sets the deleted timestamp of a row by its $pk $uid */
-  public function remove($uid){
+  public function remove($uid): int {
     if( is_array($uid) ){
       if( empty($uid) ) return null;
       $uid = implode(',',$uid);
@@ -490,7 +492,7 @@ class Repository {
   }
   
   /** Unsets the deleted timestamp of a row by its $pk $uid */
-  public function recycle($uid){
+  public function recycle($uid): int {
     if( is_array($uid) ){
       if( empty($uid) ) return null;
       $uid = implode(',',$uid);
@@ -500,7 +502,7 @@ class Repository {
   }
   
   /** Deletes a row completely by its $pk $uid */
-  public function delete($uid){
+  public function delete($uid): int {
     if( is_array($uid) ){
       if( empty($uid) ) return null;
       $uid = implode(',',$uid);
