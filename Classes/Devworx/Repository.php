@@ -7,10 +7,13 @@ use \Devworx\Frontend;
 
 class Repository {
   
+  /** The default primary key */
   const DEFAULT_PK = 'uid';
   
+  /** The default cache folder */
   const CACHEDIR = 'Repository';
   
+  /** A list of system fields for models */
   const SYSTEM_FIELDS = [
     'uid',
     'cruser',
@@ -20,11 +23,13 @@ class Repository {
     'deleted'
   ];
   
+  /** A list of system conditions for active rows */
   const SYSTEM_CONDITIONS = [
     'hidden=0',
     'ISNULL(deleted)',
   ];
   
+  /** An index of mysql types for generating type placeholders for prepared statements */
   const TYPE_MAP = [
     'varchar' => 's',
     'text' => 's',
@@ -41,25 +46,35 @@ class Repository {
     'enum' => 's'
   ];
   
+  /** A reference to the Database */
   protected $db = null;
+  /** The current table */
   protected $table = '';
+  /** The primary key of the table */
   protected $pk = '';
+  /** The field details for the table */
   protected $details = [];
+  /** The field list for the table */
   protected $fieldList = [];
+  /** The type list of the table */
   protected $typeList = [];
+  /** The type placeholders of the table */
   protected $valueList = [];
+  /** The class to map after fetching */
   protected $mapToClass = '';
   
   public $defaultConditions = [];
   
+  /** Checks if $field is a system field */
   public static function isSystemField(string $field){
     return in_array($field,self::SYSTEM_FIELDS);
   }
-  
+  /** Returns the system fields as a string if $string is true, otherwise returns an array */
   public static function getSystemFields(bool $string=false){
     return $string ? implode( ',', self::SYSTEM_FIELDS ) : self::SYSTEM_FIELDS;
   }
   
+  /** Returns the system conditions as a string if $string is true, otherwise returns an array */
   public static function getSystemConditions(bool $string=false){
     return $string ? implode(" AND ",self::SYSTEM_CONDITIONS) : self::SYSTEM_CONDITIONS;
   }
@@ -97,6 +112,7 @@ class Repository {
     }
   }
   
+  /** Returns the url for the settings cache file */
   public function getCacheUrl(): string {
     return Frontend::path(
       Frontend::getConfig('system','cache'),
@@ -105,6 +121,7 @@ class Repository {
     );
   }
   
+  /** Loads cached settings */
   public function loadCachedSettings(): bool {
     $fileName = $this->getCacheUrl();
     if( is_file($fileName) ){
@@ -115,16 +132,19 @@ class Repository {
     return false;
   }
   
+  /** Caches the current settings */
   public function cacheSettings(): bool {
     $data = json_encode($this->toArray(),JSON_PRETTY_PRINT);
     $path = $this->getCacheUrl();
     return file_put_contents($path, $data) !== false;
   }
   
+  /** Returns the last error message of $db */
   public function error(): string {
     return $this->db->error();
   }
   
+  /** Checks if the set table contains a primary key */
   public function hasPK(): bool {
     $result = $this->db->query("
       SELECT EXISTS(
@@ -139,6 +159,7 @@ class Repository {
     return intval($result['hasPK']) > 0;
   }
   
+  /** Returns the primary key of the set table */
   public function getPK(): string {
     $result = $this->db->query("
       SELECT column_name AS pk 
@@ -150,6 +171,7 @@ class Repository {
     return $result['pk'];
   }
   
+  /** Initializes the repository and reads the type definitions of the set table */
   public function initialize(){
         
     $fieldList = [];
@@ -195,6 +217,7 @@ class Repository {
     $this->valueList = implode(',',$valueList);
   }
   
+  /** Returns the current configuration as an array */
   public function toArray(): array {
     return [
       'table' => $this->table,
@@ -208,6 +231,7 @@ class Repository {
     ];
   }
   
+  /** Loads the current configuration from an array */
   public function fromArray(array $value): Repository {
     foreach( $value as $k => $v ){
       if( property_exists($this,$k) )
@@ -218,36 +242,44 @@ class Repository {
   
   //------------------ PROPERTY FUNCTIONS ----------------------------
   
+  /** Getter for the set primary key */
   public function getPrimaryKey(){
     return $this->pk;
   }
   
+  /** Returns field details if $field is set, otherwise returns an array of all field details  */
   public function getDetails(string $field=''){
     return empty($field) ? $this->details : $this->details[$field];
   }
   
+  /** Returns the field list as an array */
   public function getFieldList(){
     return $this->fieldList;
   }
   
+  /** Returns the type list as an array */
   public function getTypeList(){
     return $this->typeList;
   }
   
+  /** Returns the value placeholder list as an array */
   public function getValueList(){
     return $this->valueList;
   }
   
+  /** Getter for class to map the row data to */
   public function getMapToClass(): string {
     return $this->mapToClass;
   }
   
+  /** Setter for class to map the row data to */
   public function setMapToClass(string $className): void {
     $this->mapToClass = $className;
   }
   
   //------------------ QUERY FUNCTIONS ----------------------------
   
+  /** Finds all rows of the set $table */
   public function findAll(string $fields='*',string $order='',int $offset=0,int $limit=0){
     $limit = $limit > 0 ? " LIMIT {$offset},{$limit}" : "";
     $order = " ORDER BY " . ( empty($order) ? "{$this->pk} ASC" : $order );
@@ -256,6 +288,7 @@ class Repository {
     return empty($this->mapToClass) ? $result : ModelUtility::toModels( $result, $this->mapToClass );
   }
   
+  /** Finds a subset of rows of the set $table based on $key and $value */
   public function findBy($key,$value,string $fields='*',string $order='',int $offset=0,int $limit=0){
     $limit = $limit > 0 ? " LIMIT {$offset},{$limit}" : "";
     $order = " ORDER BY " . (empty($order) ? "{$this->pk} ASC" : $order );
@@ -264,12 +297,14 @@ class Repository {
     return empty($this->mapToClass) ? $result : ModelUtility::toModels( $result, $this->mapToClass );
   }
   
+  /** Finds a single row of the set $table based on $key and $value */
   public function findOneBy($key,$value,string $fields='*'){
     $system = implode(" AND ",$this->defaultConditions);
     $result = $this->db->query("SELECT {$fields} FROM {$this->table} WHERE ({$key} = '{$value}') AND {$system} LIMIT 1;",true,MYSQLI_ASSOC);
     return empty($this->mapToClass) ? $result : ModelUtility::toModel( $result, $this->mapToClass );
   }
   
+  /** Finds a subset of rows of the set $table by a given associative $filter array */
   public function filter(
     array $filter,
     string $fields='*',
@@ -368,12 +403,14 @@ class Repository {
     return empty($this->mapToClass) ? $result : ModelUtility::toModels( $result, $this->mapToClass );
   }
   
+  /** Counts all rows of the set $table */
   public function count(): int {
     $system = implode(" AND ",$this->defaultConditions);
     $result = $this->db->query("SELECT COUNT({$this->pk}) FROM {$this->table} WHERE {$system} LIMIT 1;",true);
     return $result[0];
   }
   
+  /** Counts rows of the set $table by $field and $value */
   public function countBy(string $field,$value): int {
     if( in_array($field,$this->fieldList) ){
       $system = implode(" AND ",$this->defaultConditions);
@@ -383,16 +420,19 @@ class Repository {
     return -1;
   }
   
+  /** Finds a row by the $pk of the set $table with value $uid */
   public function findByUid($uid,string $fields='*'){
     $system = implode(" AND ",$this->defaultConditions);
     $result = $this->db->query("SELECT {$fields} FROM {$this->table} WHERE ({$this->pk} = {$uid}) AND {$system} LIMIT 1;",true,MYSQLI_ASSOC);
     return empty($this->mapToClass) ? $result : ModelUtility::toModel( $result, $this->mapToClass );
   }
   
+  /** Adds a row to the set $table */
   public function add(array $data): int {
     return $this->db->add($this->table,$data);
   }
   
+  /** Adds many rows to the set $table */
   public function addAll(array $rows): array {
     $result = [];
     foreach( $rows as $i =>$row ){
@@ -401,6 +441,7 @@ class Repository {
     return $result;
   }
   
+  /** Updates a given row with $data */
   public function put(array $data): bool {   
     $uid = null;
     $fields = [];
@@ -438,6 +479,7 @@ class Repository {
     );
   }
   
+  /** Sets the deleted timestamp of a row by its $pk $uid */
   public function remove($uid){
     if( is_array($uid) ){
       if( empty($uid) ) return null;
@@ -447,6 +489,7 @@ class Repository {
     return $this->db->query("UPDATE {$this->table} SET deleted=CURRENT_TIMESTAMP WHERE {$this->pk} = '{$uid}';",true,MYSQLI_NUM);
   }
   
+  /** Unsets the deleted timestamp of a row by its $pk $uid */
   public function recycle($uid){
     if( is_array($uid) ){
       if( empty($uid) ) return null;
@@ -456,6 +499,7 @@ class Repository {
     return $this->db->query("UPDATE {$this->table} SET deleted=NULL WHERE {$this->pk} = '{$uid}';",true,MYSQLI_NUM);
   }
   
+  /** Deletes a row completely by its $pk $uid */
   public function delete($uid){
     if( is_array($uid) ){
       if( empty($uid) ) return null;
