@@ -41,18 +41,16 @@ class Repository {
     'enum' => 's'
   ];
   
-  protected
-    $db = null,
-    $table = '',
-    $pk = '',
-    $details = [],
-    $fieldList = [],
-    $typeList = [],
-    $valueList = [],
-    $mapToClass = '';
+  protected $db = null;
+  protected $table = '';
+  protected $pk = '';
+  protected $details = [];
+  protected $fieldList = [];
+  protected $typeList = [];
+  protected $valueList = [];
+  protected $mapToClass = '';
   
-  public
-    $defaultConditions = [];
+  public $defaultConditions = [];
   
   public static function isSystemField(string $field){
     return in_array($field,self::SYSTEM_FIELDS);
@@ -363,20 +361,7 @@ class Repository {
         }
       }
     }
-    /*
-    if( $this->table == 'protocol' ){
-      echo \Devworx\Utility\DebugUtility::var_dump([
-        'table' => $this->table,
-        'fields' => $fields,
-        'filter' => $filter,
-        'conditions' => $conditions,
-        'order' => $order,
-        'limit' => $limit
-      ],'Filter',__METHOD__,__LINE__);
-      throw new \Exception("WTF");
-    }
-    */
-    
+        
     $conditions = implode(" AND ",$conditions);
     
     $result = $this->db->query("SELECT {$fields} FROM {$this->table} WHERE {$conditions}{$order}{$limit};",false,MYSQLI_ASSOC);
