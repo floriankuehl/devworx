@@ -8,7 +8,14 @@ use \Devworx\Utility\DebugUtility;
 
 class ProviderController extends AbstractController {
   
-  public function initialize(){
+  /**
+   * Function initialize
+   *
+   * Initializes the Controller
+   * 
+   * @return void
+   */
+  public function initialize(): void {
     $this->view->setEncoding('');
     $view = &Frontend::$config['view'];
     $view['layout'] = 'Resource';
@@ -21,7 +28,14 @@ class ProviderController extends AbstractController {
     
   }
   
-  public function partialAction(){
+  /**
+   * Action partial
+   * 
+   * Calls View::Partial with the JSON request body as arguments
+   *
+   * @return void
+   */
+  public function partialAction(): void {
     $content = '';
     if( $this->request->isPost() ){
       
