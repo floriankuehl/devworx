@@ -4,6 +4,13 @@ namespace Devworx\Renderer;
 
 class FluidRenderer extends AbstractRenderer {
   
+  /**
+   * Parses a branch in the object tree
+   *
+   * @param string $key The key to read
+   * @param mixed $branch The current branch
+   * @return mixed
+   */
   public static function parseBranch(string $key,$branch){
     
     if( empty($key) || is_null($branch) ) 
@@ -43,12 +50,25 @@ class FluidRenderer extends AbstractRenderer {
     return $branch;
   }
   
+  /**
+   * Extracts all variables from a given source string
+   *
+   * @param string $source The source text
+   * @return array|null
+   */
   public static function extractVariables(string $source): ?array {
     $matches = [];
     $found = preg_match_all('~\{([^{:}]*)\}~',$source,$matches,PREG_SET_ORDER,0);
     return $found === false ? null : array_column($matches,1);
   }
   
+  /**
+   * Converts a given value to a string
+   *
+   * @param string $value The given value
+   * @param string $key A possible subkey of the value (not used)
+   * @return string
+   */
   public static function stringify( $value, string $key='' ): string {
     if( is_null($value) )
       return 'null';
@@ -62,6 +82,14 @@ class FluidRenderer extends AbstractRenderer {
     return $value;
   }
   
+  /**
+   * Renders a source string template using branched object access
+   *
+   * @param mixed $source The given source template text
+   * @param array $variables The provided variables for this renderer
+   * @param string $encoding The standard encoding for this renderer
+   * @return mixed
+   */
   public static function render($source,array $variables,string $encoding=''){
     if( is_string($source) ){
       $keys = self::extractVariables($source);
@@ -82,56 +110,5 @@ class FluidRenderer extends AbstractRenderer {
     return $source;
   }
 }
-
-/*
-  use \Devworx\Utility\DebugUtility;
-  public static function extractViewHelper(string $source){
-    $matches = [];
-    $count = preg_match("/(\w{1,}):(\w{1,})\(([^()]*)\)/",$source,$matches);
-    if( $count == false ) return $source;
-    
-    $args = array_map(
-      function($a){
-        $kv = explode(':',$a);
-        return [
-          trim($kv[0]),
-          trim($kv[1])
-        ];
-      },
-      explode(',',$matches[3])
-    );
-    
-    return [
-      'call' => $matches[0],
-      'namespace' => $matches[1],
-      'class' => ucfirst($matches[2])."ViewHelper",
-      'args' => array_combine(
-        array_column($args,0),
-        array_column($args,1)
-      ),
-    ];
-  }
-  
-  public static function callViewHelper(array $options){
-    $namespace = $options['namespace'];
-    $namespaces = \Frontend\Frontend::getConfig('namespaces');
-    if( array_key_exists($namespace,$namespaces) ){
-      $namespace = $namespaces[$namespace];
-    }
-    
-    $className = $namespace . "\\" . $options['class'];
-    if( class_exists($className) ){
-      $viewHelper = new $className();
-      if( $viewHelper instanceof \Devworx\Renderer\ViewHelper ){
-        echo \Devworx\Utility\DebugUtility::var_dump([
-          'instance' => $viewHelper,
-          'options' => $options
-        ]);
-        return $viewHelper->process();
-      }
-    }
-    return '';
-  }
-*/
 
 ?>
