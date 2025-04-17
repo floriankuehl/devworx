@@ -11,7 +11,7 @@ class BuildUtility {
       return "{$indent} * {$line}";
     },$lines);
     $result = implode("\n",$result);
-    return "/****\n{$result}\n{$indent} **/";
+    return "/**\n{$result}\n{$indent} */";
   }
   
   public static function ClassToTable(string $className): array {
@@ -222,8 +222,6 @@ class BuildUtility {
     $properties = [];
     $functions = [];
     
-    //echo DebugUtility::var_dump($repository);
-    
     foreach($repository->getDetails() as $name => $info ){
       
       if( in_array($name,Repository::SYSTEM_FIELDS) )
@@ -262,7 +260,7 @@ class BuildUtility {
     array &$properties,
     array &$functions,
     string $indent = '  ',
-  ){
+  ): void {
     $tokens = explode('\\',$className);
     $className = array_pop( $tokens );
     
@@ -281,7 +279,7 @@ class BuildUtility {
     $properties []= self::Comment($indent,
       "{$name} of the {$className}",
       "",
-      "@param {$returnType} " . '$' . $name
+      "@var {$returnType} " . '$' . $name
     );
     $properties []= 'protected $'."{$name} = {$standard};\n";
     
@@ -302,7 +300,7 @@ class BuildUtility {
   }
   
   
-  public static function checkModels(){
+  public static function checkModels(): void {
     
     global $DB;
     
