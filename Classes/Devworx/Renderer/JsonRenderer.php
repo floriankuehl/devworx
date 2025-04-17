@@ -7,12 +7,24 @@ use Devworx\Utility\ArrayUtility;
 
 class JsonRenderer {
   
+  /**
+   * Renders a flag that will be added to the encoding function
+   *
+   * @return int
+   */
   public static function getFlags(): int {
     return 0;
   }
   
+  /**
+   * Renders a given source with provided variables
+   * If source is an array, the provided keys in variables are extracted from the source array.
+   * If source is not an array, the variables are encoded
+   *
+   * @return mixed
+   */
   public static function render($source,array $variables,string $encoding=''){
-    header("Content-Type: application/json;charset=utf-8");
+    header("Content-Type: application/{$encoding};charset=utf-8");
     $fn = empty($encoding) ? $encoding : "{$encoding}_encode";
     
     if( is_array($source) ){
