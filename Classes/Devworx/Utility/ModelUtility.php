@@ -5,7 +5,14 @@ namespace Devworx\Utility;
 use \Devworx\AbstractModel;
 
 class ModelUtility {
-
+  
+  /**
+   * Maps a data row to a new model instance by setter functions
+   *
+   * @param array $row The data array
+   * @param string $class The FQCN of the new instance
+   * @return AbstractModel
+   */
   public static function toModel(array $row, string $class): AbstractModel {
     if( empty($class) )
       throw new \Exception("No class provided");
@@ -19,6 +26,13 @@ class ModelUtility {
     return $model;
   }
   
+  /**
+   * Maps data rows to new model instances by setter functions
+   *
+   * @param array $rows The list of data arrays
+   * @param string $class The FQCN of the new instance
+   * @return AbstractModel
+   */
   public static function toModels(array $rows,string $class): array {
     if( empty($class) )
       throw new \Exception("No class provided");
@@ -36,6 +50,12 @@ class ModelUtility {
     return $result;
   }
   
+  /**
+   * Converts a model to an array
+   *
+   * @param AbstractModel $model The model to convert to an array
+   * @return array
+   */
   public static function toArray(AbstractModel $model):array {
     $result = [];
     
