@@ -4,11 +4,25 @@ namespace Devworx\Utility;
 
 class ArrayUtility {
   
-  static function has(array $array,string $key){
+  /**
+   * Checks for a key in a given array
+   * 
+   * @param array $array The given array
+   * @param string $key The key to check in the given array
+   * @return bool
+   */
+  static function has(array $array,string $key): bool {
     return array_key_exists($key,$array);
   }
   
-  static function remove(array &$array,...$keys){
+  /**
+   * Removes a list of keys from a given array
+   * 
+   * @param array $array The given array
+   * @param array $keys The keys to remove
+   * @return array
+   */
+  static function remove(array &$array,...$keys): array {
     foreach( $keys as $i => $key ){
       if( array_key_exists($key,$array) )
         unset($array[$key]);
@@ -16,6 +30,14 @@ class ArrayUtility {
     return $array;
   }
   
+  /**
+   * Reads a key from an array with a default fallback
+   * 
+   * @param array $array The given array
+   * @param string|null $key The key to read
+   * @param mixed|null $default The fallback value
+   * @return mixed
+   */
   static function key(array $array,string $key=null,$default=null){
     if( is_null($key) )
       return $array;
@@ -24,6 +46,13 @@ class ArrayUtility {
     return $default;
   }
   
+  /**
+   * Reads a keys path from a multidimensional array
+   * 
+   * @param array $array The given array
+   * @param array $keys The key path to read
+   * @return mixed
+   */
   static function keys(array $array,...$keys){
     $current = $array;
     foreach($keys as $i=>$key){
@@ -33,18 +62,33 @@ class ArrayUtility {
     return $current;
   }
   
-  static function setKeys(array &$var, $value, ...$path): bool{
+  /**
+   * Sets a key of a multidimensional array by a path
+   * 
+   * @param array $array The given array
+   * @param mixed $value The value to set
+   * @param array $path The path inside the array
+   * @return bool
+   */
+  static function setKeys(array &$array, $value, ...$path): bool{
     $key = array_shift($path);
     if( empty($path) ){
-      $var[$key] = $value;
-      return self::has( $var, $key );
+      $array[$key] = $value;
+      return self::has( $array, $key );
     }
-    if( !( self::has($var,$key) && is_array($var[$key]) ) ){
-      $var[$key] = [];
+    if( !( self::has($array,$key) && is_array($array[$key]) ) ){
+      $array[$key] = [];
     }
-    return self::setKeys($var[$key], $value, ...$path);
+    return self::setKeys($array[$key], $value, ...$path);
   }
   
+  /**
+   * Checks if a given array is empty
+   * 
+   * @param array $array The given array
+   * @param null|string|array $key The optional key(s) to check inside the array, can be null, string or an array
+   * @return bool
+   */
   static function empty(array $array,$key=null): bool {
     if( is_null($key) )
       return empty($array);
@@ -61,11 +105,26 @@ class ArrayUtility {
     return true;
   }
   
+  /**
+   * Checks if a given array has a key with a value that is not empty
+   * 
+   * @param array $array The given array
+   * @param string $key The key to check inside the array
+   * @return bool
+   */
   static function hasValue(array $array,string $key){
     return self::has($array,$key) && !empty($array[$key]);
   }
   
-  static function index(array $array,string $key,bool $group=false){
+  /**
+   * Builds an index from an array
+   * 
+   * @param array $array The given array
+   * @param string $key The key to get the data from
+   * @param bool $group Flag to group the retrieved values in a subarray
+   * @return array
+   */
+  static function index(array $array,string $key,bool $group=false): array {
     $result = [];
     
     foreach( $array as $i => $row ){
@@ -87,6 +146,12 @@ class ArrayUtility {
     return $result;
   }
   
+  /**
+   * Combines a list of arrays
+   * 
+   * @param array $arrays The given arrays
+   * @return array
+   */
   static function combine(...$arrays){
     $result = [];
     
@@ -106,26 +171,39 @@ class ArrayUtility {
     return $result;
   }
   
-  static function isAssoc(array $array){
+  /**
+   * Checks if an array is associative
+   * 
+   * @param array $array The given array
+   * @return bool
+   */
+  static function isAssoc(array $array): bool {
     return count( array_filter( array_keys($array), 'is_string' ) ) > 0;
   }
   
-  static function filter(array $source,array $options){
-    if( is_null($options) || empty($options) )
+  /**
+   * Filters values from an array
+   * 
+   * @param array $array The given array
+   * @param array $filter The given filter
+   * @return array
+   */
+  static function filter(array $source,array $filter){
+    if( is_null($filter) || empty($filter) )
       return $source;
     
-    $check = array_keys($options);
+    $check = array_keys($filter);
     $check = $check[0];
     if( array_key_exists($check,$source) ){
       $source = [$source];
     } 
-    return array_filter($source,function($row) use ($options){
+    return array_filter($source,function($row) use ($filter){
       $keep = true;
-      foreach( $options as $k => $v ){
+      foreach( $filter as $k => $v ){
         $keep = array_key_exists($k,$row) && (
-          is_array($options[$k]) ? 
-            in_array($row[$k],$options[$k]) :
-            $row[$k] == $options[$k]
+          is_array($filter[$k]) ? 
+            in_array($row[$k],$filter[$k]) :
+            $row[$k] == $filter[$k]
           );
         if( !$keep ) break;
       }
