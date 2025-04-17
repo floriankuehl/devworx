@@ -24,6 +24,14 @@ class FileUtility {
     '.htpasswd'
   ];
   
+  /**
+   * Retrieves a file list from a given path
+   *
+   * @param string $path The folder to search
+   * @param string $ext The file extension for the files
+   * @param bool $absolute Flag for returning the absolute file path
+   * @return array
+   */
   public static function getFiles(string $path,string $ext='',bool $absolute=true): array {
     $result = [];
     if( is_dir($path) ){
@@ -47,6 +55,14 @@ class FileUtility {
     return $result;
   }
   
+  /**
+   * Uploads files to a target directory
+   *
+   * @param string $source The field name in $_FILES
+   * @param string $target The target directory
+   * @param bool $overwrite Flag for overwriting existing files
+   * @return int The amount of uploaded files
+   */
   public static function upload(string $source,string $target,bool $overwrite=true): int {
     $result = 0;
     if( array_key_exists($source,$_FILES) ){
@@ -69,7 +85,14 @@ class FileUtility {
     return $result;
   }
   
-  public static function download(string $fileName, string $downloadFileName){
+  /**
+   * Downloads a file for use in the browser
+   *
+   * @param string $fileName The original file name
+   * @param string $downloadFileName The download file name
+   * @return void
+   */
+  public static function download(string $fileName, string $downloadFileName): void {
     $ext = strtolower( pathinfo($fileName,PATHINFO_EXTENSION) );
     $cType = ArrayUtility::key(self::MIME_TYPES,$ext,'text/plain');
     header('Content-Type: ' . $cType);
@@ -90,7 +113,13 @@ class FileUtility {
     readfile($fileName);
   }
   
-  public static function view(string $fileName){
+  /**
+   * Views file content in the browser
+   *
+   * @param string $fileName The original file name
+   * @return void
+   */
+  public static function view(string $fileName): void {
     $ext = strtolower( pathinfo($fileName,PATHINFO_EXTENSION) );
     $cType = ArrayUtility::key(self::MIME_TYPES,$ext,'text/plain');
     header('Content-Type: ' . $cType);
@@ -100,6 +129,13 @@ class FileUtility {
     readfile($fileName);
   }
   
+  /**
+   * Retrieves all files and folders from a path
+   *
+   * @param string $path The folder to search
+   * @param bool $filesOnly Flag for returning only files and ignore folders
+   * @return array|null
+   */
   public static function findAll(string $path,bool $filesOnly=false): ?array {
     $files = null;
     if( is_dir($path) ){
@@ -111,6 +147,12 @@ class FileUtility {
     return $files;
   }
   
+  /**
+   * Deletes all files from a path
+   *
+   * @param string $path The folder to search
+   * @return array|null The unlinked files
+   */
   public static function unlinkAll(string $path): ?array {
     $files = self::findAll($path);
     if( is_null($files) ) return $files;
