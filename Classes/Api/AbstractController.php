@@ -6,7 +6,13 @@ use \Api\Utility\ApiUtility;
 
 class AbstractController extends \Devworx\AbstractController {
   
-  public function initialize(){
+  /**
+   * Function initialize
+   * Initializes an API Controller with JSON encoding
+   * 
+   * @return void
+   */
+  public function initialize(): void {
     $this->view->setEncoding('json');
   }
   
