@@ -6,7 +6,14 @@ class BuildUtility {
   
   const NULLABLE = ['TIMESTAMP','DATE','DATETIME'];
   
-  public static function Comment(string $indent,...$lines){
+  /**
+   * Creates a multiline PHP comment
+   *
+   * @param string $indent The line indent to use
+   * @param array $lines The text lines for the comment
+   * @return string
+   */
+  public static function Comment(string $indent,...$lines): string {
     $result = array_map(function($line) use ($indent){
       return "{$indent} * {$line}";
     },$lines);
@@ -14,6 +21,12 @@ class BuildUtility {
     return "/**\n{$result}\n{$indent} */";
   }
   
+  /**
+   * Checks a model against a SQL table and retrieves the needed changes
+   *
+   * @param string $className The FQCN of the model
+   * @return array
+   */
   public static function ClassToTable(string $className): array {
     
     //$model = GeneralUtility::makeInstance($className);
@@ -140,6 +153,13 @@ class BuildUtility {
     ];
   }
   
+  /**
+   * Converts a SQL data type to an array of informations for the getter and setter of a model
+   *
+   * @param string $type The SQL type
+   * @param int $length The SQL field length
+   * @return array
+   */
   public static function TableToClass(string $type,int $length): array {
     $result = [
       'standard' => "''",
@@ -212,6 +232,16 @@ class BuildUtility {
     return $result;
   }
   
+  /**
+   * Creates a PHP model definition for a given SQL table
+   *
+   * @param string $namespace The namespace of the new model
+   * @param string $className The class name of the new model
+   * @param string $table The SQL table for the underlying data
+   * @param string $pk The primary key of the SQL table
+   * @param string $indent The line indent for the model
+   * @return string
+   */
   public static function Model(string $namespace,string $className,string $table,string $pk='uid',string $indent='  '): string {
     
     $extends = \Devworx\AbstractModel::class;
@@ -253,6 +283,17 @@ class BuildUtility {
     
   }
   
+  /**
+   * Creates getter and setter for given model
+   *
+   * @param string $className The class name of the model
+   * @param string $name The name of the model property
+   * @param array $info The property type info
+   * @param array $properties The resulting properties for the model
+   * @param array $functions The resulting getters and setters for the model
+   * @param string $indent The line indent for the functions
+   * @return void
+   */
   public static function CreateProperty( 
     string $className,
     string $name,
@@ -299,7 +340,11 @@ class BuildUtility {
     $functions []= "public function {$setter}({$argumentNullable}{$inputType} {$argument}): void {\n{$indent}{$indent}{$property} = {$value};\n{$indent}}\n";
   }
   
-  
+  /**
+   * Checks if all tables in the database have models and creates them
+   *
+   * @return void
+   */
   public static function checkModels(): void {
     
     global $DB;
