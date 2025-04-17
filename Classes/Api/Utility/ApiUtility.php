@@ -11,37 +11,71 @@ class ApiUtility {
   
   public static $debug = !true;
   
-  const 
-    ACCEPT_KEY = 'Accept',
-    CONTENT_TYPE_KEY = 'Content-Type',
-    CONTENT_TYPE = 'application/json',
-    CHARSET = 'utf-8',
-    HEADER_KEY = 'X-Devworx-Api',
-    CONTEXT_KEY = 'X-Devworx-Context',
-    CONTEXT = 'api',
-    SELFSIGNED = true;
-    
+  const ACCEPT_KEY = 'Accept';
+  const CONTENT_TYPE_KEY = 'Content-Type';
+  const CONTENT_TYPE = 'application/json';
+  const CHARSET = 'utf-8';
+  const HEADER_KEY = 'X-Devworx-Api';
+  const CONTEXT_KEY = 'X-Devworx-Context';
+  const CONTEXT = 'api';
+  const SELFSIGNED = true;
+  
+  /** 
+   * Checks if the HEADER_KEY is provided in the request header
+   *
+   * @return bool
+   */
   public static function hasKey(): bool {
     return Frontend::hasHeader(self::HEADER_KEY);
   }
   
+  /** 
+   * Reads the HEADER_KEY provided in the request header 
+   *
+   * @return string|null
+   */
   public static function getKey(): ?string {
     return ArrayUtility::key(Frontend::$header,self::HEADER_KEY);
   }
   
+  /** 
+   * Builds a header string by $key and $value
+   *
+   * @param string $key The header field
+   * @param string $value The header field value
+   * @return string
+   */
   public static function getHeaderString(string $key,string $value): string {
     return "{$key}: {$value}";
   }
   
+  /** 
+   * Sets a header Key-Value-Pair
+   *
+   * @param string $key The header field
+   * @param string $value The header field value
+   * @return void
+   */
   public static function setHeader(string $key,string $value): void {
     header(self::getHeaderString($key,$value));
   }
   
+  /** 
+   * Sets an array of headers
+   *
+   * @param array $headers The headers to set
+   * @return void
+   */
   public static function setHeaders(array $headers): void {
     foreach($headers as $key=>$value)
       self::setHeader($key,$value);
   }
   
+  /** 
+   * Initializes the API by setting neccessary headers
+   *
+   * @return void
+   */
   public static function initialize(): void {
     self::setHeaders([
       self::ACCEPT_KEY => self::CONTENT_TYPE,
@@ -50,6 +84,11 @@ class ApiUtility {
     ]);
   }
   
+  /** 
+   * Builds a header array for the current user
+   *
+   * @return array
+   */
   public static function getHeader(): array {
     return [
       self::getHeaderString(self::CONTENT_TYPE_KEY,self::CONTENT_TYPE . ';charset=' . self::CHARSET),
@@ -58,6 +97,14 @@ class ApiUtility {
     ];
   }
   
+  /** 
+   * Builds a url for a given controller action pair with additional arguments
+   *
+   * @param string $controller The target controller
+   * @param string $action The target controller action
+   * @param array $arguments The additional arguments
+   * @return string
+   */
   public static function getUrl(string $controller,string $action,array $arguments=null): string {
     $config = Frontend::getConfig('system');
     $query = [
@@ -77,12 +124,21 @@ class ApiUtility {
     ]);
   }
   
+  /** 
+   * Performs a GET-Request to a given controller action pair with additional arguments
+   *
+   * @param string $controller The target controller
+   * @param string $action The target controller action
+   * @param array $arguments The additional arguments
+   * @param bool $raw Flag to determine if the result of the request should be undecoded
+   * @return string|array
+   */
   public static function GET(
     string $controller,
     string $action,
     array $arguments=null,
     bool $raw=false
-  ){
+  ): string|array {
     $url = self::getUrl($controller,$action,$arguments);
     
     $ch = curl_init();
@@ -112,6 +168,15 @@ class ApiUtility {
     return $raw ? $result : json_decode($result,true);
   }
   
+  /** 
+   * Performs a POST-Request to a given controller action pair with additional arguments
+   *
+   * @param string $controller The target controller
+   * @param string $action The target controller action
+   * @param array $arguments The payload for the request
+   * @param bool $raw Flag to determine if the result of the request should be undecoded
+   * @return string|array
+   */
   public static function POST(
     string $controller,
     string $action,
