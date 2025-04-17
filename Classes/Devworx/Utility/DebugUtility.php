@@ -6,12 +6,21 @@ class DebugUtility {
   
   const STYLE = 'Resources/Styles/debug.css';
   
+  /** 
+   * Dumps a variable for debugging and adds a debugger wrap
+   * 
+   * @param mixed $var The variable to dump
+   * @param string $title The optional title for the debugger wrap
+   * @param string $method The optional method name for the debugger wrap
+   * @param int $line The optional line number for the debugger
+   * @return string
+   */
   static function var_dump(
     $var,
     string $title='',
     string $method='',
     int $line=0
-  ){
+  ): string {
     ob_start();
     var_dump($var);
     $result = ob_get_clean();
@@ -22,7 +31,13 @@ class DebugUtility {
     "</article>";
   }
   
-  static function exception(\Throwable $e){
+  /** 
+   * Exception handler for devworx with backtrace
+   * 
+   * @param \Throwable $e The exception
+   * @return void
+   */
+  static function exception(\Throwable $e): void {
     $type = $e::class;
     $title = $e->getMessage();
     
