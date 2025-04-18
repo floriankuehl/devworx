@@ -115,30 +115,30 @@ class Html {
 		}
 		   
 		switch($type){
-		  case'string': {
-  			$tag = "input";
-  			if( !array_key_exists('type',$attributes) )
-  			  $attributes['type'] = 'text';
-  			$attributes['value'] = $value;
-		  } break;
-		  case'int': {
-  			$tag = "input";
-  			if( !array_key_exists('type',$attributes) )
-  			  $attributes['type'] = 'number';
-  			$attributes['value'] = $value;
-		  } break;
-		  case'?DateTime': {
-  			$tag = "input";
-  			if( !array_key_exists('type',$attributes) )
-  			  $attributes['type'] = 'datetime-local';
-  			$attributes['value'] = is_null($value) ? '' : $value->format("Y-m-d\TH:i:s");
-  		} break;
-  	  case'DateTime': {
-  			$tag = "input";
-  			if( !array_key_exists('type',$attributes) )
-  			  $attributes['type'] = 'datetime-local';
-  			$attributes['value'] = is_null($value) ? '' : $value->format("Y-m-d\TH:i:s");
-  		} break;
+			case'string': {
+				$tag = "input";
+				if( !array_key_exists('type',$attributes) )
+				  $attributes['type'] = 'text';
+				$attributes['value'] = $value;
+  			} break;
+		  	case'int': {
+	  			$tag = "input";
+	  			if( !array_key_exists('type',$attributes) )
+	  			  $attributes['type'] = 'number';
+	  			$attributes['value'] = $value;
+			} break;
+			case'?DateTime': {
+	  			$tag = "input";
+	  			if( !array_key_exists('type',$attributes) )
+	  			  $attributes['type'] = 'datetime-local';
+	  			$attributes['value'] = is_null($value) ? '' : $value->format("Y-m-d\TH:i:s");
+			} break;
+	  	  	case'DateTime': {
+	  			$tag = "input";
+	  			if( !array_key_exists('type',$attributes) )
+	  			  $attributes['type'] = 'datetime-local';
+	  			$attributes['value'] = is_null($value) ? '' : $value->format("Y-m-d\TH:i:s");
+			} break;
 		}
 		
 		return self::element($tag,$attributes,$html);
