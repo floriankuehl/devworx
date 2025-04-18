@@ -50,6 +50,12 @@
 <h3>Data Handling</h3>
 <p>The results of database queries are generally represented with associative arrays. Classes like <code>ArrayWalker</code> allow enriching relational data such as MySQL results to enable multidimensional results and additional data. Models can also be used to modify result handling.</p>
 
+<h3>API Context</h3>
+<p>Devworx comes with the idea to use itself in an API style context, based on JSON data. The login hash can be provided via HTTP header to access the full capacity. The public resources contain a JavaScript implementation for easy access.</p>
+
+<h3>Access security</h3>
+<p>The codes like classes and private resources are located in the root folder of the solution, but the frontend files are located in the <code>Public</code> folder, aswell as the JavaScript classes for all custom HTML elements and the API integration.</p>
+
 <h3>Templating</h3>
 <p>The solution uses the principle of layout, template, and partial. The layout provides the outer frame that is the same for all results and renders the corresponding template of the requested action. Partials are small code snippets that can be used in templates and layouts, as well as in the actions, to generate output.</p>
 
@@ -64,8 +70,12 @@
 
 <h3>Styling</h3>
 <p><code>Bootstrap 5.3</code> and <code>Material Icons from Google</code> are used here.</p>
+
 <h3>Custom HTML Elements</h3>
 <p>The solution contains its own HTML elements to handle lists and formats. These are imported via JavaScript module.</p>
+
+<h3>JavaScript Addons</h3>
+<p>The solution contains addons for dialogs, toggle logic, confirming, formatting and a example for providing serverside rendered templates or partials.</p>
 
 <h3>Caches</h3>
 <p>The solution features automatic file caching of MySQL database schemas. This allows type usage without database queries.</p>
@@ -84,7 +94,7 @@
 <p>New functions can be easily implemented by adding new classes or inheriting existing classes.</p>
 
 <h3>Error Handling</h3>
-<p>Utility classes such as <code>DebugUtility</code> and <code>ErrorUtility</code> make implementing debugging and error handling logic easier.</p>
+<p>Utility classes such as <code>DebugUtility</code> make implementing debugging and error handling logic easier.</p>
 
 <h3>Security Features</h3>
 <p><code>AuthUtility</code> provides basic security functions that can be quickly integrated.</p>
