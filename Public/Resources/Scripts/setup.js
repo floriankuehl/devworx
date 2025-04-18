@@ -4,7 +4,7 @@ Devworx.Load(Devworx)
 class Provide {
   
   static #cache = {}
-  
+  /*
   static async ProtocolEditor(project){
     Devworx.Api.text(false)
     return Promise.all([
@@ -32,7 +32,7 @@ class Provide {
       })
     )
   }
-  
+  */
 }
 
 document.querySelectorAll('[data-confirm]')
@@ -101,6 +101,7 @@ document.querySelectorAll('[data-dialog]')
     })
   })
 
+/*
 Devworx.Api.register(
   'importDomains',
   _=> Devworx.Api.Get({
@@ -108,25 +109,8 @@ Devworx.Api.register(
     'action': 'domainImport'
   })
 )
-
-Devworx.Api.register(
-  'importIncoming',
-  _=> Devworx.Api.Get({
-    'controller': 'import',
-    'action': 'invoiceImport'
-  })
-)
-
-Devworx.Api.register(
-  'importHostings',
-  _=> Devworx.Api.Get({
-    'controller': 'import',
-    'action': 'hostingImport'
-  })
-)
-
-//Devworx.Api.debug(true);
-//Devworx.Api.trigger('importIncoming').then(result=>console.log(result))
+Devworx.Api.trigger('importDomains').then(result=>console.log(result))
+*/
 
 /*
 //Complex api call
@@ -134,7 +118,7 @@ Promise.all([
   Devworx.Api.Get({
     'controller': 'project',
     'action': 'get',
-    'uid': 14,
+    'uid': 1,
     'short': 1
   }),
   Devworx.Api.Get({
@@ -160,12 +144,5 @@ Promise.all([
 
 //List calculations and formatting
 document.addEventListener("DOMContentLoaded", e => {
-  const list = document.querySelector('#protocols')
-  if( list ){
-    const ts = list.querySelector('info timespan')
-    ts.innerHTML = Devworx.Format.number(list.timespan) + " Stunden"
-    
-    const s = list.querySelector('info salary')
-    s.innerHTML = Devworx.Format.currency(list.salary)
-  }
+  
 })
