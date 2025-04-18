@@ -13,6 +13,9 @@ namespace Devworx;
     EXTR_PREFIX_IF_EXISTS
 */
 
+/**
+ * The interface for general Views
+ */
 interface IView {
   
   function getId(): string;
@@ -44,15 +47,23 @@ interface IView {
   );
 }
 
+/**
+ * The view class for rendering with variables and templates
+ */
 class View implements IView {
   
-  protected 
-    $id = '',
-    $fileName = '',
-    $variables = [],
-    $encoding = '',
-    $renderer = '',
-    $all = false;
+  /** @var string The id of the view */
+  protected $id = '';
+  /** @var string The fileName of the template */
+  protected $fileName = '';
+  /** @var array The variables to provide to the template */
+  protected $variables = [];
+  /** @var string The encoding of the template */
+  protected $encoding = '';
+  /** @var string The name of the renderer */
+  protected $renderer = '';
+  /** @var mixed The container for all provided variables */
+  protected $all = false;
   
   function __construct(
     string $id='',
@@ -68,77 +79,182 @@ class View implements IView {
     $this->encoding = $encoding;
   }
   
+  /**
+   * Getter for the id
+   *
+   * @return string
+   */
   function getId(): string {
     return $this->id;
   }
   
+  /**
+   * Setter for the id
+   *
+   * @param string $id The value for the id
+   * @return void
+   */
   function setId(string $id): void {
     $this->id = $id;
   }
   
+  /**
+   * Getter for the renderer
+   *
+   * @return string
+   */
   function getRenderer(): string {
     return $this->renderer;
   }
   
+  /**
+   * Setter for the renderer
+   *
+   * @param string $renderer The value for the renderer
+   * @return void
+   */
   function setRenderer(string $renderer): void {
     $this->renderer = $renderer;
   }
   
+  /**
+   * Getter for the fileName
+   *
+   * @return string
+   */
   function getFile(): string {
     return $this->fileName;
   }
   
+  /**
+   * Setter for the template fileName
+   *
+   * @param string $fileName The value for the template fileName
+   * @return void
+   */
   function setFile(string $fileName): void {
     $this->fileName = $fileName;
   }
   
+  /**
+   * Getter for the 'all' flag
+   *
+   * @return bool
+   */
   function getProvideAll(): bool {
     return $this->all;
   }
   
+  /**
+   * Setter for the 'all' flag
+   *
+   * @param bool $all The value for 'all'
+   * @return void
+   */
   function setProvideAll(bool $all=true): void {
     $this->all = $all;
   }
   
+  /**
+   * Getter for the encoding
+   *
+   * @return string
+   */
   function getEncoding(): string {
     return $this->encoding;
   }
   
+  /**
+   * Setter for the encoding
+   *
+   * @param string $encoding The value for encoding
+   * @return void
+   */
   function setEncoding(string $encoding): void {
     $this->enconding = $encoding;
   }
   
+  /**
+   * Getter for the variables
+   *
+   * @return array
+   */
   function getVariables(): array {
     return $this->variables;
   }
   
+  /**
+   * Setter for the variables
+   *
+   * @param array $variables
+   * @return void
+   */
   function setVariables(array $variables): void {
     $this->variables = $variables;
   }
   
+  /**
+   * Checks if a given variable name is set
+   *
+   * @param string $key The variable name
+   * @return bool
+   */
   function hasVariable(string $key): bool {
     return array_key_exists($key,$this->variables);
   }
   
+  /**
+   * Gets a variable from the internal variable buffer
+   *
+   * @param string $key The variable name
+   * @return mixed|null
+   */
   function getVariable(string $key){
     if( $this->hasVariable($key) )
       return $this->variables[$key];
     return null;
   }
   
+  /**
+   * Sets a variable in the internal variable buffer
+   *
+   * @param string $key The variable name
+   * @param mixed $value The variable value
+   * @return void
+   */
   function setVariable(string $key,$value): void {
     $this->variables[$key] = $value;
   }
   
+  /**
+   * Sets a variable in the internal variable buffer using setVariable
+   * Alias for usage like Extbase
+   *
+   * @param string $key The variable name
+   * @param mixed $value The variable value
+   * @return void
+   */
   function assign(string $key,$value): void {
     $this->setVariable($key,$value);
   }
   
+  /**
+   * Sets multiple variables in the internal variable buffer using setVariable
+   * Alias for usage like Extbase
+   *
+   * @param array $values The variable values
+   * @return void
+   */
   function assignMultiple(array $values): void {
     foreach( $values as $key => $value )
       $this->setVariable($key,$value);
   } 
   
+  /**
+   * Renders the current view using renderStatic
+   *
+   * @return mixed
+   */
   function render(){
     return self::renderStatic(
       $this->fileName,
@@ -148,10 +264,24 @@ class View implements IView {
     );
   }
   
+  /**
+   * Converts the view to a string by rendering
+   *
+   * @return mixed
+   */
   function __toString(): string {
     return $this->render();
   }
   
+  /**
+   * Static render function for views
+   *
+   * @param string $fileName The template fileName
+   * @param array $variables The variables for the template
+   * @param string $renderer The renderer to use for the template
+   * @param string $encoding The encoding for the template
+   * @return mixed
+   */
   static function renderStatic(
     string $fileName,
     array $variables=null,
@@ -177,13 +307,16 @@ class View implements IView {
     throw new \Exception("Missing file {$fileName}");
     return $result;
   }
-  /*
-    string $id='',
-    string $fileName='',
-    array $variables=[],
-    string $renderer='',
-    string $encoding=''
-  */
+  
+  /**
+   * Static function for generating a View for layout rendering
+   *
+   * @param string $layout The template fileName
+   * @param array $arguments The variables for the template
+   * @param string $renderer The renderer to use for the template
+   * @param string $encoding The encoding for the template
+   * @return IView
+   */
   static function Layout(string $layout,array $arguments=null,string $renderer='',string $encoding=''): IView {
     $layout = ucfirst($layout);
     $path = Frontend::path( 
@@ -200,6 +333,16 @@ class View implements IView {
     );
   }
   
+  /**
+   * Static function for generating a View for action template rendering
+   *
+   * @param string $controller The controller name
+   * @param string $action The action name
+   * @param array $arguments The variables for the template
+   * @param string $renderer The renderer to use for the template
+   * @param string $encoding The encoding for the template
+   * @return IView
+   */
   static function Template(string $controller,string $action,array $arguments=null,string $renderer='',string $encoding=''): IView {
     $controller = ucfirst($controller);
     $action = ucfirst($action);
@@ -218,6 +361,15 @@ class View implements IView {
     );
   }
   
+  /**
+   * Static function for generating a View for partial rendering
+   *
+   * @param string $partial The partial name
+   * @param array $arguments The variables for the template
+   * @param string $renderer The renderer to use for the template
+   * @param string $encoding The encoding for the template
+   * @return IView
+   */
   static function Partial(string $partial,array $arguments=null,string $renderer='',string $encoding=''): IView {
     $partial = ucfirst($partial);
     $path = Frontend::path( 
