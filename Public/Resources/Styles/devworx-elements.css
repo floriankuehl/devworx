@@ -1,9 +1,6 @@
 devworx-app,
 devworx-view,
-devworx-list, 
-devworx-project, 
-devworx-customer, 
-devworx-protocol {
+devworx-list {
   display:block;
   width:100%;
 }
@@ -26,18 +23,6 @@ devworx-app > main {
 
 devworx-list {
     
-}
-
-devworx-project {
-  
-}
-
-devworx-customer {
-  
-}
-
-devworx-protocol:has(devworx-salary[value="0"]) {
-  background-color: rgba(0,255,0,.3)
 }
 
 /* VIEW HELPERS */
@@ -63,8 +48,4 @@ devworx-timespan {
 
 devworx-salary {
   
-}
-
-devworx-project devworx-protocol {
-  font-size: calc( var(--bs-body-font-size) * .8 );
 }
