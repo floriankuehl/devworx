@@ -1,8 +1,6 @@
 import { Format } from './Format.js';
 import { BasicElement } from './Elements.js';
 
-
-
 export class ID extends BasicElement {
   constructor() { 
     super()
