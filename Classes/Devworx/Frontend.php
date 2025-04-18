@@ -12,6 +12,10 @@ use \Devworx\Utility\DebugUtility;
 use \Devworx\Renderer\ConfigRenderer;
 use \Api\Utility\ApiUtility;
 
+/**
+ * The main frontend class, that handles the basics of every requested page.
+ * It also handles the current configuration by context
+ */
 class Frontend extends ConfigManager {
   
   const PATHGLUE = '/';
@@ -24,20 +28,36 @@ class Frontend extends ConfigManager {
     'lastName' => 'System'
   ];
   
-  public static
-    $context = '',
-    $encoding = '',
-    $header = null,
-    $layout = '',
-    $controller = null,
-    $action = '';
-    
-  public static function loadHeaders(){
+  /** @var string The current context */
+  public static $context = '';
+  /** @var string The current encoding */
+  public static $encoding = '';
+  /** @var array The current header */
+  public static $header = null;
+  /** @var string The current layout */
+  public static $layout = '';
+  /** @var IController The current controller */
+  public static $controller = null;
+  /** @var string The current action */
+  public static $action = '';
+  
+  /**
+   * Loads the standard headers
+   *
+   * @return void
+   */
+  public static function loadHeaders(): void {
     header('Cache-Control: no-cache, no-store, must-revalidate');
     header('Pragma: no-cache');
     header('Expires: 0');
   }
   
+  /**
+   * Gets a root folder or file path based on given segments
+   *
+   * @param array $segments The path segments
+   * @return string
+   */
   public static function path(...$segments): string {
     $segments = array_map(fn($s)=>trim($s,self::PATHGLUE),$segments);
     $path = implode(self::PATHGLUE,[
@@ -47,7 +67,13 @@ class Frontend extends ConfigManager {
     return self::REALPATH ? realpath($path) : $path;
   }
   
-  public static function pathDebug(...$segments){
+  /**
+   * Gives debug information about a folder or file path based on given segments
+   *
+   * @param array $segments The path segments
+   * @return array
+   */
+  public static function pathDebug(...$segments): array {
     $segments = array_map(fn($s)=>trim($s,self::PATHGLUE),$segments);
     $path = implode(self::PATHGLUE,[
       $GLOBALS['DEVWORX']['PATH']['ROOT'],
@@ -60,6 +86,12 @@ class Frontend extends ConfigManager {
     ];
   }
   
+  /**
+   * Gets a public folder or file path based on given segments
+   *
+   * @param array $segments The path segments
+   * @return string
+   */
   public static function publicPath(...$segments): string {
     $segments = array_map(fn($s)=>trim($s,self::PATHGLUE),$segments);
     $path = implode(self::PATHGLUE,[
@@ -69,6 +101,13 @@ class Frontend extends ConfigManager {
     return self::REALPATH ? realpath( $path ) : $path;
   }
   
+  /**
+   * Gets the public path based on the view configuration
+   *
+   * @param string $configKey The key of the view config to use
+   * @param array $segments The path segments
+   * @return string
+   */
   public static function viewPath(string $configKey,...$segments): string {
     $segments = array_map(fn($s)=>trim($s,self::PATHGLUE),$segments);
     $path = implode(self::PATHGLUE,[
@@ -79,32 +118,66 @@ class Frontend extends ConfigManager {
     return self::REALPATH ? realpath( $path ) : $path;
   }
   
+  /**
+   * Gets the public scripts path
+   *
+   * @param array $segments The path segments
+   * @return string
+   */
   public static function scriptsPath(...$segments): string {
     return self::viewPath('scriptsPath',...$segments);
   }
   
+  /**
+   * Gets the public styles path
+   *
+   * @param array $segments The path segments
+   * @return string
+   */
   public static function stylesPath(...$segments): string {
     return self::viewPath('stylesPath',...$segments);
   }
   
+  /**
+   * Checks if the program runs in API context
+   *
+   * @return bool
+   */
   public static function isApiContext(): bool{
     return self::$context == self::CONTEXTS[1];
   }
   
+  /**
+   * Loads the context based configuration file
+   *
+   * @return bool
+   */
   public static function loadConfigurationFile(): bool {
     $name = ucfirst(self::$context);
     $fileName = self::path('Configuration',"{$name}.json");
     return self::loadConfig($fileName);
   }
   
-  public static function loadLayout(){
+  /**
+   * Returns the content of the current layout file
+   *
+   * @return string
+   */
+  public static function loadLayout(): string {
     $name = ucfirst(self::$config['layout']);
     $path = self::path( self::$config['layoutRootPath'], "{$name}.php" );
     if( is_file( $path ) )
       return file_get_contents( $path );
     throw new \Exception("Missing layout file: {$path}");
+	return '';
   }
   
+  /**
+   * Loads and returns the current controller instance
+   *
+   * @param string $namespace Allows a variable namespace for the FQCN
+   * @return object|null
+   */
   public static function loadController(string $namespace=''){
     $controller = self::$config['context']['controller'];
     $namespace = empty($namespace) ? self::$config['system']['defaultNamespace'] : $namespace;
@@ -118,11 +191,24 @@ class Frontend extends ConfigManager {
     return null;
   }
   
+  /**
+   * Checks if a user is logged in
+   *
+   * @return bool
+   */
   public static function isActiveLogin(): bool {
     return is_array( self::$config['user'] ) && !empty(self::$config['user']);
   }
   
-  public static function getUrl(string $controller,string $action,array $arguments=null){
+  /**
+   * Returns a URL for a controller action with optional GET-arguments
+   *
+   * @param string $controller The controller name
+   * @param string $action The action name
+   * @param array|null $arguments The additional arguments
+   * @return string
+   */
+  public static function getUrl(string $controller,string $action,array $arguments=null): string {
     $formData = ArrayUtility::combine(
       [
         self::$config['system']['controllerArgument'] => $controller,
@@ -133,23 +219,49 @@ class Frontend extends ConfigManager {
     return "?" . http_build_query($formData);
   }
   
-  public static function redirect( string $controller, string $action, array $arguments=null ){
+  /**
+   * Redirects to a controller action with optional GET-arguments
+   *
+   * @param string $controller The controller name
+   * @param string $action The action name
+   * @param array|null $arguments The additional arguments
+   * @return void
+   */
+  public static function redirect( string $controller, string $action, array $arguments=null ): void {
     GeneralUtility::redirect( 
       self::getUrl( $controller, $action, $arguments ) 
     );
   }
   
-  public static function redirectDefault(){
+  /**
+   * Redirects to the default controller action
+   *
+   * @param string $controller The controller name
+   * @param string $action The action name
+   * @return void
+   */
+  public static function redirectDefault(): void {
     self::redirect(
       self::$config['system']['defaultController'],
       self::$config['system']['defaultAction']
     );
   }
   
+  /**
+   * Redirects back to the referrer
+   *
+   * @return void
+   */
   public static function redirectReferrer(){
     GeneralUtility::redirect( $_SERVER['HTTP_REFERER'] );
   }
   
+  /**
+   * Returns the current controller id based on set keys in $_REQUEST.
+   * Falls back to the defaultController if not set
+   *
+   * @return string
+   */
   public static function getCurrentController(): string {
     return StringUtility::cleanup(
       ArrayUtility::key(
@@ -160,6 +272,12 @@ class Frontend extends ConfigManager {
     );
   }
   
+  /**
+   * Returns the current action name based on set keys in $_REQUEST.
+   * Falls back to the defaultAction if not set
+   *
+   * @return string
+   */
   public static function getCurrentAction(): string {
     return StringUtility::cleanup(
       ArrayUtility::key(
@@ -170,10 +288,20 @@ class Frontend extends ConfigManager {
     );
   }
   
+  /**
+   * Returns the data of the current logged in user
+   *
+   * @return array|null
+   */
   public static function getCurrentUser(): ?array {
     return self::$config['user'];
   }
   
+  /**
+   * Initializes the frontend
+   *
+   * @return bool
+   */
   public static function initialize(): bool {
     self::loadHeaders();
     
@@ -200,6 +328,11 @@ class Frontend extends ConfigManager {
     return false;
   }
   
+  /**
+   * Checks if the current controller and action matches the default
+   *
+   * @return bool
+   */
   public static function isDefaultAction(): bool {
     return (
       self::$config['context']['controller'] === self::$config['system']['defaultController'] && 
@@ -207,12 +340,22 @@ class Frontend extends ConfigManager {
     );
   }
   
+  /**
+   * Checks if the current controller and action are public by configuration
+   *
+   * @return bool
+   */
   public static function isPublicControllerAction(string $caPair=''): bool {
     if( empty($caPair) )
       $caPair = self::$config['context']['controller'] . '::' . self::$config['context']['action'];
     return in_array($caPair,self::$config['system']['publicControllerActions']);
   }
   
+  /**
+   * Processes the current controller action to the body content
+   *
+   * @return IController|null
+   */
   public static function processControllerAction(): ?IController {
     $instance = self::loadController();
     if( is_null( $instance ) ) return $instance;
@@ -220,7 +363,12 @@ class Frontend extends ConfigManager {
     return $instance;
   }
   
-  public static function process(){
+  /**
+   * Processes the current frontend request and renders the view if needed
+   *
+   * @return string|null
+   */
+  public static function process(): ?string {
     if( self::initialize() ){
       
       $userOnline = self::isActiveLogin();
