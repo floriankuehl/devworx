@@ -88,60 +88,6 @@ export class List extends BasicElement {
   }
 }
 
-export class Project extends BasicElement {
-  constructor() { 
-    super();
-    this.timeout = _=> this.devworx()
-  }
-  
-  devworx(){
-    const timespanInfo = this.querySelector('devworx-list info timespan')
-    if( timespanInfo ) timespanInfo.innerHTML = Format.number(this.timespan) + " Stunden"
-    const salaryInfo = this.querySelector('devworx-list info salary')
-    if( salaryInfo ) salaryInfo.innerHTML = Format.currency(this.salary)
-  }
-}
-
-export class Customer extends BasicElement {
-  constructor() { 
-    super()
-    this.devworx()
-  }
-  devworx(){}
-}
-
-export class Protocol extends BasicElement {
-  constructor() { 
-    super()
-    this.devworx()
-  }
-  devworx(){}
-}
-
-export class Invoice extends BasicElement {
-  constructor() { 
-    super()
-    this.devworx()
-  }
-  devworx(){}
-}
-
-export class Domain extends BasicElement {
-  constructor() { 
-    super()
-    this.devworx()
-  }
-  devworx(){}
-}
-
-export class Contract extends BasicElement {
-  constructor() { 
-    super()
-    this.devworx()
-  }
-  devworx(){}
-}
-
 export class Tabs extends BasicElement {
   #lists
   #triggers
