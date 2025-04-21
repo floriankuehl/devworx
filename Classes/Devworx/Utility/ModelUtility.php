@@ -17,7 +17,7 @@ class ModelUtility {
   public static function toModel(array $row, string $class): IModel {
     if( empty($class) )
       throw new \Exception("No class provided");
-    if( !is_a($class,IModel::class) )
+    if( !is_a($class,IModel::class,true) )
       throw new \Exception("Class must implement IModel");
     
     $model = new $class();
@@ -37,7 +37,7 @@ class ModelUtility {
   public static function toModels(array $rows,string $class): array {
     if( empty($class) )
       throw new \Exception("No class provided");
-    if( !is_a($class,IModel::class) )
+    if( !is_a($class,IModel::class,true) )
       throw new \Exception("Class must implement IModel");
     
     $result = [];
