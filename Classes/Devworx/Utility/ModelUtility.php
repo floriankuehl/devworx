@@ -6,6 +6,13 @@ use \Devworx\Interfaces\IModel;
 
 class ModelUtility {
   
+  /**
+   * Sets data in a model by setter
+   * 
+   * @param IModel $model
+   * @param array $row
+   * @return IModel
+   */
   public static function hydrateModel(IModel $model, array $row): IModel {
 	foreach( $row as $key => $value ){
 	  $model->{"set".ucfirst($key)}($value);
