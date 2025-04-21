@@ -9,32 +9,32 @@ use \Devworx\Interfaces\IView;
  */
 class View implements IView {
   
-  /** @var string The id of the view */
-  protected $id = '';
-  /** @var string The fileName of the template */
-  protected $fileName = '';
-  /** @var array The variables to provide to the template */
-  protected $variables = [];
-  /** @var string The encoding of the template */
-  protected $encoding = '';
-  /** @var string The name of the renderer */
-  protected $renderer = '';
-  /** @var mixed The container for all provided variables */
-  protected $all = false;
+	/** @var string The id of the view */
+	protected $id = '';
+	/** @var string The fileName of the template */
+	protected $fileName = '';
+	/** @var array The variables to provide to the template */
+	protected $variables = [];
+	/** @var string The encoding of the template */
+	protected $encoding = '';
+	/** @var string The name of the renderer */
+	protected $renderer = '';
+	/** @var mixed The container for all provided variables */
+	protected $all = false;
   
-  function __construct(
-    string $id='',
-    string $fileName='',
-    array $variables=null,
-    string $renderer='',
-    string $encoding=''
-  ){
-    $this->id = $id;
-    $this->fileName = $fileName;
-    $this->variables = is_null($variables) ? [] : $variables;
-    $this->renderer = empty($renderer) ? Frontend::getConfig('view','renderer') : $renderer;
-    $this->encoding = $encoding;
-  }
+	function __construct(
+		string $id='',
+		string $fileName='',
+		array $variables=null,
+		string $renderer='',
+		string $encoding=''
+	){
+		$this->id = $id;
+		$this->fileName = $fileName;
+		$this->variables = is_null($variables) ? [] : $variables;
+		$this->renderer = empty($renderer) ? Frontend::getConfig('view','renderer') : $renderer;
+		$this->encoding = $encoding;
+	}
   
   /**
    * Getter for the id
@@ -128,7 +128,7 @@ class View implements IView {
    * @return void
    */
   function setEncoding(string $encoding): void {
-    $this->enconding = $encoding;
+    $this->encoding = $encoding;
   }
   
   /**
@@ -210,7 +210,7 @@ class View implements IView {
   /**
    * Renders the current view using renderStatic
    *
-   * @return mixed
+   * @return \mixed
    */
   function render(){
     return self::renderStatic(
@@ -224,7 +224,7 @@ class View implements IView {
   /**
    * Converts the view to a string by rendering
    *
-   * @return mixed
+   * @return \mixed
    */
   function __toString(): string {
     return $this->render();
@@ -237,14 +237,14 @@ class View implements IView {
    * @param array $variables The variables for the template
    * @param string $renderer The renderer to use for the template
    * @param string $encoding The encoding for the template
-   * @return mixed
+   * @return \mixed
    */
   static function renderStatic(
     string $fileName,
     array $variables=null,
     string $renderer = '',
     string $encoding = ''
-  ){
+  ): \mixed {
     $result = null;
     if( is_file($fileName) ){
       ob_start();
@@ -259,9 +259,15 @@ class View implements IView {
       else
         ob_end_flush();
       
-      return call_user_func([$renderer,'render'],$result,$variables,$encoding);
+	  if (class_exists($renderer)) {
+		$instance = new $renderer();
+		if (method_exists($instance, 'supports') && $instance->supports($result)) {
+			return $instance->render($result, $variables, $encoding);
+		}
+	  }
+	  return $result;
     }
-    throw new \Exception("Missing file {$fileName}");
+    throw new \RuntimeException("Missing file {$fileName}");
     return $result;
   }
   
