@@ -2,6 +2,8 @@
 
 namespace Devworx\Renderer;
 
+use \Devworx\Utility\ArrayUtility;
+
 class FluidRenderer extends AbstractRenderer {
   
   /**
@@ -11,7 +13,7 @@ class FluidRenderer extends AbstractRenderer {
    * @param mixed $branch The current branch
    * @return mixed
    */
-  public static function parseBranch(string $key,$branch){
+  public static function parseBranch(string $key,$branch,bool $enableMagicCalls=false){
     
     if( empty($key) || is_null($branch) ) 
       return '';
@@ -25,11 +27,19 @@ class FluidRenderer extends AbstractRenderer {
     if( empty($segments) ){
       if( is_string($branch) && is_numeric($first) )
         return $branch[$first];
-      if( is_object($branch) )
-        return call_user_func([$branch,"get".ucfirst($first)]);
+      if( is_object($branch) ){
+		if( method_exists( $branch, $first ) && (new \ReflectionMethod($branch, $first))->getNumberOfRequiredParameters() === 0 )
+			return call_user_func([$branch, $first]);
+		elseif( property_exists($branch,$first) )
+			return $branch->$first;
+		elseif( method_exists($branch, "get".ucfirst($first)) )
+			return call_user_func([$branch,"get".ucfirst($first)]);
+		elseif(method_exists($branch, '__call') && $enableMagicCalls)
+			return $branch->$first(); // oder $branch->__call($first, []);
+	  }
       if( is_array($branch) && array_key_exists($first,$branch) )
         return $branch[$first];
-      return "{{$key}}";
+      return "[UNDEFINED: {$key}]";
     }
     
     $rest = implode('.',$segments);
@@ -44,8 +54,8 @@ class FluidRenderer extends AbstractRenderer {
     }
     if( is_numeric($branch) )
       return $branch;
-    if( is_string($branch) )
-      return self::parseBranch($rest,$branch[$first]);
+    if( is_string($branch) && isset($branch[$first]) )
+	  return self::parseBranch($rest,$branch[$first]);
     
     return $branch;
   }
@@ -82,22 +92,28 @@ class FluidRenderer extends AbstractRenderer {
     return $value;
   }
   
+  public function supports(mixed $template): bool {
+	return is_string($template) && str_contains($template, '{');
+  }
+  
   /**
    * Renders a source string template using branched object access
    *
    * @param mixed $source The given source template text
    * @param array $variables The provided variables for this renderer
    * @param string $encoding The standard encoding for this renderer
-   * @return mixed
+   * @return string
    */
-  public static function render($source,array $variables,string $encoding=''){
-    if( is_string($source) ){
+  public function render(\mixed $template,array $variables,string $encoding=''): string {
+    if( is_string($source) && str_contains($source,'{') ){
       $keys = self::extractVariables($source);
       if( is_null($keys) ) return $source;
       
+	  $enableMagicCalls = ArrayUtility::key($this->options,'enableMagicCalls',false);
+	  
       $values = [];
       foreach( $keys as $i => $key ){
-        $value = self::parseBranch($key,$variables);
+        $value = self::parseBranch($key,$variables,$enableMagicCalls);
         $values["{{$key}}"] = self::stringify($value,$key);
       }
       
@@ -107,7 +123,7 @@ class FluidRenderer extends AbstractRenderer {
         $source
       );
     }
-    return $source;
+    return (string)$source;
   }
 }
 
