@@ -322,7 +322,8 @@ class Frontend extends ConfigManager {
       }
       
       session_start();
-      self::$config = ConfigRenderer::render( self::$config );
+	  $renderer = new ConfigRenderer();
+      self::$config = $renderer->render( self::$config );
       return true;
     }
     return false;
