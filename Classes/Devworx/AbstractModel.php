@@ -2,6 +2,7 @@
 
 namespace Devworx;
 
+use \Devworx\Interfaces\IModel;
 use \Devworx\Utility\GeneralUtility;
 use \Devworx\Utility\ModelUtility;
 
@@ -9,7 +10,7 @@ use \Devworx\Utility\ModelUtility;
  * The base class for models
  */
 
-abstract class AbstractModel {
+abstract class AbstractModel implements IModel {
   
 	/** 
 	 * @var int $uid The uid of the model 
