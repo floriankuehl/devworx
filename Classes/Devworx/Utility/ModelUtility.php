@@ -3,9 +3,15 @@
 namespace Devworx\Utility;
 
 use \Devworx\Interfaces\IModel;
-use \Devworx\AbstractModel;
 
 class ModelUtility {
+  
+  public static function hydrateModel(IModel $model, array $row): IModel {
+	foreach( $row as $key => $value ){
+	  $model->{"set".ucfirst($key)}($value);
+	}
+	return $model;
+  }
   
   /**
    * Maps a data row to a new model instance by setter functions
@@ -20,11 +26,7 @@ class ModelUtility {
     if( !is_a($class,IModel::class,true) )
       throw new \Exception("Class must implement IModel");
     
-    $model = new $class();
-    foreach( $row as $key => $value ){
-      $model->{"set".ucfirst($key)}($value);
-    }
-    return $model;
+	return self::hydrateModel(new $class(),$row);
   }
   
   /**
@@ -42,11 +44,7 @@ class ModelUtility {
     
     $result = [];
     foreach( $rows as $i => $row ){
-      $model = new $class();
-      foreach( $row as $key => $value ){
-        $model->{"set".ucfirst($key)}($value);
-      }
-      $result []= $model;
+	  $result []= self::hydrateModel(new $class,$row);
     }
     return $result;
   }
