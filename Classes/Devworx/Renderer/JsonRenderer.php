@@ -2,10 +2,10 @@
 
 namespace Devworx\Renderer;
 
-use Devworx\Frontend;
-use Devworx\Utility\ArrayUtility;
+use \Devworx\Frontend;
+use \Devworx\Utility\ArrayUtility;
 
-class JsonRenderer {
+class JsonRenderer extends AbstractRenderer {
   
   /**
    * Renders a flag that will be added to the encoding function
@@ -16,6 +16,10 @@ class JsonRenderer {
     return 0;
   }
   
+  public function supports(\mixed $template): bool {
+	return is_array($template) || is_object($template);
+  }
+  
   /**
    * Renders a given source with provided variables
    * If source is an array, the provided keys in variables are extracted from the source array.
@@ -23,7 +27,7 @@ class JsonRenderer {
    *
    * @return mixed
    */
-  public static function render($source,array $variables,string $encoding=''){
+  public function render(\mixed $source,array $variables,string $encoding=''): string {
     header("Content-Type: application/{$encoding};charset=utf-8");
     $fn = empty($encoding) ? $encoding : "{$encoding}_encode";
     
