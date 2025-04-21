@@ -2,28 +2,30 @@
 
 namespace Devworx\Renderer;
 
+use \Devworx\Interfaces\IRenderer;
 use Devworx\Frontend;
 use Devworx\Utility\ArrayUtility;
 
-
-/**
- * Interface IRenderer
- * Basic interface for every renderer
- */
-interface IRenderer {
-  static function render($source,array $variables,string $encoding): void;
-}
-
 abstract class AbstractRenderer implements IRenderer {
+ 
+   protected $options = [];
  
   /**
    * Function render
    * Abstract function for rendering anything
    * 
-   * @return void
+   * @param \mixed $template The given template
+   * @param array $variables 
+   * @param string $encoding
+   * @return \mixed
    */
-  abstract static function render($source,array $variables,string $encoding): void;
+  abstract function render(\mixed $template,array $variables,string $encoding): \mixed;
   
+  public function setOptions(array $options): void {
+	  $this->options = $options;
+  }
+  
+  abstract function supports(\mixed $template): bool;
 }
 
 ?>
