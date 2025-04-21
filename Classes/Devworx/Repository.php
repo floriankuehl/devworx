@@ -2,7 +2,6 @@
 
 namespace Devworx;
 
-use \Devworx\Interfaces\IModel;
 use \Devworx\Utility\ModelUtility;
 use \Devworx\Frontend;
 
