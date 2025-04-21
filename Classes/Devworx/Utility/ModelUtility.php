@@ -2,6 +2,7 @@
 
 namespace Devworx\Utility;
 
+use \Devworx\Interfaces\IModel;
 use \Devworx\AbstractModel;
 
 class ModelUtility {
@@ -11,9 +12,9 @@ class ModelUtility {
    *
    * @param array $row The data array
    * @param string $class The FQCN of the new instance
-   * @return AbstractModel
+   * @return IModel
    */
-  public static function toModel(array $row, string $class): AbstractModel {
+  public static function toModel(array $row, string $class): IModel {
     if( empty($class) )
       throw new \Exception("No class provided");
     if( !is_subclass_of($class,AbstractModel::class) )
@@ -53,10 +54,10 @@ class ModelUtility {
   /**
    * Converts a model to an array
    *
-   * @param AbstractModel $model The model to convert to an array
+   * @param IModel $model The model to convert to an array
    * @return array
    */
-  public static function toArray(AbstractModel $model):array {
+  public static function toArray(IModel $model):array {
     $result = [];
     
     foreach( $model->fields() as $key => $value ){
