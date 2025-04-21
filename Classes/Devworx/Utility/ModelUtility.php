@@ -37,8 +37,8 @@ class ModelUtility {
   public static function toModels(array $rows,string $class): array {
     if( empty($class) )
       throw new \Exception("No class provided");
-    if( !is_subclass_of($class,AbstractModel::class) )
-      throw new \Exception("Class must inherit AbstractModel");
+    if( !is_a($class,'IModel') )
+      throw new \Exception("Class must implement IModel");
     
     $result = [];
     foreach( $rows as $i => $row ){
@@ -73,7 +73,7 @@ class ModelUtility {
           $result[$key] = $value->getTimestamp();
           continue;
         }
-        if( $value instanceof AbstractModel ){
+        if( is_a( $value, 'IModel' ) ){
           $result[$key] = $value->getUid();
           continue;
         }
