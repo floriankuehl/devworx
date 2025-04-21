@@ -1,6 +1,6 @@
 <?php
 
-namespace Devworx;
+namespace Devworx\Interfaces;
 
 /**
  * Interface for basic controllers
