@@ -3,8 +3,8 @@
 namespace Devworx\Renderer;
 
 use \Devworx\Interfaces\IRenderer;
-use Devworx\Frontend;
-use Devworx\Utility\ArrayUtility;
+use \Devworx\Frontend;
+use \Devworx\Utility\ArrayUtility;
 
 abstract class AbstractRenderer implements IRenderer {
  
