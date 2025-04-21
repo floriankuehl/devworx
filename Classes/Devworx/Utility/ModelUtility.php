@@ -32,7 +32,7 @@ class ModelUtility {
    *
    * @param array $rows The list of data arrays
    * @param string $class The FQCN of the new instance
-   * @return AbstractModel
+   * @return array
    */
   public static function toModels(array $rows,string $class): array {
     if( empty($class) )
