@@ -117,9 +117,8 @@ class AuthUtility {
    * @return void
    */
   public static function lock(): void {
-    CookieUtility::unset();
-    if( !empty(session_id()) )
-      session_destroy();
+	SessionUtility::stop();
+	CookieUtility::unset();
   }
 }
 
