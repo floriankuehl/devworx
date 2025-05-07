@@ -207,9 +207,10 @@ class Frontend extends ConfigManager {
    * @param string $controller The controller name
    * @param string $action The action name
    * @param array|null $arguments The additional arguments
+   * @param string|null $anchor The optional anchor of the url
    * @return string
    */
-  public static function getUrl(string $controller,string $action,array $arguments=null): string {
+  public static function getUrl(string $controller,string $action,array $arguments=null,string $anchor=null): string {
     $formData = ArrayUtility::combine(
       [
         self::$config['system']['controllerArgument'] => $controller,
@@ -217,7 +218,7 @@ class Frontend extends ConfigManager {
       ],
       $arguments
     );
-    return "?" . http_build_query($formData);
+    return "?" . http_build_query($formData) . ( is_null($anchor) ? '' : "#{$anchor}" );
   }
   
   /**
@@ -226,11 +227,12 @@ class Frontend extends ConfigManager {
    * @param string $controller The controller name
    * @param string $action The action name
    * @param array|null $arguments The additional arguments
+   * @param string|null $anchor The optional anchor of the url
    * @return void
    */
-  public static function redirect( string $controller, string $action, array $arguments=null ): void {
+  public static function redirect( string $controller, string $action, array $arguments=null, string $anchor=null ): void {
     GeneralUtility::redirect( 
-      self::getUrl( $controller, $action, $arguments ) 
+      self::getUrl( $controller, $action, $arguments, $anchor ) 
     );
   }
   
