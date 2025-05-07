@@ -7,6 +7,17 @@ use \Api\Utility\ApiUtility;
 class AuthUtility {
   
   /**
+   * Creates a user hash from a username and a password
+   *
+   * @param string $userName The username
+   * @param string $password The password
+   * @return string
+   */
+  public static function createUserHash(string $userName, string $password): string {
+	  return md5("{$userName}|{$password}");
+  }
+  
+  /**
    * Checks if a given string is MD5 and checks if a user with this login exists
    *
    * @param string $hash The login hash
@@ -91,11 +102,7 @@ class AuthUtility {
       $result = ArrayUtility::hasValue($_POST,'username') && 
         ArrayUtility::hasValue($_POST,'password');
       if( $result ){
-        $payload = implode("|",[
-          ArrayUtility::key($_POST,'username'),
-          ArrayUtility::key($_POST,'password')
-        ]);
-        $payload = md5( $payload );
+        $payload = self::createUserHash($_POST['username'], $_POST['password']);
         $result = self::isUserHash( $payload ) && 
           CookieUtility::set( $payload ) && 
           self::setLastLogin( $payload );
