@@ -19,13 +19,13 @@ abstract class AbstractController implements IController {
 	/** @var string $namespace The namespace of the controller */
 	protected $namespace = '';
 	/** @var IView $view A interface reference to the view of the controller */
-    protected $view = null;
+    	protected $view = null;
 	/** @var IRequest $request A interface reference to the current request */
-    protected $request = null;
+	protected $request = null;
 	/** @var bool $blockRendering Flag to block rendering for functional actions */
-    protected $blockRendering = false;
+	protected $blockRendering = false;
 	/** @var bool $blockLayout Flag to block layout rendering (template only) */
-    protected $blockLayout = false;
+	protected $blockLayout = false;
   
 	public function __construct(){
 		$tokens = explode("\\",get_called_class());
@@ -76,7 +76,7 @@ abstract class AbstractController implements IController {
 	 *
 	 * @return void
 	 */
-	function setBlockRendering(bool $value=true): bool {
+	function setBlockRendering(bool $value=true): void {
 		$this->blockRendering = $value;
 	}
 
