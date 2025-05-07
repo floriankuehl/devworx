@@ -1,5 +1,4 @@
 import * as Devworx from './Devworx/Module.js';
-Devworx.Load(Devworx)
 
 class Provide {
   
