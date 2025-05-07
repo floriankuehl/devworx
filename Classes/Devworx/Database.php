@@ -230,7 +230,7 @@ class Database implements IDatabase {
 		  $fields []= "{$k} = '{$v}'";
 		}
 		$fields = implode(',',$fields);
-		return (bool) $this->result("UPDATE {$table} SET ({$fields}) WHERE ({$pk} = '{$uid}') LIMIT 1;");
+		return (bool) $this->result("UPDATE {$table} SET {$fields} WHERE ({$pk} = '{$uid}') LIMIT 1;");
 	}
 
 	/**
