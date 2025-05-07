@@ -105,9 +105,9 @@ class FluidRenderer extends AbstractRenderer {
    * @return string
    */
   public function render(mixed $template,array $variables,string $encoding=''): string {
-    if( is_string($source) && str_contains($source,'{') ){
-      $keys = self::extractVariables($source);
-      if( is_null($keys) ) return $source;
+    if( is_string($template) && str_contains($template,'{') ){
+      $keys = self::extractVariables($template);
+      if( is_null($keys) ) return $template;
       
 	  $enableMagicCalls = ArrayUtility::key($this->options,'enableMagicCalls',false);
 	  
@@ -120,10 +120,10 @@ class FluidRenderer extends AbstractRenderer {
       return str_replace(
         array_keys($values), 
         array_values($values),
-        $source
+        $template
       );
     }
-    return (string)$source;
+    return (string)$template;
   }
 }
 
