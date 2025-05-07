@@ -123,19 +123,19 @@ class ConfigRenderer extends AbstractRenderer {
       );
   }
   
-  public function supports(\mixed $template): bool {
+  public function supports(mixed $template): bool {
 	  return is_array($template);
   }
   
   /**
    * Renders a configuration with automatic collapsing
    *
-   * @param \mixed $source The configuration data
+   * @param mixed $source The configuration data
    * @param array $variables The variables to provide while rendering
    * @param string $encoding The standard encoding for the renderer
-   * @return \mixed
+   * @return mixed
    */
-  public function render(\mixed $source,array $variables=null,string $encoding=''): \mixed {
+  public function render(mixed $source,array $variables=null,string $encoding=''): mixed {
     if( is_array($source) ){
       foreach( $source as $key => $value ){
         if( is_array($value) ){
