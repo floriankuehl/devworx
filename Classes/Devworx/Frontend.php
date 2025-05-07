@@ -6,11 +6,11 @@ use \Devworx\ConfigManager;
 use \Devworx\Utility\AuthUtility;
 use \Devworx\Utility\ArrayUtility;
 use \Devworx\Utility\CookieUtility;
-use \Devworx\Utility\SessionUtility;
 use \Devworx\Utility\GeneralUtility;
 use \Devworx\Utility\StringUtility;
 use \Devworx\Utility\DebugUtility;
 use \Devworx\Renderer\ConfigRenderer;
+use \Devworx\Utility\SessionUtility;
 use \Api\Utility\ApiUtility;
 
 /**
@@ -323,7 +323,7 @@ class Frontend extends ConfigManager {
       }
       
       SessionUtility::start();
-      $renderer = new ConfigRenderer();
+	  $renderer = new ConfigRenderer();
       self::$config = $renderer->render( self::$config );
       return true;
     }
@@ -356,7 +356,7 @@ class Frontend extends ConfigManager {
   /**
    * Processes the current controller action to the body content
    *
-   * @return AbstractController|null
+   * @return IController|null
    */
   public static function processControllerAction(): ?AbstractController {
     $instance = self::loadController();
@@ -394,6 +394,9 @@ class Frontend extends ConfigManager {
       if( $ctrl->getBlockRendering() )
         return '';
       
+	  if( $ctrl->getBlockLayout() )
+		  return self::$config['body']['content'];
+	  
       return View::Layout( 
         self::$config['view']['layout'], 
         self::$config, 
