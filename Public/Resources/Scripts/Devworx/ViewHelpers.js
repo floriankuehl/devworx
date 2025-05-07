@@ -5,12 +5,11 @@ export class ID extends AutoRegistering(HTMLSpanElement) {
 	
   constructor() { 
     super()
-    this.devworx()
   }
   
   static get baseTag(){ return 'span' }
   
-  devworx(){
+  connectedCallback(){
     const 
       value = '' + parseInt( this.getAttribute('value') ),
       prefix = this.hasAttribute('prefix') ? this.getAttribute('prefix') : '',
@@ -24,12 +23,11 @@ export class ID extends AutoRegistering(HTMLSpanElement) {
 export class Time extends AutoRegistering(HTMLTimeElement) {
   constructor() { 
     super()
-    this.devworx()
   }
   
   static get baseTag(){ return 'time' }
-  
-  devworx(){
+   
+  connectedCallback(){
     const dt = this.getAttribute('datetime')
     if( dt == '' || dt == 'null' || dt == '0000-00-00 00:00:00' ) 
       return;
@@ -44,12 +42,11 @@ export class Time extends AutoRegistering(HTMLTimeElement) {
 export class Timespan extends AutoRegistering(HTMLTimeElement) {
   constructor() { 
     super()
-    this.devworx()
   }
   
   static get baseTag(){ return 'time' }
   
-  devworx(){
+  connectedCallback(){
     const time = this.timespan
     
     this.setAttribute('days',time[0])
@@ -116,12 +113,11 @@ export class Timespan extends AutoRegistering(HTMLTimeElement) {
 export class Currency extends AutoRegistering(HTMLDataElement) {
   constructor() { 
     super()
-    this.devworx()
   }
   
   static get baseTag(){ return 'data' }
   
-  devworx(){
+  connectedCallback(){
     const value = parseFloat( this.getAttribute('value') );
     this.innerHTML = Format.currency(value);
   }
@@ -130,12 +126,11 @@ export class Currency extends AutoRegistering(HTMLDataElement) {
 export class Salary extends Timespan {
   constructor() { 
     super()
-    this.devworx()
   }
   
   static get baseTag(){ return 'data' }
   
-  devworx(){
+  connectedCallback(){
     const 
       value = parseFloat( this.getAttribute('value') ),
       price = parseFloat( this.getAttribute('price') ),

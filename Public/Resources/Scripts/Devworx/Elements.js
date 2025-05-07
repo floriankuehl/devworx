@@ -64,24 +64,47 @@ export function AutoRegistering(Base) {
 }
 
 export class View extends AutoRegistering(HTMLDivElement) {
-    
   constructor() { 
     super()
-    //this.devworx()
   }
-  
-  devworx(){
-    
-  }
+}
+
+export class Link extends AutoRegistering(HTMLAnchorElement){
+	constructor(){
+		super()
+	}
+	static get baseTag(){ return 'a' }
+	
+	connectedCallback() {
+		const params = []
+		if( this.hasAttribute('controller') ){
+			params.push(`controller=${this.getAttribute('controller')}`)
+			this.removeAttribute('controller')
+		}	
+		if( this.hasAttribute('action') ){
+			params.push(`action=${this.getAttribute('action')}`)
+			this.removeAttribute('action')
+		}
+		if( this.hasAttribute('uid') ){
+			params.push(`uid=${this.getAttribute('uid')}`)
+			this.removeAttribute('uid')
+		}
+		this.setAttribute('href',`?${params.join('&')}`)
+		
+		this.addEventListener('click',e=>{
+			e.preventDefault()
+			e.stopPropagation()
+			window.location.href = this.getAttribute('src')
+		})
+	}
 }
 
 export class List extends AutoRegistering(HTMLDivElement) {
   constructor() { 
     super()
-    this.devworx()
   }
   
-  devworx(){
+  connectedCallback() {
     const 
       type = this.getAttribute('type'),
       itemSelector = `devworx-${type.toLowerCase()}`,
@@ -100,7 +123,6 @@ export class Tabs extends AutoRegistering(HTMLDivElement) {
   
   constructor() { 
     super()
-    this.devworx()
   }
   
   set active(value){
@@ -117,7 +139,7 @@ export class Tabs extends AutoRegistering(HTMLDivElement) {
     return this.#active
   }
   
-  devworx(){  
+  connectedCallback() {  
     this.#active = 0
     this.#lists = this.querySelectorAll(':scope > tabs > *');
     this.#triggers = this.querySelectorAll(':scope > nav > *')
@@ -156,7 +178,7 @@ export class Dialog extends AutoRegistering(HTMLDialogElement) {
     super()
   }
   
-  devworx(){
+  connectedCallback() {
     this.setAttribute('devworx-dialog','')
     this.classList.add(
       'd-none',
@@ -319,10 +341,6 @@ export class Dialog extends AutoRegistering(HTMLDialogElement) {
     this.setTitle('')
     this.setBody('')
     this.setStatus('')
-  }
-  
-  connectedCallback() {
-    this.devworx()
   }
   
 }
