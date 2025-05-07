@@ -104,7 +104,7 @@ class FluidRenderer extends AbstractRenderer {
    * @param string $encoding The standard encoding for this renderer
    * @return string
    */
-  public function render(\mixed $template,array $variables,string $encoding=''): string {
+  public function render(mixed $template,array $variables,string $encoding=''): string {
     if( is_string($source) && str_contains($source,'{') ){
       $keys = self::extractVariables($source);
       if( is_null($keys) ) return $source;
