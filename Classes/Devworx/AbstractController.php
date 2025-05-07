@@ -3,6 +3,7 @@
 namespace Devworx;
 
 use \Devworx\Interfaces\IController;
+use \Devworx\Interfaces\IRequest;
 use \Devworx\Utility\StringUtility;
 use \Devworx\Utility\ModelUtility;
 use \Devworx\Utility\CookieUtility;
