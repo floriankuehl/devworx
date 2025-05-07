@@ -27,11 +27,13 @@ export const Load = mod => {
         mod[ v[0] ],
         {extends: mod[ v[1] ]}
       );
-    } else {
-      customElements.define( 
-        `${TagPrefix}-${k}`, 
-        mod[v]
-      );
-    }
+    } else if( v in mod ){
+  	  customElements.define( 
+  		`${TagPrefix}-${k}`, 
+  		mod[v]
+  	  );
+  	} else {
+  		console.error(`${v} is not loaded`,mod);
+  	}
   }
 }
