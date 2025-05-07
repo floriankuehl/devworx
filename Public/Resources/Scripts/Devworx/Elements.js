@@ -1,65 +1,70 @@
 import {Format} from './Format.js'
 
-export class BasicElement extends HTMLElement {
-  constructor() { 
-    super()
-  }
-  
-  devworx(){
-    
-  }
-  
-  set timeout(func){
-    setTimeout(func,100)
-  }
-  
-  get rect(){
-    return {
-      x: this.offsetLeft, 
-      y: this.offsetTop, 
-      w: this.offsetWidth, 
-      h: this.offsetHeight
+export function AutoRegistering(Base) {
+  return class extends Base {
+	static namespace = 'devworx'
+	static get baseTag(){ return 'div' }
+	static get elementTag() { return `${this.namespace}-${this.name.toLowerCase()}` }
+	static get elementOptions() { return { extends: this.baseTag } }
+	  
+    static register() {
+		if (!customElements.get(this.elementTag)) {
+			customElements.define(this.elementTag, this, this.elementOptions);
+		}
     }
-  }
-  
-  get x(){ return this.offsetLeft }
-  set x(value){ this.style.left = `${value}px` }
-  get y(){ return this.offsetTop }
-  set y(value){ this.style.top = `${value}px` }
-  get w(){ return this.offsetWidth }
-  set w(value){ this.style.width = `${value}px` }
-  get h(){ return this.offsetHeight }
-  set h(value){ this.style.height = `${value}px` }
-  
-  get salary(){
-    let result = .0
-    this.querySelectorAll('devworx-salary')
-      .forEach(s=>{
-        const v = parseFloat(s.getAttribute('value'))
-        result += isNaN(v) ? 0 : v;
-      })
-    return result
-  }
-  
-  get timespan(){
-    let result = .0
-    this.querySelectorAll('devworx-timespan')
-      .forEach(s=>{
-        const v = parseFloat(s.getAttribute('total-hours'))
-        result += isNaN(v) ? 0 : v;
-      })
-    return result
-  }
-  
-  find(selector,iterator){
-    const result = this.querySelectorAll(selector)
-    if( iterator ) result.forEach(iterator)
-    return result
-  }
+	
+	set timeout(func){
+		setTimeout(func,100)
+	}
 
+	get rect(){
+		return {
+		  x: this.offsetLeft, 
+		  y: this.offsetTop, 
+		  w: this.offsetWidth, 
+		  h: this.offsetHeight
+		}
+	}
+
+	get x(){ return this.offsetLeft }
+	set x(value){ this.style.left = `${value}px` }
+	get y(){ return this.offsetTop }
+	set y(value){ this.style.top = `${value}px` }
+	get w(){ return this.offsetWidth }
+	set w(value){ this.style.width = `${value}px` }
+	get h(){ return this.offsetHeight }
+	set h(value){ this.style.height = `${value}px` }
+	
+	get salary(){
+		let result = .0
+		this.querySelectorAll('devworx-salary')
+		  .forEach(s=>{
+			const v = parseFloat(s.getAttribute('value'))
+			result += isNaN(v) ? 0 : v;
+		  })
+		return result
+	}
+
+	get timespan(){
+		let result = .0
+		this.querySelectorAll('devworx-timespan')
+		  .forEach(s=>{
+			const v = parseFloat(s.getAttribute('total-hours'))
+			result += isNaN(v) ? 0 : v;
+		  })
+		return result
+	}
+
+	find(selector,iterator){
+		const result = this.querySelectorAll(selector)
+		if( iterator ) result.forEach(iterator)
+		return result
+	}
+  };
 }
 
-export class View extends BasicElement {
+export class View extends AutoRegistering(HTMLDivElement) {
+    
   constructor() { 
     super()
     //this.devworx()
@@ -70,7 +75,7 @@ export class View extends BasicElement {
   }
 }
 
-export class List extends BasicElement {
+export class List extends AutoRegistering(HTMLDivElement) {
   constructor() { 
     super()
     this.devworx()
@@ -88,7 +93,7 @@ export class List extends BasicElement {
   }
 }
 
-export class Tabs extends BasicElement {
+export class Tabs extends AutoRegistering(HTMLDivElement) {
   #lists
   #triggers
   #active = 0
@@ -141,8 +146,11 @@ export class Tabs extends BasicElement {
   
 }
 
-export class Dialog extends BasicElement {
+export class Dialog extends AutoRegistering(HTMLDialogElement) {
+   
   #elements = {}
+  
+  static get baseTag(){ return 'dialog' }
   
   constructor() { 
     super()

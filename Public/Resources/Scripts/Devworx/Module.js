@@ -1,39 +1,20 @@
 export * from './Format.js'
 export * from './Api.js'
-export * from './Elements.js'
-export * from './ViewHelpers.js'
 
-export const TagPrefix = 'devworx'
+import * as Elements from './Elements.js'
+import * as ViewHelpers from './ViewHelpers.js'
+import * as ProjectElements from './ProjectElements.js'
 
-export const CustomElements = {
-  app: ['BasicElement', 'div'],
-  view: ['View', 'div'],
-  list: ['List', 'div'],
-  id: 'ID',
-  time: ['Time','time'],
-  timespan: 'Timespan',
-  currency: 'Currency',
-  salary: 'Salary',
-  tabs: 'Tabs',
-  dialog: ['Dialog','dialog']
+function autoRegisterClasses(module) {
+  Object.keys(module).forEach((exportedKey) => {
+    const exportedValue = module[exportedKey];
+	if (typeof exportedValue === 'function' && exportedValue.prototype instanceof HTMLElement) {
+      exportedValue.register();
+      console.log(`Registered: ${exportedValue.name}`);
+    }
+  });
 }
 
-export const Load = mod => {
-  for( let k in CustomElements ){
-    const v = CustomElements[k]
-    if( Array.isArray(v) ){
-      customElements.define( 
-        `${TagPrefix}-${k}`, 
-        mod[ v[0] ],
-        {extends: mod[ v[1] ]}
-      );
-    } else if( v in mod ){
-  	  customElements.define( 
-  		`${TagPrefix}-${k}`, 
-  		mod[v]
-  	  );
-  	} else {
-  		console.error(`${v} is not loaded`,mod);
-  	}
-  }
-}
+autoRegisterClasses(Elements)
+autoRegisterClasses(ViewHelpers)
+autoRegisterClasses(ProjectElements)

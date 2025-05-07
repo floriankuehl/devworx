@@ -1,11 +1,14 @@
 import { Format } from './Format.js';
-import { BasicElement } from './Elements.js';
+import { AutoRegistering } from './Elements.js';
 
-export class ID extends BasicElement {
+export class ID extends AutoRegistering(HTMLSpanElement) {
+	
   constructor() { 
     super()
     this.devworx()
   }
+  
+  static get baseTag(){ return 'span' }
   
   devworx(){
     const 
@@ -18,11 +21,13 @@ export class ID extends BasicElement {
   }
 }
 
-export class Time extends BasicElement {
+export class Time extends AutoRegistering(HTMLSpanElement) {
   constructor() { 
     super()
     this.devworx()
   }
+  
+  static get baseTag(){ return 'span' }
   
   devworx(){
     const dt = this.getAttribute('datetime')
@@ -36,11 +41,13 @@ export class Time extends BasicElement {
   }
 }
 
-export class Timespan extends BasicElement {
+export class Timespan extends AutoRegistering(HTMLSpanElement) {
   constructor() { 
     super()
     this.devworx()
   }
+  
+  static get baseTag(){ return 'span' }
   
   devworx(){
     const time = this.timespan
@@ -106,11 +113,13 @@ export class Timespan extends BasicElement {
   }
 }
 
-export class Currency extends BasicElement {
+export class Currency extends AutoRegistering(HTMLSpanElement) {
   constructor() { 
     super()
     this.devworx()
   }
+  
+  static get baseTag(){ return 'span' }
   
   devworx(){
     const value = parseFloat( this.getAttribute('value') );
