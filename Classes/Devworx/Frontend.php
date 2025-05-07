@@ -6,6 +6,7 @@ use \Devworx\ConfigManager;
 use \Devworx\Utility\AuthUtility;
 use \Devworx\Utility\ArrayUtility;
 use \Devworx\Utility\CookieUtility;
+use \Devworx\Utility\SessionUtility;
 use \Devworx\Utility\GeneralUtility;
 use \Devworx\Utility\StringUtility;
 use \Devworx\Utility\DebugUtility;
@@ -321,8 +322,8 @@ class Frontend extends ConfigManager {
         return true;
       }
       
-      session_start();
-	  $renderer = new ConfigRenderer();
+      SessionUtility::start();
+      $renderer = new ConfigRenderer();
       self::$config = $renderer->render( self::$config );
       return true;
     }
