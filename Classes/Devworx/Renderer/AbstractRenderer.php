@@ -14,18 +14,18 @@ abstract class AbstractRenderer implements IRenderer {
    * Function render
    * Abstract function for rendering anything
    * 
-   * @param \mixed $template The given template
+   * @param mixed $template The given template
    * @param array $variables 
    * @param string $encoding
-   * @return \mixed
+   * @return mixed
    */
-  abstract function render(\mixed $template,array $variables,string $encoding): \mixed;
+  abstract function render(mixed $template,array $variables,string $encoding): mixed;
   
   public function setOptions(array $options): void {
 	  $this->options = $options;
   }
   
-  abstract function supports(\mixed $template): bool;
+  abstract function supports(mixed $template): bool;
 }
 
 ?>
