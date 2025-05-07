@@ -94,7 +94,7 @@ export class Link extends AutoRegistering(HTMLAnchorElement){
 		this.addEventListener('click',e=>{
 			e.preventDefault()
 			e.stopPropagation()
-			window.location.href = this.getAttribute('src')
+			window.location.href = this.getAttribute('href')
 		})
 	}
 }
