@@ -41,6 +41,7 @@
     "actionArgument": "action",
     "defaultController": "Login",
     "defaultAction": "Login",
+    "afterLogin": "Dashboard::index",
     "publicControllerActions": [
       "Login::Login"
     ],
