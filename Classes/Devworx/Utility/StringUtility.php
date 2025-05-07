@@ -70,6 +70,17 @@ class StringUtility {
     
     return "https://{$value}";
   }
+
+  /**
+   * Converts \r\n and \n to PHP_EOL
+   *
+   * @param string $value The given value
+   * @return string
+   */
+  public static function realNL(string $value): string {
+	  $value = str_replace('\r\n', PHP_EOL, $value);
+	  return str_replace('\n', PHP_EOL, $value);
+  }
 }
 
 ?>
