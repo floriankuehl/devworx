@@ -39,7 +39,7 @@ class FluidRenderer extends AbstractRenderer {
 	  }
       if( is_array($branch) && array_key_exists($first,$branch) )
         return $branch[$first];
-      return "[UNDEFINED: {$key}]";
+      return "{{$key}}";;
     }
     
     $rest = implode('.',$segments);
