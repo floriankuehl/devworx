@@ -355,9 +355,9 @@ class Frontend extends ConfigManager {
   /**
    * Processes the current controller action to the body content
    *
-   * @return IController|null
+   * @return AbstractController|null
    */
-  public static function processControllerAction(): ?IController {
+  public static function processControllerAction(): ?AbstractController {
     $instance = self::loadController();
     if( is_null( $instance ) ) return $instance;
     self::$config['body']['content'] = $instance->processAction( self::$config['context']['action'] );
