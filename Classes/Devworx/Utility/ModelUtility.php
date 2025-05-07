@@ -2,18 +2,18 @@
 
 namespace Devworx\Utility;
 
-use \Devworx\Interfaces\IModel;
+use \Devworx\AbstractModel;
 
 class ModelUtility {
   
   /**
    * Sets data in a model by setter
    * 
-   * @param IModel $model
+   * @param AbstractModel $model
    * @param array $row
-   * @return IModel
+   * @return AbstractModel
    */
-  public static function hydrateModel(IModel $model, array $row): IModel {
+  public static function hydrateModel(AbstractModel $model, array $row): AbstractModel {
 	foreach( $row as $key => $value ){
 	  $model->{"set".ucfirst($key)}($value);
 	}
@@ -25,13 +25,13 @@ class ModelUtility {
    *
    * @param array $row The data array
    * @param string $class The FQCN of the new instance
-   * @return IModel
+   * @return AbstractModel
    */
-  public static function toModel(array $row, string $class): IModel {
+  public static function toModel(array $row, string $class): AbstractModel {
     if( empty($class) )
       throw new \Exception("No class provided");
-    if( !is_a($class,IModel::class,true) )
-      throw new \Exception("Class must implement IModel");
+    if( !is_a($class,AbstractModel::class,true) )
+      throw new \Exception("Class must inherit from AbstractModel");
     
 	return self::hydrateModel(new $class(),$row);
   }
@@ -46,12 +46,12 @@ class ModelUtility {
   public static function toModels(array $rows,string $class): array {
     if( empty($class) )
       throw new \Exception("No class provided");
-    if( !is_a($class,IModel::class,true) )
-      throw new \Exception("Class must implement IModel");
+    if( !is_a($class,AbstractModel::class,true) )
+      throw new \Exception("Class must inherit from AbstractModel");
     
     $result = [];
     foreach( $rows as $i => $row ){
-	  $result []= self::hydrateModel(new $class,$row);
+	  $result []= self::hydrateModel(new $class(),$row);
     }
     return $result;
   }
@@ -59,10 +59,10 @@ class ModelUtility {
   /**
    * Converts a model to an array
    *
-   * @param IModel $model The model to convert to an array
+   * @param AbstractModel $model The model to convert to an array
    * @return array
    */
-  public static function toArray(IModel $model):array {
+  public static function toArray(AbstractModel $model):array {
     $result = [];
     
     foreach( $model->fields() as $key => $value ){
