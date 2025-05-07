@@ -21,13 +21,13 @@ export class ID extends AutoRegistering(HTMLSpanElement) {
   }
 }
 
-export class Time extends AutoRegistering(HTMLSpanElement) {
+export class Time extends AutoRegistering(HTMLTimeElement) {
   constructor() { 
     super()
     this.devworx()
   }
   
-  static get baseTag(){ return 'span' }
+  static get baseTag(){ return 'time' }
   
   devworx(){
     const dt = this.getAttribute('datetime')
@@ -41,13 +41,13 @@ export class Time extends AutoRegistering(HTMLSpanElement) {
   }
 }
 
-export class Timespan extends AutoRegistering(HTMLSpanElement) {
+export class Timespan extends AutoRegistering(HTMLTimeElement) {
   constructor() { 
     super()
     this.devworx()
   }
   
-  static get baseTag(){ return 'span' }
+  static get baseTag(){ return 'time' }
   
   devworx(){
     const time = this.timespan
@@ -113,13 +113,13 @@ export class Timespan extends AutoRegistering(HTMLSpanElement) {
   }
 }
 
-export class Currency extends AutoRegistering(HTMLSpanElement) {
+export class Currency extends AutoRegistering(HTMLDataElement) {
   constructor() { 
     super()
     this.devworx()
   }
   
-  static get baseTag(){ return 'span' }
+  static get baseTag(){ return 'data' }
   
   devworx(){
     const value = parseFloat( this.getAttribute('value') );
@@ -133,8 +133,9 @@ export class Salary extends Timespan {
     this.devworx()
   }
   
+  static get baseTag(){ return 'data' }
+  
   devworx(){
-    super.devworx()
     const 
       value = parseFloat( this.getAttribute('value') ),
       price = parseFloat( this.getAttribute('price') ),
