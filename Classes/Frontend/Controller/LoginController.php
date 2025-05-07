@@ -52,7 +52,8 @@ class LoginController extends \Devworx\AbstractController {
   function loginAction(){
     if( AuthUtility::cookie() || AuthUtility::post() ){
       //Referrer Tracking?
-      Frontend::redirect('project','list');
+      $ca = explode('::',Frontend::getConfig('system','afterLogin'));
+      Frontend::redirect(...$ca);
       return;
     }
     
