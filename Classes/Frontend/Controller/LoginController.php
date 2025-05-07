@@ -63,16 +63,10 @@ class LoginController extends \Devworx\AbstractController {
     }
     
     AuthUtility::lock();
-    /*
-    echo \Devworx\Utility\DebugUtility::var_dump([
-      'cookie' => AuthUtility::cookie(),
-      'post' => AuthUtility::post(),
-    ]);
-    */
   }
   
   function logoutAction(){
     AuthUtility::lock();
-    Frontend::redirect('login','login');
+    Frontend::redirectDefault();
   }
 }
