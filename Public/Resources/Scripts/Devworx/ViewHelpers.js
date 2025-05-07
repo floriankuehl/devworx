@@ -131,6 +131,7 @@ export class Salary extends Timespan {
   static get baseTag(){ return 'data' }
   
   connectedCallback(){
+    super.connectedCallback()
     const 
       value = parseFloat( this.getAttribute('value') ),
       price = parseFloat( this.getAttribute('price') ),
