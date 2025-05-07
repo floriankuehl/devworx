@@ -15,7 +15,6 @@ export const CustomElements = {
   currency: 'Currency',
   salary: 'Salary',
   tabs: 'Tabs',
-  invoice: 'Invoice',
   dialog: ['Dialog','dialog']
 }
 
