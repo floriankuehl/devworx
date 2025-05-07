@@ -2,6 +2,8 @@
 
 namespace Devworx\Utility;
 
+use \Devworx\Repository;
+
 class BuildUtility {
   
   const NULLABLE = ['TIMESTAMP','DATE','DATETIME'];
