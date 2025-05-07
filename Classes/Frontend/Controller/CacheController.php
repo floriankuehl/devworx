@@ -5,7 +5,6 @@ namespace Frontend\Controller;
 use \Devworx\Frontend;
 use \Devworx\Utility\FileUtility;
 use \Devworx\Utility\BuildUtility;
-use \Api\Utility\BillomatUtility;
 
 class CacheController extends \Devworx\AbstractController {
   
