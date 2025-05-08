@@ -8,6 +8,7 @@
     {head.styles}
     {head.scripts}
     {head.content}
+    <link rel="icon" type="image/x-icon" href="{head.favicon}">
   </head>
   <body>
     <devworx-app>
