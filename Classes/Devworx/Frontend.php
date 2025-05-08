@@ -43,27 +43,35 @@ class Frontend extends ConfigManager {
   public static $action = '';
   
   /**
+   * Sets a header key-value-pair
+   *
+   * @return void
+   */
+  public static function setHeader(string $key, string $value): void {
+	  header("{$key}: {$value}");
+  }
+  
+  /**
+   * Sets a header depending on a configuration value
+   *
+   * @return void
+   */
+  public static function setHeaderConfig(string $key, ...$path): void {
+	  self::setHeader($key, self::getConfig(...$path));
+  }
+  
+  /**
    * Loads the standard headers from the configuration
    *
    * @return void
    */
   public static function loadHeaders(): void {
-    
-	$charset = self::getConfig('charset');
-	$contentType = self::getConfig('head','metaHttpEquiv','Content-Type');
-	$contentScriptType = self::getConfig('head','metaHttpEquiv','Content-Script-Type');
-	$contentStyleType = self::getConfig('head','metaHttpEquiv','Content-Style-Type');
-	$cacheControl = self::getConfig('head','metaHttpEquiv','Cache-Control');
-	$pragma = self::getConfig('head','metaHttpEquiv','Pragma');
-	$expires = self::getConfig('head','metaHttpEquiv','Expires');
-	
-	header("Cache-Control: {$cacheControl}");
-    	header("Pragma: {$pragma}");
-    	header("Expires: {$expires}");
-	header("Content-Type: {$contentType};charset={$charset}"); 
-	header("Content-Script-Type: {$contentScriptType};charset={$charset}"); 
-	header("Content-Style-Type: {$contentStyleType};charset={$charset}");
-	
+	self::setHeaderConfig('Content-Type', 'head','metaHttpEquiv','Content-Type');
+	self::setHeaderConfig('Content-Script-Type', 'head','metaHttpEquiv','Content-Script-Type');
+	self::setHeaderConfig('Content-Style-Type', 'head','metaHttpEquiv','Content-Style-Type');
+	self::setHeaderConfig('Cache-Control', 'head','metaHttpEquiv','Cache-Control');
+	self::setHeaderConfig('Pragma', 'head','metaHttpEquiv','Pragma');
+	self::setHeaderConfig('Expires', 'head','metaHttpEquiv','Expires');
   }
   
   /**
