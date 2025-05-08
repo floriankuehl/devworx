@@ -6,7 +6,7 @@
 <p>The software can be customized and extended as desired, as it is intended to save time for developers.</p>
 
 <h2>Inspiration</h2>
-<p>As a developer, I wrote the same codes over and over. I repeated the same time-consuming steps for prototype development. Sure, I could have used bigger frameworks like Typo3 (big inspiration for me), because of future compatibility and ability to handle big Web-Projects with ease. But for small prototypes, Typo3 is just too big. Devworx is my personal interpreation of a framework, that was shaped over more than 20 years of development. It might not be perfect, but it will grow.</p>
+<p>As a developer, I wrote the same codes over and over for kickstarting a standalone webapp. I repeated the same time-consuming steps for every prototype project. Sure, I could have used bigger frameworks like Typo3 (big inspiration for me), because of future compatibility and ability to handle big Web-Projects with ease, but for small prototypes, Typo3 is just too big. Devworx is my personal framework, that was shaped by experience many years of development. It might not be perfect, but it will grow.</p>
 
 <h2>Roadmap</h2>
 <p>The solution will be expanded and supplemented with functionality over time. Here are some ideas:</p>
@@ -20,9 +20,6 @@
   <li>PSR integration</li>
 </ul>
 <p>Over time, more repositories will be released that are based on Devworx.</p>
-
-<h3>Want to participate?</h3>
-<p>Feel free to submit changes and be part of the project. I will revise the code and create branches for upcoming changes.</p>
 
 <h2>Architecture</h2>
 
@@ -45,9 +42,9 @@
 </ul>
 
 <h3>Repository</h3>
-<p>The <code>Repository</code> class enables caching of schemas. System fields such as <code>hidden</code> and <code>deleted</code> are automatically added to the queries.</p>
+<p>The <code>Repository</code> class enables caching of schemas. System fields such as <code>hidden</code> and <code>deleted</code> are automatically added to the queries. Results can be mapped to Model-classes automatically.</p>
 
-<h3>Data Handling</h3>
+<h3>Extending results</h3>
 <p>The results of database queries are generally represented with associative arrays. Classes like <code>ArrayWalker</code> allow enriching relational data such as MySQL results to enable multidimensional results and additional data. Models can also be used to modify result handling.</p>
 
 <h3>API Context</h3>
@@ -66,19 +63,20 @@
 <p>A distinction is made between private and public resources. Private resources are, for example, layouts, templates, and partials. Public are all styles, images, icons, and scripts.</p>
 
 <h3>Configuration</h3>
-<p>The solution can be configured via JSON files, that are stored in the Configuration folder.</p>
+<p>The solution can be configured via JSON files, that are stored in the Configuration folder. These files are used to configurate the system itself, aswell as as the frontend page. See Resources/Layouts/Page.php and Configuration/Frontend.json</p>
 
 <h3>Styling</h3>
-<p><code>Bootstrap 5.3</code> and <code>Material Icons from Google</code> are used here.</p>
+<p><code>Bootstrap 5.3</code> and <code>Material Icons from Google</code> are used by standard. But it is easy to change the framework's styling via the configuration files.</p>
 
 <h3>Custom HTML Elements</h3>
-<p>The solution contains its own HTML elements to handle lists and formats. These are imported via JavaScript module.</p>
+<p>The solution contains its own HTML elements to handle lists and formats. These are imported via JavaScript module. See Public/Resources/Scripts.</p>
 
 <h3>JavaScript Addons</h3>
 <p>The solution contains addons for dialogs, toggle logic, confirming, formatting and a example for providing serverside rendered templates or partials.</p>
 
 <h3>Caches</h3>
 <p>The solution features automatic file caching of MySQL database schemas. This allows type usage without database queries.</p>
+
 <h2>Advantages</h2>
 
 <h3>Modularity</h3>
@@ -88,10 +86,10 @@
 <p>Through inheritance and utility classes, many parts of the code can be reused, which shortens development time.</p>
 
 <h3>Clarity</h3>
-<p>The division into different classes and files helps to keep the code clear.</p>
+<p>The division into different classes and files helps to keep the code clear. Every class and every function has documentation blocks.</p>
 
 <h3>Extensibility</h3>
-<p>New functions can be easily implemented by adding new classes or inheriting existing classes.</p>
+<p>New functions can be easily implemented by adding new classes or inheriting existing classes. The classes are loaded automatically via use-statement. Namespace and folder structure are matching for easy location of the files.</p>
 
 <h3>Error Handling</h3>
 <p>Utility classes such as <code>DebugUtility</code> make implementing debugging and error handling logic easier.</p>
