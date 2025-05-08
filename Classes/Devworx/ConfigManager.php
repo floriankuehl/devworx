@@ -56,41 +56,45 @@ class ConfigManager {
 		return $result;
 	}
 
+
 	/**
-	 * Sets a configuration value recursively based on a key path. Can create trees.
+	 * Sets a configuration value based on a key path.
 	 * 
-	 * @param array|null $branch The current configuration branch
 	 * @param mixed $value The value to set
 	 * @param array $path The key path
 	 * @return bool
 	 */
-	public static function setConfig(?array $branch, $value, ...$path): bool {
-		$pointer = ( 
-		  is_null($branch) ? 
-		  self::$config : 
-		  $branch 
-		);
+	public static function setConfig($value, ...$path): bool {
+		if (empty($path)) return false;
+		return self::setConfigRecursive(self::$config, $value, ...$path);
+	}
+
+
+	/**
+	 * Sets a configuration value recursively based on a key path. Can create trees.
+	 * 
+	 * @param array $branch The current configuration branch
+	 * @param mixed $value The value to set
+	 * @param array $path The key path
+	 * @return bool
+	 */
+	private static function setConfigRecursive(array &$branch, $value, ...$path): bool {
 		$key = array_shift($path);
 
-		if( empty($key) )
-		  return false;
+		if (empty($key)) {
+			return false;
+		}
 
-		if( array_key_exists($key,$pointer) ){
-		  if( empty($path) ){
-			$pointer[$key] = $value;
+		if (!isset($branch[$key]) || !is_array($branch[$key])) {
+			$branch[$key] = [];
+		}
+
+		if (empty($path)) {
+			$branch[$key] = $value;
 			return true;
-		  }
-		  return self::setConfig($pointer[$key], $value, ...$path);
 		}
 
-		if( empty($path) ){
-		  $pointer[$key] = $value;
-		  return true;
-		}
-
-		$pointer[$key] = [];
-
-		return self::setConfig($pointer,$value,...$path);
+		return self::setConfigRecursive($branch[$key], $value, ...$path);
 	}
 }
 ?>
