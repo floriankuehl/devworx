@@ -59,12 +59,12 @@ class ConfigManager {
 	/**
 	 * Sets a configuration value recursively based on a key path. Can create trees.
 	 * 
-	 * @param array $branch The current configuration branch
+	 * @param array|null $branch The current configuration branch
 	 * @param mixed $value The value to set
 	 * @param array $path The key path
 	 * @return bool
 	 */
-	public static function setConfig(array $branch, $value, ...$path): bool {
+	public static function setConfig(?array $branch, $value, ...$path): bool {
 		$pointer = ( 
 		  is_null($branch) ? 
 		  self::$config : 
