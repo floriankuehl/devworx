@@ -58,8 +58,8 @@ class Frontend extends ConfigManager {
 	$expires = self::getConfig('head','metaHttpEquiv','Expires');
 	
 	header("Cache-Control: {$cacheControl}");
-    header("Pragma: {$pragma}");
-    header("Expires: {$expires}");
+    	header("Pragma: {$pragma}");
+    	header("Expires: {$expires}");
 	header("Content-Type: {$contentType};charset={$charset}"); 
 	header("Content-Script-Type: {$contentScriptType};charset={$charset}"); 
 	header("Content-Style-Type: {$contentStyleType};charset={$charset}");
