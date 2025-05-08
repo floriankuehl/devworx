@@ -1,17 +1,9 @@
-<?php 
-  header("Content-Type: text/html;charset=utf-8"); 
-  header("Content-Script-Type: text/javascript;charset=utf-8"); 
-  header("Content-Style-Type: text/css;charset=utf-8");
-?>
 <!DOCTYPE {doctype}>
 <html lang="{lang}">
   <head>
     <meta charset="{charset}">
-    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
-    <meta http-equiv="Pragma" content="no-cache" />
-    <meta http-equiv="Expires" content="0" />
-    {head.meta}
     {head.metaHttpEquiv}
+	{head.meta}
     <title>{head.title}</title>
     {head.styles}
     {head.scripts}
@@ -27,7 +19,7 @@
           ]);
         } 
       ?>
-      <main class="px-5 pb-5">
+      <main>
         <devworx-view class="border-2 border-dark rounded p-3 bg-light">
           {body.content}
         </devworx-view>
