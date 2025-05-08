@@ -14,7 +14,7 @@
 <p>The solution can be controlled in the frontend and API context via controllers and actions. The <code>LoginHash</code> can be provided by Cookie or via request header.</p>
 
 <h3>Database</h3>
-<p>The <code>Database</code> class serves as a database interface and is accessible via <code>global $DB</code>. It contains functions like <code>query, statement, get, add, put and remove.</code></p>
+<p>The <code>Database</code> class serves as a MySQLi database interface and is accessible via <code>global $DB</code>. It contains functions like <code>query, statement, get, add, put and remove.</code></p>
 <p>Database entries in Devworx have a basic structure that allows for easy data handling and mapping to any <code>AbstractModel</code>.</p>
 <ul>
   <li><b>uid</b> <span>PK int (Unique ID of the row)</span></li>
