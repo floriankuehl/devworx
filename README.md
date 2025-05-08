@@ -26,7 +26,7 @@
 </ul>
 
 <h4>Repository</h4>
-<p>The <code>Repository</code> class enables caching of schemas. System fields such as <code>hidden</code> and <code>deleted</code> are automatically added to the queries. Results can be mapped to Model-classes automatically.</p>
+<p>The <code>Repository</code> class enables caching of schemas and easy access to specific database tables in controller context. It contains functions like <code>findBy, findOneBy, findAll, put, add, remove and delete</code>. System fields such as <code>hidden</code> and <code>deleted</code> are automatically added to the queries. Results can be mapped to Model-classes automatically.</p>
 
 <h4>Extending results</h4>
 <p>The results of database queries are generally represented with associative arrays. Classes like <code>ArrayWalker</code> allow enriching relational data such as MySQL results to enable multidimensional results and additional data. Models can also be used to modify result handling.</p>
