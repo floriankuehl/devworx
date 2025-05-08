@@ -27,7 +27,7 @@
 <p>The solution can be controlled in the frontend and API context via controllers and actions. The <code>LoginHash</code> can be provided by Cookie or via request header.</p>
 
 <h3>Database</h3>
-<p>The <code>Database</code> class serves as a database interface and is accessible via <code>global $DB</code>.</p>
+<p>The <code>Database</code> class serves as a database interface and is accessible via <code>global $DB</code>. It contains functions like <code>query, statement, get, add, put and remove.</code></p>
 <p>Database entries in Devworx have a basic structure that allows for easy data handling and mapping to any <code>AbstractModel</code>.</p>
 <ul>
   <li><b>uid</b> <span>PK int (Unique ID of the row)</span></li>
@@ -48,13 +48,13 @@
 <p>Devworx comes with the idea to use itself in an API style context, based on JSON data. The login hash can be provided via HTTP header to access the full capacity. The public resources contain a JavaScript implementation for easy access.</p>
 
 <h3>Access security</h3>
-<p>The codes like classes and private resources are located in the root folder of the solution, but the frontend files are located in the <code>Public</code> folder, aswell as the JavaScript classes for all custom HTML elements and the API integration.</p>
+<p>The codes like classes and private resources are located in the root folder of the solution, but the frontend files are located in the <code>Public</code> folder, aswell as the JavaScript classes for all custom HTML elements and the API integration. The domain for the projects should point to the <code>Public</code> folder.</p>
 
 <h4>Security Features</h4>
 <p><code>AuthUtility</code> provides basic security functions that can be quickly integrated.</p>
 
 <h4>Credential Hashing</h4>
-<p>The <code>LoginHash</code> consists of the login name and password. Neither the login name nor the password are stored in plaintext in the database. The hash is directly compared with the value in the database.</p>
+<p>The <code>LoginHash</code> consists of the login name and password. The passwords are NOT stored in the database, only the hashes. The hash is used directly to retrieve user information from the database, also as the API key for JSON access.</p>
 
 <h3>Rendering</h3>
 <p>The rendering is done via <code>AbstractRenderer</code>. The <code>FluidRenderer</code> enables string templating with placeholders. The <code>JSONRenderer</code> allows direct output in JSON. ViewHelpers are (yet) not available.</p>
