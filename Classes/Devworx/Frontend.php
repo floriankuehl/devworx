@@ -336,11 +336,10 @@ class Frontend extends ConfigManager {
    * @return bool
    */
   public static function initialize(): bool {
-    self::$header = getallheaders();
-    self::$context = ArrayUtility::key(self::$header,self::CONTEXT_KEY,self::CONTEXTS[0]);
-    
     if( self::loadConfigurationFile() ){
 	  self::loadHeaders();
+	  self::$header = getallheaders();
+	  self::$context = ArrayUtility::key(self::$header,self::CONTEXT_KEY,self::CONTEXTS[0]);
 	  
       self::$config['context'] = [
         'controller' => self::getCurrentController(),
