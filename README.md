@@ -6,20 +6,7 @@
 <p>The software can be customized and extended as desired, as it is intended to save time for developers.</p>
 
 <h2>Inspiration</h2>
-<p>As a developer, I wrote the same codes over and over for kickstarting a standalone webapp. I repeated the same time-consuming steps for every prototype project. Sure, I could have used bigger frameworks like Typo3 (big inspiration for me), because of future compatibility and ability to handle big Web-Projects with ease, but for small prototypes, Typo3 is just too big. Devworx is my personal framework, that was shaped by experience many years of development. It might not be perfect, but it will grow.</p>
-
-<h2>Roadmap</h2>
-<p>The solution will be expanded and supplemented with functionality over time. Here are some ideas:</p>
-<ul>
-  <li>L10n Integration</li>
-  <li>Better Renderer</li>
-  <li>XML and JSON Utilities</li>
-  <li>Dynamic alias-based query building</li>
-  <li>Editors for models, menus and users</li>
-  <li>User groups and permission management</li>
-  <li>PSR integration</li>
-</ul>
-<p>Over time, more repositories will be released that are based on Devworx.</p>
+<p>As a developer, I wrote the same codes over and over for kickstarting standalone webapps. I repeated the same time-consuming steps for every prototype project. Sure, I could have used bigger frameworks like Typo3 (big inspiration for me), because of future compatibility and flexibility, but for small prototypes, i wanted to have my own reusable framework. Devworx is my personal framework, that was shaped by experience through many years of development.</p>
 
 <h2>Architecture</h2>
 
@@ -96,3 +83,16 @@
 
 <h3>Error Handling</h3>
 <p>Utility classes such as <code>DebugUtility</code> make implementing debugging and error handling logic easier.</p>
+
+<h2>Roadmap</h2>
+<p>The solution will be expanded and supplemented with functionality over time. Here are some ideas:</p>
+<ul>
+  <li>L10n Integration</li>
+  <li>Better Renderer</li>
+  <li>XML and JSON Utilities</li>
+  <li>Dynamic alias-based query building</li>
+  <li>Editors for models, menus and users</li>
+  <li>User groups and permission management</li>
+  <li>PSR integration</li>
+</ul>
+<p>Over time, more repositories will be released that are based on Devworx.</p>
