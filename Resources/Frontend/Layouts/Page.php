@@ -3,7 +3,7 @@
   <head>
     <meta charset="{charset}">
     {head.metaHttpEquiv}
-	{head.meta}
+    {head.meta}
     <title>{head.title}</title>
     {head.styles}
     {head.scripts}
