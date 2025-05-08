@@ -43,14 +43,27 @@ class Frontend extends ConfigManager {
   public static $action = '';
   
   /**
-   * Loads the standard headers
+   * Loads the standard headers from the configuration
    *
    * @return void
    */
   public static function loadHeaders(): void {
-    header('Cache-Control: no-cache, no-store, must-revalidate');
-    header('Pragma: no-cache');
-    header('Expires: 0');
+    
+	$charset = self::getConfig('charset');
+	$contentType = self::getConfig('head','metaHttpEquiv','Content-Type');
+	$contentScriptType = self::getConfig('head','metaHttpEquiv','Content-Script-Type');
+	$contentStyleType = self::getConfig('head','metaHttpEquiv','Content-Style-Type');
+	$cacheControl = self::getConfig('head','metaHttpEquiv','Cache-Control');
+	$pragma = self::getConfig('head','metaHttpEquiv','Pragma');
+	$expires = self::getConfig('head','metaHttpEquiv','Expires');
+	
+	header("Cache-Control: {$cacheControl}");
+    header("Pragma: {$pragma}");
+    header("Expires: {$expires}");
+	header("Content-Type: {$contentType};charset={$charset}"); 
+	header("Content-Script-Type: {$contentScriptType};charset={$charset}"); 
+	header("Content-Style-Type: {$contentStyleType};charset={$charset}");
+	
   }
   
   /**
@@ -301,17 +314,26 @@ class Frontend extends ConfigManager {
   }
   
   /**
+   * Returns the uid of the current user
+   *
+   * @return string|null
+   */
+  public static function getCurrentUserId(): ?string {
+    return is_array(self::$config['user']) ? self::$config['user']['uid'] : null;
+  }
+  
+  /**
    * Initializes the frontend
    *
    * @return bool
    */
   public static function initialize(): bool {
-    self::loadHeaders();
-    
     self::$header = getallheaders();
     self::$context = ArrayUtility::key(self::$header,self::CONTEXT_KEY,self::CONTEXTS[0]);
     
     if( self::loadConfigurationFile() ){
+	  self::loadHeaders();
+	  
       self::$config['context'] = [
         'controller' => self::getCurrentController(),
         'action' => self::getCurrentAction(),
