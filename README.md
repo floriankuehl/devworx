@@ -6,7 +6,7 @@
 <p>The software can be customized and extended as desired, as it is intended to save time for developers.</p>
 
 <h2>Inspiration</h2>
-<p>As a developer, I wrote the same codes over and over for kickstarting standalone webapps. I repeated the same time-consuming steps for every prototype project. Sure, I could have used bigger frameworks like Typo3 (big inspiration for me), because of future compatibility and flexibility, but for small prototypes, i wanted to have my own reusable framework. Devworx is my personal framework, that was shaped by experience through many years of development.</p>
+<p>As a developer, I wrote the same codes over and over for kickstarting standalone webapps. I repeated the same time-consuming steps for every prototype project. Sure, I could have used bigger frameworks like Typo3 (big inspiration for me), because of future compatibility and flexibility, but for small prototypes, i wanted to have my own reusable framework. Without the pain of complex version updates. Devworx is my personal framework, that was shaped by experience through many years of development.</p>
 
 <h2>Architecture</h2>
 
