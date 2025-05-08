@@ -26,9 +26,6 @@
 <h3>Context-Based MVC Solution</h3>
 <p>The solution can be controlled in the frontend and API context via controllers and actions. The <code>LoginHash</code> can be provided by Cookie or via request header.</p>
 
-<h3>Credential Hashing</h3>
-<p>The <code>LoginHash</code> consists of the login name and password. Neither the login name nor the password are stored in plaintext in the database. The hash is directly compared with the value in the database.</p>
-
 <h3>Database</h3>
 <p>The <code>Database</code> class serves as a database interface and is accessible via <code>global $DB</code>.</p>
 <p>Database entries in Devworx have a basic structure that allows for easy data handling and mapping to any <code>AbstractModel</code>.</p>
@@ -41,10 +38,10 @@
   <li><b>deleted</b> <span>timestamp (Deletion timestamp)</span></li>
 </ul>
 
-<h3>Repository</h3>
+<h4>Repository</h4>
 <p>The <code>Repository</code> class enables caching of schemas. System fields such as <code>hidden</code> and <code>deleted</code> are automatically added to the queries. Results can be mapped to Model-classes automatically.</p>
 
-<h3>Extending results</h3>
+<h4>Extending results</h4>
 <p>The results of database queries are generally represented with associative arrays. Classes like <code>ArrayWalker</code> allow enriching relational data such as MySQL results to enable multidimensional results and additional data. Models can also be used to modify result handling.</p>
 
 <h3>API Context</h3>
@@ -53,17 +50,23 @@
 <h3>Access security</h3>
 <p>The codes like classes and private resources are located in the root folder of the solution, but the frontend files are located in the <code>Public</code> folder, aswell as the JavaScript classes for all custom HTML elements and the API integration.</p>
 
+<h4>Security Features</h4>
+<p><code>AuthUtility</code> provides basic security functions that can be quickly integrated.</p>
+
+<h4>Credential Hashing</h4>
+<p>The <code>LoginHash</code> consists of the login name and password. Neither the login name nor the password are stored in plaintext in the database. The hash is directly compared with the value in the database.</p>
+
+<h3>Rendering</h3>
+<p>The rendering is done via <code>AbstractRenderer</code>. The <code>FluidRenderer</code> enables string templating with placeholders. The <code>JSONRenderer</code> allows direct output in JSON. ViewHelpers are (yet) not available.</p>
+
 <h3>Templating</h3>
 <p>The solution uses the principle of layout, template, and partial. The layout provides the outer frame that is the same for all results and renders the corresponding template of the requested action. Partials are small code snippets that can be used in templates and layouts, as well as in the actions, to generate output.</p>
 
-<h3>Rendering</h3>
-<p>The rendering is done via <code>AbstractRenderer</code>. The <code>FluidRenderer</code> enables string templating with placeholders. The <code>JSON-Renderer</code> allows direct output in JSON. ViewHelpers are (yet) not available.</p>
-
 <h3>Resources</h3>
-<p>A distinction is made between private and public resources. Private resources are, for example, layouts, templates, and partials. Public are all styles, images, icons, and scripts.</p>
+<p>A distinction is made between private and public resources. Private resources are, for example, layouts, templates, and partials. Public resources are all styles, images, icons, and scripts. All private resources are located in the <code>root/Resources</code> folder. The public resources are located in the <code>root/Public/Resources</code> folder.</p>
 
 <h3>Configuration</h3>
-<p>The solution can be configured via JSON files, that are stored in the Configuration folder. These files are used to configurate the system itself, aswell as as the frontend page. See Resources/Layouts/Page.php and Configuration/Frontend.json</p>
+<p>The solution can be configured via JSON files, that are stored in the Configuration folder. These files are used to configurate the system itself, aswell as as the frontend page. See <code>Resources/Layouts/Page.php</code> and <code>Configuration/Frontend.json</code></p>
 
 <h3>Styling</h3>
 <p><code>Bootstrap 5.3</code> and <code>Material Icons from Google</code> are used by standard. But it is easy to change the framework's styling via the configuration files.</p>
@@ -93,6 +96,3 @@
 
 <h3>Error Handling</h3>
 <p>Utility classes such as <code>DebugUtility</code> make implementing debugging and error handling logic easier.</p>
-
-<h3>Security Features</h3>
-<p><code>AuthUtility</code> provides basic security functions that can be quickly integrated.</p>
