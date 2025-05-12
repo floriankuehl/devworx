@@ -405,12 +405,12 @@ class Repository {
    * @param string $key The key for the subquery
    * @param mixed $value The value for the subquery
    * @param string $fields The fields to select
-   * @return array|object
+   * @return array|object|null
    */
-  public function findOneBy(string $key,$value,string $fields='*'): array|object {
+  public function findOneBy(string $key,$value,string $fields='*'): array|object|null {
     $system = implode(" AND ",$this->defaultConditions);
     $result = $this->db->query("SELECT {$fields} FROM {$this->table} WHERE ({$key} = '{$value}') AND {$system} LIMIT 1;",true,MYSQLI_ASSOC);
-    return empty($this->mapToClass) ? $result : ModelUtility::toModel( $result, $this->mapToClass );
+    return is_null($result) ? $result : ( empty($this->mapToClass) ? $result : ModelUtility::toModel( $result, $this->mapToClass ) );
   }
   
   /** 
