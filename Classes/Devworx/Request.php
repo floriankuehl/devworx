@@ -12,6 +12,7 @@ class Request implements IRequest {
   
   function __construct(){
     $this->arguments = $_REQUEST;
+	/* filter by plugin key? controller?_action? */
     $this->method = $_SERVER['REQUEST_METHOD'];
   }
   
@@ -57,7 +58,7 @@ class Request implements IRequest {
    * @param string $key optional key
    * @return ?mixed
    */
-  function getGet(string $key=null): ?mixed {
+  function Get(string $key=null): ?mixed {
 	  return ArrayUtility::key($_GET,$key);
   }
   
@@ -67,7 +68,7 @@ class Request implements IRequest {
    * @param string $key optional key
    * @return ?mixed
    */
-  function getPost(string $key=null): ?mixed {
+  function Post(string $key=null): ?mixed {
 	  return ArrayUtility::key($_POST,$key);
   }
   
@@ -77,7 +78,7 @@ class Request implements IRequest {
    * @param string $key optional key
    * @return ?mixed
    */
-  function getPost(string $key=null): ?mixed {
+  function Put(string $key=null): ?mixed {
 	  return ArrayUtility::key($_PUT,$key);
   }
   
