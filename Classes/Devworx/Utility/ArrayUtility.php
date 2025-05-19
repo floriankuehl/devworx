@@ -172,6 +172,17 @@ class ArrayUtility {
   }
   
   /**
+   * Checks if an index in an array is valid
+   * 
+   * @param array $array The given array
+   * @param int $index The given index
+   * @return bool
+   */
+  static function isIndex(array $array,int $index): bool {
+    return !( $index < 0 || $index >= count($array) );
+  }
+  
+  /**
    * Checks if an array is associative
    * 
    * @param array $array The given array
