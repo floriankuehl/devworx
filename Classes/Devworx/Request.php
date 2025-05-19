@@ -9,12 +9,10 @@ class Request implements IRequest {
   
   protected $arguments = null;
   protected $method = null;
-  protected $files = null;
   
   function __construct(){
     $this->arguments = $_REQUEST;
     $this->method = $_SERVER['REQUEST_METHOD'];
-	$this->files = $_FILES;
   }
   
   /**
@@ -54,6 +52,36 @@ class Request implements IRequest {
   }
   
   /**
+   * Gets a _GET variable
+   *
+   * @param string $key optional key
+   * @return ?mixed
+   */
+  function getGet(string $key=null): ?mixed {
+	  return ArrayUtility::key($_GET,$key);
+  }
+  
+  /**
+   * Gets a _POST variable
+   *
+   * @param string $key optional key
+   * @return ?mixed
+   */
+  function getPost(string $key=null): ?mixed {
+	  return ArrayUtility::key($_POST,$key);
+  }
+  
+  /**
+   * Gets a _PUT variable
+   *
+   * @param string $key optional key
+   * @return ?mixed
+   */
+  function getPost(string $key=null): ?mixed {
+	  return ArrayUtility::key($_PUT,$key);
+  }
+  
+  /**
    * Gets the current request arguments
    *
    * @return array
@@ -66,8 +94,7 @@ class Request implements IRequest {
    * Checks if a specific argument exists
    *
    * @param string $key The name of the argument
-   * @return bool
-   */
+   * @return   */
   function hasArgument(string $key): bool {
     return array_key_exists($key,$this->arguments);
   }
@@ -78,7 +105,6 @@ class Request implements IRequest {
    * @param string $key The name of the argument
    * @param mixed $fallback The fallback value
    * @return mixed
-   */
   function getArgument(string $key,$fallback=null){
     if( $this->hasArgument($key) )
       return $this->arguments[$key];
@@ -91,7 +117,7 @@ class Request implements IRequest {
    * @return array
    */
   function getFiles(): array {
-    return $this->files;
+    return $_FILES;
   }
   
   /**
@@ -101,9 +127,9 @@ class Request implements IRequest {
    * @return bool
    */
   function hasFiles(string $key): bool {
-	if( empty($this->files) )
+	if( empty($_FILES) )
 		return false;
-	return ArrayUtility::key($this->files,$key);
+	return ArrayUtility::key($_FILES[$key],$key);
   }
   
   /**
@@ -115,7 +141,7 @@ class Request implements IRequest {
    */
   function hasFile(string $key,int $index): bool {
 	  if( $this->hasFiles( $key ) ){
-		return ArrayUtility::isIndex($this->files['name'],$index);
+		return ArrayUtility::isIndex($_FILES[$key]['name'],$index);
 	  }
 	  return false;
   }
@@ -133,16 +159,13 @@ class Request implements IRequest {
     if( $this->hasFile($key,$index) ){
 		if( empty($subkey) ){
 			$file = [];
-			foreach( $this->files[$key] as $k => $v )
-				$file[$k] = $v[$index];
+			foreach( $_FILES[$key] as $k => $list )
+				$file[$k] = $list[$index];
 			return $file;
 		}
 		
-		if( ArrayUtility::has($this->files,$subkey) )
-			return $this->files[$key][$subkey][$index];
-		
-		if( ArrayUtility::key($this->files,$key,$subkey)
-      return $this->files[$key][$subkey];
+		if( ArrayUtility::has($_FILES[$key],$subkey) )
+			return $_FILES[$key][$subkey][$index];
 	}
 	return null;
   }
