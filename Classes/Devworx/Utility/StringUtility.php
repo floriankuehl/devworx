@@ -15,6 +15,16 @@ class StringUtility {
   }
   
   /**
+   * Cleans a filename string from invalid characters
+   *
+   * @param string $value The given value
+   * @return string
+   */
+  public static function cleanupFile(string $value): string {
+	  return preg_replace('/[^a-zA-Z0-9-_\.]/', '_', $value);
+  }
+  
+  /**
    * Checks if the given string is a MD5 hash of 32B
    *
    * @param string $md5 The given value
@@ -70,7 +80,7 @@ class StringUtility {
     
     return "https://{$value}";
   }
-
+  
   /**
    * Converts \r\n and \n to PHP_EOL
    *
@@ -78,8 +88,9 @@ class StringUtility {
    * @return string
    */
   public static function realNL(string $value): string {
-	  $value = str_replace('\r\n', PHP_EOL, $value);
-	  return str_replace('\n', PHP_EOL, $value);
+	$value = str_replace('\r\n', PHP_EOL, $value);
+	$value = str_replace('\n', PHP_EOL, $value);
+	return str_replace('\"', '"', $value);
   }
 }
 
