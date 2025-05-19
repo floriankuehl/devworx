@@ -106,6 +106,7 @@ class Request implements IRequest {
    * @param string $key The name of the argument
    * @param mixed $fallback The fallback value
    * @return mixed
+   */
   function getArgument(string $key,$fallback=null){
     if( $this->hasArgument($key) )
       return $this->arguments[$key];
