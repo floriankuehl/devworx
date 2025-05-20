@@ -2,11 +2,36 @@
 
 namespace Devworx\Utility;
 
+use \Devworx\Frontend;
+
 class CookieUtility {
   
-  const 
-    COOKIE = 'devworx',
-    EXPIRES = 3600 * 24;
+  /**
+   * Gets the cookie name from the configuration
+   *
+   * @return string
+   */
+  static function Name(): string {
+	  return Frontend::getConfig('cookie','name');
+  }
+  
+  /**
+   * Gets the expire duration from the configuration
+   *
+   * @return int
+   */
+  static function Expires(): int {
+	  return Frontend::getConfig('cookie','expires');
+  }
+  
+  /**
+   * Gets the sameSite flag from the configuration
+   *
+   * @return string
+   */
+  static function SameSite(): string {
+	  return Frontend::getConfig('cookie','sameSite');
+  }
   
   /**
    * Gets the folder of the current script
@@ -25,7 +50,7 @@ class CookieUtility {
    * @return bool
    */
   static function has(): bool {
-    return array_key_exists(self::COOKIE,$_COOKIE);
+    return array_key_exists(self::Name(),$_COOKIE);
   }
   
   /**
@@ -36,13 +61,13 @@ class CookieUtility {
    */
   static function set(string $value): bool {
     return empty($value) ? false : setcookie(
-      self::COOKIE,
+      self::Name(),
       $value,
       [
-        'expires' => time() + self::EXPIRES,
+        'expires' => time() + self::Expires(),
         'path' => '/',
         'domain' => $_SERVER['HTTP_HOST'],
-        'samesite' => 'strict',
+        'samesite' => self::SameSite(),
         'secure' => ( array_key_exists('HTTPS',$_SERVER) && ( $_SERVER['HTTPS'] == 'on' ) ),
       ]
     );
@@ -63,7 +88,7 @@ class CookieUtility {
    * @return string|null
    */
   static function get(): ?string {
-    return self::has() ? $_COOKIE[self::COOKIE] : null;
+    return self::has() ? $_COOKIE[self::Name()] : null;
   }
   
   /**
@@ -73,13 +98,13 @@ class CookieUtility {
    */
   static function unset(): bool {
     return setcookie(
-      self::COOKIE,
+      self::Name(),
       "",
       [
         'expires' => 0,
         'path' => '/',
         'domain' => $_SERVER['HTTP_HOST'],
-        'samesite' => 'strict',
+        'samesite' => self::SameSite(),
         'secure' => ( array_key_exists('HTTPS',$_SERVER) && ( $_SERVER['HTTPS'] == 'on' ) ),
       ]
     );
