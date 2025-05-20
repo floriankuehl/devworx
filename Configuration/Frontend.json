@@ -4,6 +4,10 @@
   "charset": "utf-8",
   "controller": "",
   "action": "",
+  "cookie": {
+    "name": "devworx",
+    "expires": 86400
+  },
   "head": {
     "title": "Devworx",
     "favicon": "",
