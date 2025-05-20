@@ -164,9 +164,9 @@ class View implements IView {
 	 * Gets a variable from the internal variable buffer
 	 *
 	 * @param string $key The variable name
-	 * @return mixed|null
+	 * @return mixed
 	 */
-	function getVariable(string $key){
+	function getVariable(string $key): mixed{
 		if( $this->hasVariable($key) )
 		  return $this->variables[$key];
 		return null;
@@ -210,9 +210,9 @@ class View implements IView {
 	/**
 	 * Renders the current view using renderStatic
 	 *
-	 * @return \mixed
+	 * @return mixed
 	 */
-	function render(){
+	function render(): mixed{
 		return self::renderStatic(
 		  $this->fileName,
 		  $this->variables,
@@ -224,7 +224,7 @@ class View implements IView {
 	/**
 	 * Converts the view to a string by rendering
 	 *
-	 * @return \mixed
+	 * @return mixed
 	 */
 	function __toString(): string {
 		return $this->render();
@@ -237,14 +237,14 @@ class View implements IView {
 	 * @param array $variables The variables for the template
 	 * @param string $renderer The renderer to use for the template
 	 * @param string $encoding The encoding for the template
-	 * @return \mixed
+	 * @return mixed
 	 */
 	static function renderStatic(
 		string $fileName,
 		array $variables=null,
 		string $renderer = '',
 		string $encoding = ''
-	): \mixed {
+	): mixed {
 		$result = null;
 		if( is_file($fileName) ){
 		  ob_start();
