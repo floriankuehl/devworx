@@ -6,7 +6,8 @@
   "action": "",
   "cookie": {
     "name": "devworx",
-    "expires": 86400
+    "expires": 86400,
+    "sameSite": "strict"
   },
   "head": {
     "title": "Devworx",
