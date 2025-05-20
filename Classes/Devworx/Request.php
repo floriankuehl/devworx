@@ -56,30 +56,84 @@ class Request implements IRequest {
    * Gets a _GET variable
    *
    * @param string $key optional key
-   * @return ?mixed
+   * @return mixed
    */
-  function Get(string $key=null): ?mixed {
+  function Get(string $key=null): mixed {
 	  return ArrayUtility::key($_GET,$key);
+  }
+  
+  /**
+   * Sets a _GET variable
+   *
+   * @param string $key key
+   * @param mixed $value
+   * @return void
+   */
+  function setGet(string $key,mixed $value): void {
+	  $_GET[$key] = $value;
   }
   
   /**
    * Gets a _POST variable
    *
    * @param string $key optional key
-   * @return ?mixed
+   * @return mixed
    */
-  function Post(string $key=null): ?mixed {
+  function Post(string $key=null): mixed {
 	  return ArrayUtility::key($_POST,$key);
+  }
+  
+  /**
+   * Sets a _POST variable
+   *
+   * @param string $key key
+   * @param mixed $value
+   * @return void
+   */
+  function setPost(string $key,mixed $value): void {
+	  $_POST[$key] = $value;
   }
   
   /**
    * Gets a _PUT variable
    *
    * @param string $key optional key
-   * @return ?mixed
+   * @return mixed
    */
-  function Put(string $key=null): ?mixed {
+  function Put(string $key=null): mixed {
 	  return ArrayUtility::key($_PUT,$key);
+  }
+  
+  /**
+   * Sets a _PUT variable
+   *
+   * @param string $key key
+   * @param mixed $value
+   * @return void
+   */
+  function setPut(string $key,mixed $value): void {
+	  $_PUT[$key] = $value;
+  }
+  
+  /**
+   * Gets a _REQUEST variable
+   *
+   * @param string $key optional key
+   * @return mixed
+   */
+  function Request(string $key=null): mixed {
+	  return ArrayUtility::key($_REQUEST,$key);
+  }
+  
+  /**
+   * Sets a _REQUEST variable
+   *
+   * @param string $key key
+   * @param mixed $value
+   * @return void
+   */
+  function setRequest(string $key,mixed $value): void {
+	  $_REQUEST[$key] = $value;
   }
   
   /**
@@ -95,7 +149,8 @@ class Request implements IRequest {
    * Checks if a specific argument exists
    *
    * @param string $key The name of the argument
-   * @return   */
+   * @return bool 
+   */
   function hasArgument(string $key): bool {
     return array_key_exists($key,$this->arguments);
   }
@@ -107,17 +162,29 @@ class Request implements IRequest {
    * @param mixed $fallback The fallback value
    * @return mixed
    */
-  function getArgument(string $key,$fallback=null){
+  function getArgument(string $key,$fallback=null): mixed {
     return $this->arguments[$key] ?? $fallback;
+  }
+  
+  /**
+   * Sets an argument
+   *
+   * @param string $key key
+   * @param mixed $value value
+   * @return void
+   */
+  function setArgument(string $key,mixed $value): void {
+    $this->arguments[$key] = $value;
   }
   
   /**
    * Gets the current upload files
    *
-   * @return array
+   * string $key
+   * @return ?array
    */
-  function getFiles(): array {
-    return $_FILES;
+  function getFiles(string $key): ?array {
+    return ArrayUtility::key($_FILES,$key);
   }
   
   /**
