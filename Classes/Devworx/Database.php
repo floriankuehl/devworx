@@ -89,9 +89,9 @@ class Database implements IDatabase {
 	 * Returns the result of a query
 	 * 
 	 * @param string $query The SQL query string 
-	 * @return object
+	 * @return mixed
 	 */
-	function result(string $query){
+	function result(string $query): mixed {
 		return $this->connection->query($query);
 	}
 
@@ -103,7 +103,7 @@ class Database implements IDatabase {
 	 * @param int $mode The mysqli result mode
 	 * @return mixed
 	 */
-	function query(string $query,bool $one=false,int $mode=MYSQLI_NUM){
+	function query(string $query,bool $one=false,int $mode=MYSQLI_NUM): mixed {
 		$result = $this->result($query);
 		if( $result === false )
 		  throw new \Exception($this->error());
@@ -120,9 +120,9 @@ class Database implements IDatabase {
 	 * @param string $query The SQL query string 
 	 * @param string $format The MySQL field format string 
 	 * @param array $values The field values for the placeholders
-	 * @return object
+	 * @return mixed
 	 */
-	function statement(string $query,string $format,array $values){
+	function statement(string $query,string $format,array $values): mixed {
 		$connection = $this->connection;
 		$stmt = $connection->prepare($query);
 
@@ -143,7 +143,7 @@ class Database implements IDatabase {
 	 * @param array $values The field values for the placeholders
 	 * @return mixed
 	 */
-	function prepare(string $query,string $format,array $values){
+	function prepare(string $query,string $format,array $values): mixed {
 		$stmt = $this->statement($query,$format,$values);
 		$stmt->execute();
 		$result = $stmt->get_result();
