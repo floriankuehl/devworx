@@ -17,7 +17,7 @@ class CacheController extends \Devworx\AbstractController {
   private $cacheFolder = '';
   private $modelFolder = '';
   
-  public function initialize(){
+  public function initialize(): void {
     $this->cacheFolder = Frontend::getConfig('system','cache');
     $this->modelFolder = Frontend::path('Classes','Frontend','Models');
   }

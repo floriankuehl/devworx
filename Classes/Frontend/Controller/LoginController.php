@@ -9,7 +9,7 @@ use \Devworx\Utility\FlashMessageUtility;
 
 class LoginController extends \Devworx\AbstractController {
   
-  function initialize(){
+  function initialize(): void {
     
   }
   

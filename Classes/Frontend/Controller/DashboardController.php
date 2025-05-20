@@ -11,7 +11,7 @@ use \Frontend\Models\User;
 class DashboardController extends \Devworx\AbstractController {
     
 	
-	public function initialize(){
+	public function initialize(): void {
 		
 	}
 	
