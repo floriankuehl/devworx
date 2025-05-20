@@ -112,7 +112,7 @@ abstract class AbstractController implements IController {
 	 *
 	 * @return void
 	 */
-	abstract function initialize();
+	abstract function initialize(): void;
 
 	/** 
 	 * This function processes actions by retrieving the template and rendering the view
@@ -121,7 +121,7 @@ abstract class AbstractController implements IController {
 	 * @param array $arguments The arguments for the action
 	 * @return mixed
 	 */
-	function processAction(string $action,...$arguments){
+	function processAction(string $action,...$arguments): mixed {
 		$controller = $this->getId();
 		$action = ucfirst($action);
 		$this->view->setId("{$controller}-{$action}");
