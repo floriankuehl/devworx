@@ -159,6 +159,28 @@ class FileUtility {
     $files = array_map(fn($row) => "{$path}/{$row}",scandir($path));
     return array_filter($files,fn($row) => is_file($row) && unlink($row));
   }
+  
+  /**
+   * Deletes all files and folders from a path, including the path itself
+   *
+   * @param string $path The folder to search
+   * @return void
+   */
+  public static function unlinkRecursive(string $path): void { 
+		if (is_dir($path)) { 
+			$list = scandir($path);
+			foreach ($list as $file) { 
+				if ($file != "." && $file != "..") { 
+					$full = $path . DIRECTORY_SEPARATOR . $file;
+					if (is_dir($full) && !is_link($full))
+						self::unlinkRecursive($full);
+					else
+						unlink($full); 
+				} 
+			}
+			rmdir($path); 
+		}
+	}
 }
 
 ?>
