@@ -22,6 +22,13 @@ interface IRequest {
 	function getBody(): string;
 
 	/**
+	 * Retrieves the current request body from php://input as JSON
+	 *
+ 	 * @return mixed
+	 */
+	function getJson(): mixed;	
+
+	/**
 	 * Checks if the request method is GET
 	 *
 	 * @return bool
@@ -167,7 +174,8 @@ interface IRequest {
 	 * @param int $index The row index
 	 * @return mixed
 	 */
-	function getFile(string $key,string $subkey,int $index): mixed;  
+	function getFile(string $key,string $subkey,int $index): mixed;
+
 }
 
 ?>
