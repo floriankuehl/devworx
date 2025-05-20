@@ -5,6 +5,11 @@
   "body": {
     "content": ""
   },
+  "cookie": {
+    "name": "devworx",
+    "expires": 86400,
+    "sameSite": "strict"
+  },
   "system": {
     "defaultNamespace": "Api",
     "controllerArgument": "controller",
