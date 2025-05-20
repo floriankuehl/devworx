@@ -249,9 +249,9 @@ class Request implements IRequest {
   /**
    * Retrieves the current request body from php://input as JSON
    *
-   * @return array
+   * @return mixed
    */
-  function getJson(){
+  function getJson(): mixed {
     return json_decode( $this->getBody(), true );
   }
   
