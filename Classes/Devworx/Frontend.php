@@ -21,7 +21,11 @@ class Frontend extends ConfigManager {
   
   const PATHGLUE = '/';
   const REALPATH = false;
-  const CONTEXTS = [ 'frontend', 'api' ];
+  const CONTEXTS = [ 
+	'frontend', 
+	'api', 
+	'documentation' 
+  ];
   const CONTEXT_KEY = 'X-Devworx-Context';
   const SYSTEM_USER = [
     'uid' => 0,
@@ -161,12 +165,30 @@ class Frontend extends ConfigManager {
   }
   
   /**
+   * Checks if the program runs in Frontend context
+   *
+   * @return bool
+   */
+  public static function isFrontendContext(): bool{
+    return self::$context == self::CONTEXTS[0];
+  }
+  
+  /**
    * Checks if the program runs in API context
    *
    * @return bool
    */
   public static function isApiContext(): bool{
     return self::$context == self::CONTEXTS[1];
+  }
+  
+  /**
+   * Checks if the program runs in Frontend context
+   *
+   * @return bool
+   */
+  public static function isDocumentationContext(): bool{
+    return self::$context == self::CONTEXTS[2];
   }
   
   /**
@@ -337,7 +359,11 @@ class Frontend extends ConfigManager {
    */
   public static function initialize(): bool {
 	self::$header = getallheaders();
-    self::$context = ArrayUtility::key(self::$header,self::CONTEXT_KEY,self::CONTEXTS[0]);
+    self::$context = ArrayUtility::key(
+		self::$header,
+		self::CONTEXT_KEY,
+		self::CONTEXTS[0]
+	);
 	
     if( self::loadConfigurationFile() ){
 	  self::loadHeaders();
@@ -354,10 +380,15 @@ class Frontend extends ConfigManager {
         ApiUtility::initialize();
         return true;
       }
-      
-      SessionUtility::start();
+	  
 	  $renderer = new ConfigRenderer();
       self::$config = $renderer->render( self::$config );
+	  
+	  if( self::isDocumentationContext() )
+        return true;
+      
+	  SessionUtility::start();
+	  
       return true;
     }
     return false;
