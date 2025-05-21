@@ -24,9 +24,9 @@ EXTRACT_ALL = YES
 EXTRACT_PRIVATE = YES
 EXTRACT_STATIC = YES
 FILE_PATTERNS = *.php \
-				*.html \
-				*.js \
-				*.json
+		*.html \
+		*.js \
+		*.json
 RECURSIVE = YES
 SOURCE_BROWSER = YES
 INLINE_SOURCES = NO
