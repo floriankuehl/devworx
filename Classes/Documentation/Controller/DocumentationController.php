@@ -38,16 +38,18 @@ class DocumentationController extends \Devworx\AbstractController {
 		
 		$doxygen = $this->getDoxygenConfig();
 		
-		$constants = Frontend::realPath( $doxygen['workdir'], $doxygen['constants'] );
-		$warnings = Frontend::realPath( $doxygen['workdir'], $doxygen['warnings'] );
-		$doxyfile = Frontend::realPath( $doxygen['workdir'], $doxygen['doxyfile'] );
+		$constants = Frontend::path( $doxygen['workdir'], $doxygen['constants'] );
+		$warnings = Frontend::path( $doxygen['workdir'], $doxygen['warnings'] );
+		$doxyfile = Frontend::path( $doxygen['workdir'], $doxygen['doxyfile'] );
 		
 		$project = $doxygen['project'];
 		$docset = $doxygen['docset'];
 		$html = $doxygen['html'];
 		
+		$output = $doxygen['workdir'] . DIRECTORY_SEPARATOR .  $doxygen['output'];
+		$realOutput = Frontend::realPath( $doxygen['workdir'], $doxygen['output'] );
+		
 		$constants = file_exists($constants) ? file_get_contents($constants) : '';
-		$output = Frontend::realPath( $doxygen['workdir'], $doxygen['output'] ); 		
 		
 		$addition = ArrayUtility::joinAssoc([
 			'DOXYFILE_ENCODING' => strtoupper(Frontend::getConfig('charset')),
@@ -81,11 +83,11 @@ class DocumentationController extends \Devworx\AbstractController {
 		if( file_exists($doxyfile) )
 			unlink($doxyfile);
 		
-		FileUtility::unlinkRecursive( $output );
+		FileUtility::unlinkRecursive( $realOutput );
 		
 		file_put_contents($doxyfile, "{$constants}\r\n{$addition}");
 		
-		return $doxyfile;
+		return realpath( $doxyfile );
 	}
 	
 	public function generateAction(){
@@ -124,7 +126,7 @@ class DocumentationController extends \Devworx\AbstractController {
 	}
 	
 	public function showAction(){
-
+		$content = null;
 		// Dateiname aus GET-Parameter
 		$file = $this->request->getArgument('file') ?? 'index.html';
 		if( empty($file) ) $file = 'index.html';
@@ -139,26 +141,32 @@ class DocumentationController extends \Devworx\AbstractController {
 		);
 		
 		if( !is_dir($path) ){
-			$content = getcwd() . ' misses ' . $path;
-			return;
+			$content = \Devworx\Utility\DebugUtility::var_dump([
+				'current' => getcwd(),
+				'path' => $path,
+			]);
 		}
 		
 		$absolute = realpath( "{$path}\\{$file}" );
 		if( !file_exists($absolute) ){
-			$content = getcwd() . ' cant find ' . $absolute;
-			return;
+			$content = \Devworx\Utility\DebugUtility::var_dump([
+				'current' => getcwd(),
+				'path' => $path,
+				'absolute' => $absolute
+			]);
 		}
 		
-		$content = null;	
-		$info = strtolower( pathinfo($file,PATHINFO_EXTENSION) );
-		$mime = self::MIME[$info];
-		header("Content-Type: $mime");
-		
-		$content = file_get_contents($absolute);
-		if (preg_match('/\.html?$/i', $file)) {
-			$fileName = basename($file);
-			$baseHref = '/help/' . $file;
-			$content = preg_replace('/<head([^>]*)>/i', "<head$1>\n<base href=\"{$baseHref}\">", $content, 1);
+		if( is_null($content) ){
+			$info = strtolower( pathinfo($file,PATHINFO_EXTENSION) );
+			$mime = self::MIME[$info];
+			header("Content-Type: $mime");
+			
+			$content = file_get_contents($absolute);
+			if (preg_match('/\.html?$/i', $file)) {
+				$fileName = basename($file);
+				$baseHref = '/help/' . $file;
+				$content = preg_replace('/<head([^>]*)>/i', "<head$1>\n<base href=\"{$baseHref}\">", $content, 1);
+			}
 		}
 		
 		$this->view->assign('content',$content);
