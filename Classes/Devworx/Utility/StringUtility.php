@@ -37,7 +37,7 @@ class StringUtility {
   /**
    * Checks if the given string is a Base64 string
    *
-   * @param string $value The given value
+   * @param string $base64 The given value
    * @return bool
    */
   public static function isBase64(string $base64=''): bool {
@@ -82,7 +82,7 @@ class StringUtility {
   }
   
   /**
-   * Converts \r\n and \n to PHP_EOL
+   * Converts line characters to PHP_EOL
    *
    * @param string $value The given value
    * @return string

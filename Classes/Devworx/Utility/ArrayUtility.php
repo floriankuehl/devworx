@@ -195,7 +195,7 @@ class ArrayUtility {
   /**
    * Filters values from an array
    * 
-   * @param array $array The given array
+   * @param array $source The given array
    * @param array $filter The given filter
    * @return array
    */
@@ -220,6 +220,22 @@ class ArrayUtility {
       }
       return $keep;
     });
+  }
+  
+  /**
+   * Joins key-value pairs with provided glue, can additionally join the whole list
+   * 
+   * @param array $array The given array
+   * @param string $glue opt. glue
+   * @param string $glueAll opt. overall glue
+   * @return array|string
+   */
+  static function joinAssoc(array $array, string $glue='',string $glueAll=null){
+	$result = [];
+	foreach($array as $k => $v){
+		$result []= implode($glue,[$k,$v]);
+	}
+	return is_null($glueAll) ? $result : implode($glueAll,$result);
   }
   
 }
