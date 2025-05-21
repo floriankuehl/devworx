@@ -76,6 +76,7 @@ class Frontend extends ConfigManager {
 	self::setHeaderConfig('Cache-Control', 'head','metaHttpEquiv','Cache-Control');
 	self::setHeaderConfig('Pragma', 'head','metaHttpEquiv','Pragma');
 	self::setHeaderConfig('Expires', 'head','metaHttpEquiv','Expires');
+	self::setHeader( self::CONTEXT_KEY, self::$context );
   }
   
   /**
@@ -353,18 +354,30 @@ class Frontend extends ConfigManager {
   }
   
   /**
+   * Retrieves the current context
+   *
+   * @return string
+   */
+  public static function getContext(): string {
+	return ArrayUtility::key(
+		self::$header,
+		self::CONTEXT_KEY,
+		ArrayUtility::key(
+			$_SERVER,
+			'REDIRECT_CONTEXT',
+			self::CONTEXTS[0]
+		)
+	);
+  }
+  
+  /**
    * Initializes the frontend
    *
    * @return bool
    */
   public static function initialize(): bool {
 	self::$header = getallheaders();
-    self::$context = ArrayUtility::key(
-		self::$header,
-		self::CONTEXT_KEY,
-		self::CONTEXTS[0]
-	);
-	
+    self::$context = self::getContext();
     if( self::loadConfigurationFile() ){
 	  self::loadHeaders();
 	  self::$header = getallheaders();
@@ -446,6 +459,7 @@ class Frontend extends ConfigManager {
       
       $ctrl = self::processControllerAction();
       if( is_null($ctrl) ){
+		echo self::$context;
         throw new \Exception('Unknown Controller ' . self::$config['context']['controller']);
         return '';
       }
@@ -472,6 +486,5 @@ class Frontend extends ConfigManager {
   }
   
 }
-
 
 ?>
