@@ -10,7 +10,7 @@
 	  "sameSite": "strict"
   },
   "head": {
-    "title": "Devworx",
+    "title": "Devworx Documentation",
 	"favicon": "",
     "meta": {
       "viewport": "width=device-width, initial-scale=1.0",
@@ -27,38 +27,65 @@
       "Content-Script-Type": "text/javascript",
       "Content-Style-Type": "text/css"
     },
-    "styles": {
-      "index": "Resources/Styles/index.css"
-    },
-    "scripts": {
-      
-    },
+    "styles": {},
+    "scripts": {},
     "content": ""
   },
   "body": {
-    "content": "",
-    "styles": {
-      
-    },
-    "scripts": {
-      "setup": "Resources/Scripts/setup.js"
-    }
+    "styles": {},
+    "scripts": {},
+	"content": ""
   },
   "system": {
-    "defaultNamespace": "Frontend",
+    "defaultNamespace": "Documentation",
     "controllerArgument": "controller",
     "actionArgument": "action",
-    "defaultController": "Login",
-    "defaultAction": "Login",
-	"afterLogin": "Dashboard::index",
+    "defaultController": "Documentation",
+    "defaultAction": "show",
+	"afterLogin": "Documentation::show",
     "publicControllerActions": [
-      "Login::Login"
+      "Documentation::show",
+	  "Documentation::generate"
     ],
     "cache": "Cache"
   },
+  "doxygen": {
+	"bin": "C:\\Program Files\\doxygen\\bin\\doxygen.exe",
+	"constants": "doxygen_constants.txt",
+	"doxyfile": "doxyfile.txt",
+	"output": "Documentation",
+	"language": "English",
+	"exclude": "Cache",
+	"project": {
+		"name": "Storytime",
+		"description": "A story creation framework, based on Devworx",
+		"logo": "",
+		"icon": "",
+		"version": "0.1"
+	},
+	"docset": {
+		"id": "com.floriankuehl.Storytime",
+		"name": "Storytime, a story creation framework, based on Devworx",
+		"url": "",
+		"bundle": "com.floriankuehl.Storytime",
+		"publisher": "Florian Kühl"
+	},
+	"html": {
+		"output": "html",
+		"header": "",
+		"footer": "",
+		"stylesheet": "",
+		"extraStylesheet": "",
+		"files": "",
+		"colorStyle": "AUTO_LIGHT",
+		"hue": 220,
+		"saturation": 100,
+		"gamma": 80
+	}
+  },
   "view": {
-    "renderer": "Devworx\\Renderer\\FluidRenderer",
-    "layout": "Page",
+    "renderer": "",
+    "layout": "",
     "configurationRootPath": "Configuration",
     "layoutRootPath": "Resources/Frontend/Layouts",
     "templateRootPath": "Resources/Frontend/Templates",
