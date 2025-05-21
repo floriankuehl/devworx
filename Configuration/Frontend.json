@@ -5,13 +5,13 @@
   "controller": "",
   "action": "",
   "cookie": {
-    "name": "devworx",
-    "expires": 86400,
-    "sameSite": "strict"
+	  "name": "devworx",
+	  "expires": 86400,
+	  "sameSite": "strict"
   },
   "head": {
     "title": "Devworx",
-    "favicon": "",
+	"favicon": "",
     "meta": {
       "viewport": "width=device-width, initial-scale=1.0",
       "author": "Florian Kühl",
@@ -20,9 +20,9 @@
       "robots": "NOINDEX,NOFOLLOW"
     },
     "metaHttpEquiv": {
-      "Cache-Control": "no-cache, no-store, must-revalidate",
-      "Pragma": "no-cache",
-      "Expires": 0,
+	  "Cache-Control": "no-cache, no-store, must-revalidate",
+	  "Pragma": "no-cache",
+	  "Expires": 0,
       "Content-Type": "text/html",
       "Content-Script-Type": "text/javascript",
       "Content-Style-Type": "text/css"
@@ -50,7 +50,7 @@
     "actionArgument": "action",
     "defaultController": "Login",
     "defaultAction": "Login",
-	  "afterLogin": "Dashboard::index",
+	"afterLogin": "Dashboard::index",
     "publicControllerActions": [
       "Login::Login"
     ],
@@ -64,6 +64,7 @@
     "templateRootPath": "Resources/Frontend/Templates",
     "partialRootPath": "Resources/Frontend/Partials",
     "documentRootPath": "Resources/Documents",
+	"imageRootPath": "Resources/Images",
     "scriptsPath": "Resources/Scripts",
     "stylesPath": "Resources/Styles"
   },
