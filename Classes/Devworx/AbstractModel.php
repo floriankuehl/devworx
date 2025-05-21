@@ -145,7 +145,7 @@ abstract class AbstractModel implements IModel {
 	 */
 	public function setCreated(?string $value): void {
 		if( is_null($this->created) )
-		$this->created = new \DateTime();
+			$this->created = new \DateTime();
 		$this->created->setTimestamp(intval($value));
 	}
 
@@ -165,7 +165,9 @@ abstract class AbstractModel implements IModel {
 	 * @return void
 	 */
 	public function setUpdated(?string $value): void {
-		$this->updated = new \DateTime($value);
+		if( is_null($this->updated) )
+			$this->updated = new \DateTime();
+		$this->updated->setTimestamp(intval($value));
 	}
 
 	/** 
@@ -184,7 +186,9 @@ abstract class AbstractModel implements IModel {
 	 * @return void
 	 */
 	public function setDeleted(?string $value): void {
-		$this->deleted = new \DateTime($value);
+		if( is_null($this->deleted) )
+			$this->deleted = new \DateTime();
+		$this->deleted->setTimestamp(intval($value));
 	}
 
 	/** 
