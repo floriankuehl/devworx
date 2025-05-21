@@ -19,9 +19,12 @@ use \Api\Utility\ApiUtility;
  */
 class Frontend extends ConfigManager {
   
-  const PATHGLUE = '/';
-  const REALPATH = false;
-  const CONTEXTS = [ 'frontend', 'api' ];
+  const PATHGLUE = DIRECTORY_SEPARATOR;
+  const CONTEXTS = [ 
+	'frontend', 
+	'api', 
+	'documentation' 
+  ];
   const CONTEXT_KEY = 'X-Devworx-Context';
   const SYSTEM_USER = [
     'uid' => 0,
@@ -29,17 +32,17 @@ class Frontend extends ConfigManager {
     'lastName' => 'System'
   ];
   
-  /** @var string The current context */
+  /** @var string $context The current context */
   public static $context = '';
-  /** @var string The current encoding */
+  /** @var string $encoding The current encoding */
   public static $encoding = '';
-  /** @var array The current header */
+  /** @var array $header The current header */
   public static $header = null;
-  /** @var string The current layout */
+  /** @var string $layout The current layout */
   public static $layout = '';
-  /** @var IController The current controller */
+  /** @var IController $controller The current controller */
   public static $controller = null;
-  /** @var string The current action */
+  /** @var string $action The current action */
   public static $action = '';
   
   /**
@@ -72,6 +75,22 @@ class Frontend extends ConfigManager {
 	self::setHeaderConfig('Cache-Control', 'head','metaHttpEquiv','Cache-Control');
 	self::setHeaderConfig('Pragma', 'head','metaHttpEquiv','Pragma');
 	self::setHeaderConfig('Expires', 'head','metaHttpEquiv','Expires');
+	self::setHeader( self::CONTEXT_KEY, self::$context );
+  }
+  
+  /**
+   * Builds a path based on a specific devworx path key
+   *
+   * @param string $rootKey The key in the global devworx path configuration
+   * @param array $segments The path segments
+   * @return string
+   */
+  public static function buildPath(string $rootKey,...$segments){
+	$segments = array_map(fn($s)=>trim($s,self::PATHGLUE),$segments);
+    return implode(self::PATHGLUE,[
+      $GLOBALS['DEVWORX']['PATH'][$rootKey],
+      ...$segments
+    ]);
   }
   
   /**
@@ -81,12 +100,17 @@ class Frontend extends ConfigManager {
    * @return string
    */
   public static function path(...$segments): string {
-    $segments = array_map(fn($s)=>trim($s,self::PATHGLUE),$segments);
-    $path = implode(self::PATHGLUE,[
-      $GLOBALS['DEVWORX']['PATH']['ROOT'],
-      ...$segments
-    ]);
-    return self::REALPATH ? realpath($path) : $path;
+    return self::buildPath('ROOT',...$segments);
+  }
+  
+  /**
+   * Gets a root folder or file path based on given segments
+   *
+   * @param array $segments The path segments
+   * @return string
+   */
+  public static function realPath(...$segments): string {
+    return realpath( self::path(...$segments) );
   }
   
   /**
@@ -96,11 +120,7 @@ class Frontend extends ConfigManager {
    * @return array
    */
   public static function pathDebug(...$segments): array {
-    $segments = array_map(fn($s)=>trim($s,self::PATHGLUE),$segments);
-    $path = implode(self::PATHGLUE,[
-      $GLOBALS['DEVWORX']['PATH']['ROOT'],
-      ...$segments
-    ]);
+    $path = self::path(...$segments);
     return [
       'list' => $segments,
       'path' => $path,
@@ -109,35 +129,51 @@ class Frontend extends ConfigManager {
   }
   
   /**
-   * Gets a public folder or file path based on given segments
+   * Gets the relative public folder or file path based on given segments
    *
    * @param array $segments The path segments
    * @return string
    */
   public static function publicPath(...$segments): string {
-    $segments = array_map(fn($s)=>trim($s,self::PATHGLUE),$segments);
-    $path = implode(self::PATHGLUE,[
-      $GLOBALS['DEVWORX']['PATH']['PUBLIC'],
-      ...$segments
-    ]);
-    return self::REALPATH ? realpath( $path ) : $path;
+    return self::buildPath('PUBLIC',...$segments);
   }
   
   /**
-   * Gets the public path based on the view configuration
+   * Gets the real path of a public folder or file path based on given segments
+   *
+   * @param array $segments The path segments
+   * @return string
+   */
+  public static function realPublicPath(...$segments): string {
+    return realpath( self::publicPath(...$segments) );
+  }
+  
+  /**
+   * Gets the relative public path based on the view configuration
    *
    * @param string $configKey The key of the view config to use
    * @param array $segments The path segments
    * @return string
    */
   public static function viewPath(string $configKey,...$segments): string {
-    $segments = array_map(fn($s)=>trim($s,self::PATHGLUE),$segments);
-    $path = implode(self::PATHGLUE,[
-      $GLOBALS['DEVWORX']['PATH']['PUBLIC'],
-      self::getConfig('view',$configKey),
-      ...$segments
-    ]);
-    return self::REALPATH ? realpath( $path ) : $path;
+	return self::publicPath(
+		self::getConfig('view',$configKey),
+		...$segments
+	);
+  }
+  
+  /**
+   * Gets the real public path based on the view configuration
+   *
+   * @param string $configKey The key of the view config to use
+   * @param array $segments The path segments
+   * @return string
+   */
+  public static function realViewPath(string $configKey,...$segments): string {
+    return self::realPublicPath(
+		self::getConfig('view',$configKey),
+		...$segments
+	);
   }
   
   /**
@@ -161,12 +197,30 @@ class Frontend extends ConfigManager {
   }
   
   /**
+   * Checks if the program runs in Frontend context
+   *
+   * @return bool
+   */
+  public static function isFrontendContext(): bool{
+    return self::$context == self::CONTEXTS[0];
+  }
+  
+  /**
    * Checks if the program runs in API context
    *
    * @return bool
    */
   public static function isApiContext(): bool{
     return self::$context == self::CONTEXTS[1];
+  }
+  
+  /**
+   * Checks if the program runs in Frontend context
+   *
+   * @return bool
+   */
+  public static function isDocumentationContext(): bool{
+    return self::$context == self::CONTEXTS[2];
   }
   
   /**
@@ -331,14 +385,30 @@ class Frontend extends ConfigManager {
   }
   
   /**
+   * Retrieves the current context
+   *
+   * @return string
+   */
+  public static function getContext(): string {
+	return ArrayUtility::key(
+		self::$header,
+		self::CONTEXT_KEY,
+		ArrayUtility::key(
+			$_SERVER,
+			'REDIRECT_CONTEXT',
+			self::CONTEXTS[0]
+		)
+	);
+  }
+  
+  /**
    * Initializes the frontend
    *
    * @return bool
    */
   public static function initialize(): bool {
 	self::$header = getallheaders();
-    self::$context = ArrayUtility::key(self::$header,self::CONTEXT_KEY,self::CONTEXTS[0]);
-	
+    self::$context = self::getContext();
     if( self::loadConfigurationFile() ){
 	  self::loadHeaders();
 	  self::$header = getallheaders();
@@ -354,10 +424,15 @@ class Frontend extends ConfigManager {
         ApiUtility::initialize();
         return true;
       }
-      
-      SessionUtility::start();
+	  
 	  $renderer = new ConfigRenderer();
       self::$config = $renderer->render( self::$config );
+	  
+	  if( self::isDocumentationContext() )
+        return true;
+      
+	  SessionUtility::start();
+	  
       return true;
     }
     return false;
@@ -415,6 +490,7 @@ class Frontend extends ConfigManager {
       
       $ctrl = self::processControllerAction();
       if( is_null($ctrl) ){
+		echo self::$context;
         throw new \Exception('Unknown Controller ' . self::$config['context']['controller']);
         return '';
       }
