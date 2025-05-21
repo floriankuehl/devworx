@@ -18,3 +18,14 @@ Order allow,deny
 Deny from all
 </FilesMatch>
 
+# Documentation
+<If "%{REQUEST_URI} =~ m#^/help/#">
+    Header set X-Devworx-Context "documentation"
+</If>
+
+RewriteEngine On
+RewriteCond %{REQUEST_URI} ^/help/
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteRule ^help/(.*)$ index.php?controller=documentation&action=show&file=$1 [L,QSA]
+RewriteRule ^help/?$ index.php?controller=documentation&action=show&file=index.html [L,QSA]
