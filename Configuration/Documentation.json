@@ -11,7 +11,7 @@
   },
   "head": {
     "title": "Devworx Documentation",
-	"favicon": "",
+    "favicon": "",
     "meta": {
       "viewport": "width=device-width, initial-scale=1.0",
       "author": "Florian Kühl",
@@ -20,12 +20,12 @@
       "robots": "NOINDEX,NOFOLLOW"
     },
     "metaHttpEquiv": {
-	  "Cache-Control": "no-cache, no-store, must-revalidate",
-	  "Pragma": "no-cache",
-	  "Expires": 0,
-      "Content-Type": "text/html",
-      "Content-Script-Type": "text/javascript",
-      "Content-Style-Type": "text/css"
+	"Cache-Control": "no-cache, no-store, must-revalidate",
+	"Pragma": "no-cache",
+	"Expires": 0,
+	"Content-Type": "text/html",
+	"Content-Script-Type": "text/javascript",
+	"Content-Style-Type": "text/css"
     },
     "styles": {},
     "scripts": {},
@@ -57,17 +57,17 @@
 	"language": "English",
 	"exclude": "Cache",
 	"project": {
-		"name": "Storytime",
-		"description": "A story creation framework, based on Devworx",
+		"name": "Devworx",
+		"description": "The Devworx base framework",
 		"logo": "",
 		"icon": "",
 		"version": "0.1"
 	},
 	"docset": {
-		"id": "com.floriankuehl.Storytime",
-		"name": "Storytime, a story creation framework, based on Devworx",
+		"id": "com.floriankuehl.Devworx",
+		"name": "The Devworx framework",
 		"url": "",
-		"bundle": "com.floriankuehl.Storytime",
+		"bundle": "com.floriankuehl.Devworx",
 		"publisher": "Florian Kühl"
 	},
 	"html": {
@@ -87,9 +87,9 @@
     "renderer": "",
     "layout": "",
     "configurationRootPath": "Configuration",
-    "layoutRootPath": "Resources/Frontend/Layouts",
-    "templateRootPath": "Resources/Frontend/Templates",
-    "partialRootPath": "Resources/Frontend/Partials",
+    "layoutRootPath": "Resources/Documentation/Layouts",
+    "templateRootPath": "Resources/Documentation/Templates",
+    "partialRootPath": "Resources/Documentation/Partials",
     "documentRootPath": "Resources/Documents",
 	"imageRootPath": "Resources/Images",
     "scriptsPath": "Resources/Scripts",
