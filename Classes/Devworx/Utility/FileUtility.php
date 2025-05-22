@@ -114,39 +114,45 @@ class FileUtility {
   }
   
   /**
-   * Uploads a file
+   * Uploads a file and returns the full file name on success
    *
    * @param string $tmpName The temporary file name
+   * @param string $targetFolder The target folder name
    * @param string $targetName The target file name
-   * @return bool
+   * @param bool $checkFolder Checks folder for trailing slash and existence
+   * @return string
    */
-  public static function upload(string $tmpName,string $targetName,bool $checkFolder=false): bool {
+  public static function upload(string $tmpName,string $targetFolder,string $targetName,bool $checkFolder=false): bool {
 	  if( $checkFolder ){
-		  $dir = dirname($targetName);
-		  if( !is_dir($dir) )
-			  mkdir($dir,0x777,true);
+		  $targetFolder = rtrim($targetFolder,DIRECTORY_SEPARATOR);
+		  if( !is_dir($targetFolder) )
+			  mkdir($targetFolder,0x777,true);
 	  }
-	  return move_uploaded_file($tmpName, $targetName);
+	  $targetName = StringUtility::cleanupFile($targetName);
+	  $targetName = $targetFolder . DIRECTORY_SEPARATOR . $targetName;
+	  return move_uploaded_file($tmpName, $targetName) ? $targetName : '';
   }
   
   /**
    * Uploads an array of files and returns the successfull uploaded files
    *
-   * @param string $tmpName The temporary file name
-   * @param string $targetName The target file name
+   * @param array $files The file array
+   * @param string $targetFolder The target folder
+   * @param bool $checkFolder Checks folder for trailing slash and existence
    * @return array
    */
   public static function uploadAll(array $files,string $targetFolder,bool $checkFolder=false): array {
 	  $result = [];
 	  if( $checkFolder ){
+		  $targetFolder = rtrim($targetFolder,DIRECTORY_SEPARATOR);
 		  if( !is_dir($targetFolder) )
 			  mkdir($targetFolder,0x777,true);
 	  }
-	  $targetFolder = rtrim($targetFolder,DIRECTORY_SEPARATOR);
+	  
 	  foreach( $files['tmp_name'] as $i => $tmpName ){
-		  $targetName = $targetFolder . DIRECTORY_SEPARATOR . $files['name'][$i];
-		  if( self::upload($tmpName,$targetName,$checkFolder) )
-			  $result []= $targetName;
+		  $targetFile = self::upload($tmpName,$targetFolder,$files['name'][$i],!$checkFolder);
+		  if( empty( $targetFile ) ) continue;
+		  $result []= $targetFile;
 	  }
 	  return $result;
   }
