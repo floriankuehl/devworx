@@ -12,8 +12,34 @@
 
 <h3>Context-Based MVC Solution</h3>
 <p>The solution can be controlled in the frontend and API context via controllers and actions. The <code>LoginHash</code> can be provided by Cookie or via request header.</p>
+<p>Devworx comes with the idea to use itself in different contexts, based on JSON configuration files. The available contexts are globally defined in the <code>devworx.php</code> and are used by the <code>\Devworx\Frontend</code> class.</p>
+<p>The currently available contexts are <code>frontend,api and documentation</code>.</p>
+<p>See <code>./Public/.htaccess</code> to learn, how the context is determined by URI.</p>
 
-<h3>Database</h3>
+<h3>Configuration</h3>
+<p>The solution can be configured via JSON files, based on the provided context, that are stored in the Configuration folder. These files are used to configurate the system itself, as well as as the frontend page.</p>
+<p>See <code>Resources/Layouts/Page.php</code> and <code>Configuration/Frontend.json</code></p>
+
+<h3>Frontend Context</h3>
+<p>This context is used for the "normal" processing of the user frontend, such as Login, Registering, Dashboard, Caches etc. This is basically the user interaction context.</p>
+<p>For standard rendering, the <code>Devworx\Renderer\FluidRenderer</code> is used.</p>
+
+<h3>API Context</h3>
+<p>This context is used for <code>JSON</code> based interaction, with controllers. To use the api context, you can either request <code>./api/</code> or provide the <code>X-Devworx-Context</code> header with the login hash of the user as the value.</p>
+<p>For standard rendering, the <code>Devworx\Renderer\JSONRenderer</code> is used.</p>
+
+<h3>Documentation Context</h3>
+<p>This context is used for automated documentation with <code>doxygen</code> and can be accessed by requesting <code>./help/</code>.</p>
+<p>To ensure doxygen is working, check the <code>Configuration/Documentation.json</code> configuration and <code>Doxygen/constants.txt</code></p>
+<p>If you want to regenerate the documentation, see <code>DoxygenUtility</code> or flush the <code>Documentation cache</code> via the action <code>CacheController::flush</code>.</p>
+<p>Internally, the <code>Documentation</code> controller routes the HTML files of the Doxygen Documentation to the frontend via the action <code>Documentation::show</code>.</p>
+<p>No renderer is used, because the files are routed directly.</p>
+
+<h2>Classes</h2>
+<p>All the utility classes, as well as some core classes, have static functions for easy reuse in different codes. The <code>Devworx\Frontend</code> class handles the whole architecture statically.</p>
+<p>Controllers, Requests, Repositories, Models, Renderers and Views work by instancing.</p>
+
+<h2>Database</h2>
 <p>The <code>Database</code> class serves as a MySQLi database interface and is accessible via <code>global $DB</code>. It contains functions like <code>query, statement, get, add, put and remove.</code></p>
 <p>Database entries in Devworx have a basic structure that allows for easy data handling and mapping to any <code>AbstractModel</code>.</p>
 <ul>
@@ -25,28 +51,11 @@
   <li><b>deleted</b> <span>timestamp (Deletion timestamp)</span></li>
 </ul>
 
-<h4>Repository</h4>
+<h3>Repository</h3>
 <p>The <code>Repository</code> class enables caching of schemas and easy access to specific database tables in controller context. It contains functions like <code>findBy, findOneBy, findAll, put, add, remove and delete</code>. System fields such as <code>hidden</code> and <code>deleted</code> are automatically added to the queries. Results can be mapped to Model-classes automatically.</p>
 
-<h4>Extending results</h4>
+<h3>Extending results</h3>
 <p>The results of database queries are generally represented with associative arrays. Classes like <code>ArrayWalker</code> allow enriching relational data such as MySQL results to enable multidimensional results and additional data. Models can also be used to modify result handling.</p>
-
-<h3>Variable Contexts</h3>
-<p>Devworx comes with the idea to use itself in different contexts, based on JSON configuration files. The available contexts are globally defined in the <code>devworx.php</code> and are used by the <code>\Devworx\Frontend</code> class.</p>
-<p>The currently available contexts are <code>frontend,api and documentation</code>.</p>
-
-<h4>Frontend Context</h4>
-<p>This context is used for the "normal" processing of the user frontend, such as Login, Registering, Dashboard, Caches etc. This is basically the user interaction context.</p>
-
-<h4>API Context</h4>
-<p>This context is used for <code>JSON</code> based interaction, with controllers. To use the api context, you can either request <code>./api/</code> or provide the <code>X-Devworx-Context</code> header with the login hash of the user as the value.</p>
-
-<h4>Documentation Context</h4>
-<p>This context is used for automated documentation with <code>doxygen</code> and can be accessed by requesting <code>./help/</code>.</p>
-<p>To ensure doxygen is working, check the <code>Configuration/Documentation.json</code> configuration and <code>Doxygen/constants.txt</code></p>
-<p>If you want to regenerate the documentation, see <code>DoxygenUtility</code> or flush the <code>Documentation cache</code> via the action <code>CacheController::flush</code>.</p>
-<p>Internally, the <code>Documentation</code> controller routes the HTML files of the Doxygen Documentation to the frontend via the action <code>Documentation::show</code>.</p>
-<p>See <code>./Public/.htaccess</code> to learn, how the magic is done.</p>
 
 <h3>Access security</h3>
 <p>The codes like classes and private resources are located in the root folder of the solution, but the frontend files are located in the <code>Public</code> folder, aswell as the JavaScript classes for all custom HTML elements and the API integration. The domain for the projects should point to the <code>Public</code> folder.</p>
@@ -57,17 +66,15 @@
 <h4>Credential Hashing</h4>
 <p>The <code>LoginHash</code> consists of the login name and password. The passwords are NOT stored in the database, only the hashes. The hash is used directly to retrieve user information from the database, also as the API key for JSON access.</p>
 
-<h3>Rendering</h3>
+<h2>Rendering</h2>
 <p>The rendering is done via <code>AbstractRenderer</code>. The <code>FluidRenderer</code> enables string templating with placeholders. The <code>JSONRenderer</code> allows direct output in JSON. ViewHelpers are (yet) not available.</p>
 
 <h3>Templating</h3>
 <p>The solution uses the principle of layout, template, and partial. The layout provides the outer frame that is the same for all results and renders the corresponding template of the requested action. Partials are small code snippets that can be used in templates and layouts, as well as in the actions, to generate output.</p>
+<p>See <code>Devworx\View</code> class for further clearance.</p>
 
 <h3>Resources</h3>
 <p>A distinction is made between private and public resources. Private resources are, for example, layouts, templates, and partials. Public resources are all styles, images, icons, and scripts. All private resources are located in the <code>root/Resources</code> folder. The public resources are located in the <code>root/Public/Resources</code> folder.</p>
-
-<h3>Configuration</h3>
-<p>The solution can be configured via JSON files, that are stored in the Configuration folder. These files are used to configurate the system itself, aswell as as the frontend page. See <code>Resources/Layouts/Page.php</code> and <code>Configuration/Frontend.json</code></p>
 
 <h3>Styling</h3>
 <p><code>Bootstrap 5.3</code> and <code>Material Icons from Google</code> are used by standard. But it is easy to change the framework's styling via the configuration files.</p>
