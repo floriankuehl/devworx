@@ -67,6 +67,11 @@
 <h3>Caches</h3>
 <p>The solution features automatic file caching of MySQL database schemas. This allows type usage without database queries.</p>
 
+<h3>Documentation</h3>
+<p>The code is documented with PHP doc-blocks, and user can use doxygen for building a html help structure for the complete code structure.</p>
+<p>The documentation has its own context and can be accessed via <code>./help/</code>.</p>
+<p>To ensure doxygen is working, check the <code>Documentation.json</code> configuration and <code>Doxygen/constants.txt</code></p>
+
 <h2>Advantages</h2>
 
 <h3>Modularity</h3>
