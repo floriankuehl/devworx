@@ -114,6 +114,44 @@ class FileUtility {
   }
   
   /**
+   * Uploads a file
+   *
+   * @param string $tmpName The temporary file name
+   * @param string $targetName The target file name
+   * @return bool
+   */
+  public static function upload(string $tmpName,string $targetName,bool $checkFolder=false): bool {
+	  if( $checkFolder ){
+		  $dir = dirname($targetName);
+		  if( !is_dir($dir) )
+			  mkdir($dir,0x777,true);
+	  }
+	  return move_uploaded_file($tmpName, $targetName);
+  }
+  
+  /**
+   * Uploads an array of files and returns the successfull uploaded files
+   *
+   * @param string $tmpName The temporary file name
+   * @param string $targetName The target file name
+   * @return array
+   */
+  public static function uploadAll(array $files,string $targetFolder,bool $checkFolder=false): array {
+	  $result = [];
+	  if( $checkFolder ){
+		  if( !is_dir($targetFolder) )
+			  mkdir($targetFolder,0x777,true);
+	  }
+	  $targetFolder = rtrim($targetFolder,DIRECTORY_SEPARATOR);
+	  foreach( $files['tmp_name'] as $i => $tmpName ){
+		  $targetName = $targetFolder . DIRECTORY_SEPARATOR . $files['name'][$i];
+		  if( self::upload($tmpName,$targetName,$checkFolder) )
+			  $result []= $targetName;
+	  }
+	  return $result;
+  }
+  
+  /**
    * Views file content in the browser
    *
    * @param string $fileName The original file name
