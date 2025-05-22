@@ -2,6 +2,11 @@
   namespace Devworx;
 
   $GLOBALS['DEVWORX'] = [
+    'CONTEXT' => [
+      'frontend' => 'Frontend Context',
+      'api' => 'API Context',
+      'documentation' => 'Documentation Context'
+    ],
     'DB' => [
       "localhost",
       "root",
