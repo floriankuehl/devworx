@@ -42,6 +42,7 @@
 
 <h3>Error Handling</h3>
 <p>Utility classes such as <code>DebugUtility</code> make implementing debugging and error handling logic easier.</p>
+<p>Exceptions are caught by an own Exception-Handler.</p>
 
 <h2>Database</h2>
 <p>The <code>Database</code> class serves as a MySQLi database interface and is accessible via <code>global $DB</code>. It contains functions like <code>query, statement, get, add, put and remove.</code></p>
