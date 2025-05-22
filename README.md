@@ -31,8 +31,22 @@
 <h4>Extending results</h4>
 <p>The results of database queries are generally represented with associative arrays. Classes like <code>ArrayWalker</code> allow enriching relational data such as MySQL results to enable multidimensional results and additional data. Models can also be used to modify result handling.</p>
 
-<h3>API Context</h3>
-<p>Devworx comes with the idea to use itself in an API style context, based on JSON data. The login hash can be provided via HTTP header to access the full capacity. The public resources contain a JavaScript implementation for easy access.</p>
+<h3>Variable Contexts</h3>
+<p>Devworx comes with the idea to use itself in different contexts, based on JSON configuration files. The available contexts are globally defined in the <code>devworx.php</code> and are used by the <code>\Devworx\Frontend</code> class.</p>
+<p>The currently available contexts are <code>frontend,api and documentation</code>.</p>
+
+<h4>Frontend Context</h4>
+<p>This context is used for the "normal" processing of the user frontend, such as Login, Registering, Dashboard, Caches etc. This is basically the user interaction context.</p>
+
+<h4>API Context</h4>
+<p>This context is used for <code>JSON</code> based interaction, with controllers. To use the api context, you can either request <code>./api/</code> or provide the <code>X-Devworx-Context</code> header with the login hash of the user as the value.</p>
+
+<h4>Documentation Context</h4>
+<p>This context is used for automated documentation with <code>doxygen</code> and can be accessed by requesting <code>./help/</code>.</p>
+<p>To ensure doxygen is working, check the <code>Configuration/Documentation.json</code> configuration and <code>Doxygen/constants.txt</code></p>
+<p>If you want to regenerate the documentation, see <code>DoxygenUtility</code> or flush the <code>Documentation cache</code> via the action <code>CacheController::flush</code>.</p>
+<p>Internally, the <code>Documentation</code> controller routes the HTML files of the Doxygen Documentation to the frontend via the action <code>Documentation::show</code>.</p>
+<p>See <code>./Public/.htaccess</code> to learn, how the magic is done.</p>
 
 <h3>Access security</h3>
 <p>The codes like classes and private resources are located in the root folder of the solution, but the frontend files are located in the <code>Public</code> folder, aswell as the JavaScript classes for all custom HTML elements and the API integration. The domain for the projects should point to the <code>Public</code> folder.</p>
@@ -67,10 +81,8 @@
 <h3>Caches</h3>
 <p>The solution features automatic file caching of MySQL database schemas. This allows type usage without database queries.</p>
 
-<h3>Documentation</h3>
-<p>The code is documented with PHP doc-blocks, and user can use doxygen for building a html help structure for the complete code structure.</p>
-<p>The documentation has its own context and can be accessed via <code>./help/</code>.</p>
-<p>To ensure doxygen is working, check the <code>Documentation.json</code> configuration and <code>Doxygen/constants.txt</code></p>
+<h3>Cache-driven Documentation</h3>
+<p>The code is documented with PHP doc-blocks, and the developer can use doxygen for building a html help structure for the complete code structure. Just provide a path to the doxygen binarys in the <code>Configuration/Documentation.json</code>.</p>
 
 <h2>Advantages</h2>
 
