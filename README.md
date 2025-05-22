@@ -26,6 +26,7 @@
 
 <h3>API Context</h3>
 <p>This context is used for <code>JSON</code> based interaction, with controllers. To use the api context, you can either request <code>./api/</code> or provide the <code>X-Devworx-Context</code> header with the login hash of the user as the value.</p>
+<p>As long as the cookie or the header is set, the api can be easily accessed with <code>JavaScript fetch API</code>.</p>
 <p>For standard rendering, the <code>Devworx\Renderer\JSONRenderer</code> is used.</p>
 
 <h3>Documentation Context</h3>
@@ -85,10 +86,9 @@
 <p><code>Bootstrap 5.3</code> and <code>Material Icons from Google</code> are used by standard. But it is easy to change the framework's styling via the configuration files.</p>
 
 <h3>Custom HTML Elements</h3>
-<p>The solution contains its own HTML elements to handle lists and formats. These are imported via JavaScript module. See Public/Resources/Scripts.</p>
-
-<h3>JavaScript Addons</h3>
-<p>The solution contains addons for dialogs, toggle logic, confirming, formatting and a example for providing serverside rendered templates or partials.</p>
+<p>The solution contains its own HTML elements to handle lists and formats. These are imported via JavaScript module. See <code>./Public/Resources/Scripts</code>.</p>
+<p>To ensure easy implementation, the custom elements inherit from <code>AutoRegistering(HtmlElement)</code>, that provide the tag name and the base tag of the new element. All custom elements are loaded by module in <code>./Public/Resources/Scripts/setup.js</code>.</p>
+<p>The solution contains javascript addons for dialogs, toggle logic, confirming, formatting and a example for providing serverside rendered templates or partials.</p>
 
 <h2>Caches</h2>
 
