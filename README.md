@@ -38,6 +38,7 @@
 <h2>Classes</h2>
 <p>All the utility classes, as well as some core classes, have static functions for easy reuse in different codes. The <code>Devworx\Frontend</code> class handles the whole architecture statically.</p>
 <p>Controllers, Requests, Repositories, Models, Renderers and Views work by instancing.</p>
+<p>Classes are loaded automatically by namespace. e.g.: <code>Devworx\Frontend</code> loads <code>./Classes/Devworx/Frontend.php</code>.</p>
 
 <h3>Error Handling</h3>
 <p>Utility classes such as <code>DebugUtility</code> make implementing debugging and error handling logic easier.</p>
