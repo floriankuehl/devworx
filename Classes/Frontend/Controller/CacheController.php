@@ -5,13 +5,15 @@ namespace Frontend\Controller;
 use \Devworx\Frontend;
 use \Devworx\Utility\FileUtility;
 use \Devworx\Utility\BuildUtility;
+use \Documentation\Utility\DoxygenUtility;
 
 class CacheController extends \Devworx\AbstractController {
   
   const CACHES = [
     'Repository',
     'Models',
-    'OPCache'
+    'OPCache',
+	'Documentation'
   ];
   
   private $cacheFolder = '';
@@ -31,6 +33,14 @@ class CacheController extends \Devworx\AbstractController {
       /*case'OPCache':{
         \Devworx\Utility\OPCacheUtility::flush();
       }break;*/
+	  case'Documentation': {
+		if( Frontend::loadContext('documentation') ){
+			$config = Frontend::getConfig('doxygen');
+			$folder = Frontend::realPath( $config['workdir'], $config['output'] );
+			FileUtility::unlinkRecursive( $folder );
+			Frontend::loadContext('frontend');
+		}
+	  } break;
       default:{ 
         FileUtility::unlinkAll( Frontend::path( $this->cacheFolder, $cache ) ); 
       } break;
@@ -44,6 +54,12 @@ class CacheController extends \Devworx\AbstractController {
       case'Models':{
         BuildUtility::checkModels();
       }break;
+	  case'Documentation':{
+		if( Frontend::loadContext('documentation') ){
+			DoxygenUtility::Doxygen();
+			Frontend::loadContext('frontend');
+		}
+	  }break;
     }
   }
   
