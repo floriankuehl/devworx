@@ -128,7 +128,7 @@ class FileUtility {
 		  if( !is_dir($targetFolder) )
 			  mkdir($targetFolder,0x777,true);
 	  }
-	  $targetName = StringUtility::cleanupFile($targetName);
+	  $targetName = StringUtility::cleanupFile(basename($targetName));
 	  $targetName = $targetFolder . DIRECTORY_SEPARATOR . $targetName;
 	  return move_uploaded_file($tmpName, $targetName) ? $targetName : '';
   }
