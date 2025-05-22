@@ -20,6 +20,7 @@ use \Api\Utility\ApiUtility;
 class Frontend extends ConfigManager {
   
   const PATHGLUE = DIRECTORY_SEPARATOR;
+  const DEFAULT_CONTEXT = 'frontend';
   const CONTEXT_KEY = 'X-Devworx-Context';
   const SYSTEM_USER = [
     'uid' => 0,
@@ -194,19 +195,21 @@ class Frontend extends ConfigManager {
   /**
    * Checks if the program context is known
    *
+   * @param string $context The context key to check
    * @return bool
    */
-  public static function isKnownContext(): bool {
-	  return ArrayUtility::has($GLOBALS['DEVWORX']['CONTEXT'],self::$context);
+  public static function isKnownContext(string $context): bool {
+	  return ArrayUtility::has($GLOBALS['DEVWORX']['CONTEXT'],$context);
   }
   
   /**
    * Retrieves the context label
    *
+   * @param string $context The context key to check
    * @return string
    */
-  public static function getContextName(): string {
-	  return ArrayUtility::key($GLOBALS['DEVWORX']['CONTEXT'],self::$context);
+  public static function getContextName(string $context): string {
+	  return ArrayUtility::key($GLOBALS['DEVWORX']['CONTEXT'],$context);
   }
   
   /**
@@ -239,10 +242,11 @@ class Frontend extends ConfigManager {
   /**
    * Loads the context based configuration file
    *
+   * @param string $context
    * @return bool
    */
-  public static function loadConfigurationFile(): bool {
-    $name = ucfirst(self::$context);
+  public static function loadConfigurationFile(string $context): bool {
+    $name = ucfirst($context);
     $fileName = self::path('Configuration',"{$name}.json");
     return self::loadConfig($fileName);
   }
@@ -409,9 +413,49 @@ class Frontend extends ConfigManager {
 		ArrayUtility::key(
 			$_SERVER,
 			'REDIRECT_CONTEXT',
-			'frontend'
+			self::DEFAULT_CONTEXT
 		)
 	);
+  }
+  
+  /**
+   * Loads a specific context
+   *
+   * @param string $context The context to load
+   * @return bool
+   */
+  public static function loadContext(string $context): bool {
+	  if( 
+		self::isKnownContext($context) && 
+		self::loadConfigurationFile($context) 
+	  ){
+		self::$context = $context;
+		self::loadHeaders();
+		self::$header = getallheaders();
+		
+		self::$config['context'] = [
+			'controller' => self::getCurrentController(),
+			'action' => self::getCurrentAction(),
+		];
+		self::$config['user'] = AuthUtility::getCurrentUser();
+		
+		if( self::isApiContext() ){
+			self::$encoding = 'json';
+			ApiUtility::initialize();
+			return true;
+		}
+		  
+		$renderer = new ConfigRenderer();
+		self::$config = $renderer->render( self::$config );
+		  
+		if( self::isDocumentationContext() )
+			return true;
+		  
+		SessionUtility::start();
+		  
+		return true;
+	  }
+	  return false;
   }
   
   /**
@@ -421,34 +465,7 @@ class Frontend extends ConfigManager {
    */
   public static function initialize(): bool {
 	self::$header = getallheaders();
-    self::$context = self::getContext();
-    if( self::isKnownContext() && self::loadConfigurationFile() ){
-	  self::loadHeaders();
-	  self::$header = getallheaders();
-	  
-      self::$config['context'] = [
-        'controller' => self::getCurrentController(),
-        'action' => self::getCurrentAction(),
-      ];
-      self::$config['user'] = AuthUtility::getCurrentUser();
-            
-      if( self::isApiContext() ){
-        self::$encoding = 'json';
-        ApiUtility::initialize();
-        return true;
-      }
-	  
-	  $renderer = new ConfigRenderer();
-      self::$config = $renderer->render( self::$config );
-	  
-	  if( self::isDocumentationContext() )
-        return true;
-      
-	  SessionUtility::start();
-	  
-      return true;
-    }
-    return false;
+	return self::loadContext( self::getContext() );
   }
   
   /**
