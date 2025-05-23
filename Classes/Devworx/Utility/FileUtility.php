@@ -56,36 +56,6 @@ class FileUtility {
   }
   
   /**
-   * Uploads files to a target directory
-   *
-   * @param string $source The field name in $_FILES
-   * @param string $target The target directory
-   * @param bool $overwrite Flag for overwriting existing files
-   * @return int The amount of uploaded files
-   */
-  public static function upload(string $source,string $target,bool $overwrite=true): int {
-    $result = 0;
-    if( array_key_exists($source,$_FILES) ){
-      $files = $_FILES[$source];
-      
-      $count = count($files['name']);
-      for($i=0;$i<$count;$i++){
-        $name = basename($files['name'][$i]);
-        $tmpName = $files['tmp_name'][$i];
-        $size = $files['size'][$i];
-        
-        $targetFile = "{$target}/{$name}";
-        
-        if( $overwrite || !file_exists($targetFile) ){
-          if( move_uploaded_file($tmpName,$targetFile) )
-            $result++;
-        }
-      }
-    }
-    return $result;
-  }
-  
-  /**
    * Downloads a file for use in the browser
    *
    * @param string $fileName The original file name
