@@ -41,7 +41,7 @@ export class Api {
     return ""
   }
   
-  static async Get(filter){
+  static async Get(filter,context='api',contentType='application/json'){
     const query = new URLSearchParams(filter).toString()
     const response = await fetch(
       `${window.location.origin}${window.location.pathname}?${query}`,
@@ -51,8 +51,8 @@ export class Api {
         cache: "no-cache", // *default, no-cache, reload, force-cache, only-if-cached
         credentials: "same-origin", // include, *same-origin, omit
         headers: {
-          "Content-Type": "application/json",
-          "X-Devworx-Context": "api",
+          "Content-Type": contentType,
+          "X-Devworx-Context": context,
           "X-Devworx-Api": this.cookie()
         },
         redirect: "follow",
@@ -63,7 +63,7 @@ export class Api {
     return this.#debug || this.#text ? response.text() : response.json()
   }
   
-  static async Post(filter,data){
+  static async Post(filter,data,context='api',contentType='application/json'){
     const query = new URLSearchParams(filter).toString()
     const response = await fetch(
       `${window.location.origin}${window.location.pathname}?${query}`,
@@ -73,8 +73,8 @@ export class Api {
         cache: "no-cache", // *default, no-cache, reload, force-cache, only-if-cached
         credentials: "same-origin", // include, *same-origin, omit
         headers: {
-          "Content-Type": "application/json",
-          "X-Devworx-Context": "api",
+          "Content-Type": contentType,
+          "X-Devworx-Context": context,
           "X-Devworx-Api": this.cookie()
         },
         redirect: "follow",
