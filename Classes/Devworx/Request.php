@@ -196,7 +196,7 @@ class Request implements IRequest {
   function hasFiles(string $key): bool {
 	if( empty($_FILES) )
 		return false;
-	return ArrayUtility::key($_FILES[$key],$key);
+	return ArrayUtility::has($_FILES[$key],$key);
   }
   
   /**
