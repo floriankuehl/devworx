@@ -3,7 +3,7 @@
 namespace Devworx;
 
 use \Devworx\Interfaces\IRequest;
-
+use \Devworx\Utility\ArrayUtility;
 
 class Request implements IRequest {
   
