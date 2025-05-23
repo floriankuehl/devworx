@@ -19,7 +19,7 @@ use \Api\Utility\ApiUtility;
  */
 class Frontend extends ConfigManager {
   
-  const PATHGLUE = DIRECTORY_SEPARATOR;
+  const PATHGLUE = '/';
   const DEFAULT_CONTEXT = 'frontend';
   const CONTEXT_KEY = 'X-Devworx-Context';
   const SYSTEM_USER = [
@@ -142,6 +142,38 @@ class Frontend extends ConfigManager {
    */
   public static function realPublicPath(...$segments): string {
     return realpath( self::publicPath(...$segments) );
+  }
+  
+  /**
+   * Creates a relative path between two paths
+   *
+   * @param string $from the source path
+   * @param string $to the target path
+   * @return string
+   */
+  public static function createRelativePath(string $from, string $to): string {
+	$from = str_replace('\\', '/', realpath($from));
+	$to = str_replace('\\', '/', realpath($to));
+
+	$from = explode('/', rtrim($from, '/'));
+	$to = explode('/', rtrim($to, '/'));
+
+	while (count($from) && count($to) && ($from[0] === $to[0])) {
+		array_shift($from);
+		array_shift($to);
+	}
+
+	return str_repeat('../', count($from)) . implode('/', $to);
+  }
+  
+  /**
+   * Creates a relative path from the document root
+   *
+   * @param string $path the target path
+   * @return string
+   */
+  public static function relativePath(string $path): string {
+	return self::createRelativePath($_SERVER['DOCUMENT_ROOT'],$path);
   }
   
   /**
