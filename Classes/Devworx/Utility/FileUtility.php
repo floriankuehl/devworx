@@ -94,7 +94,7 @@ class FileUtility {
    * @param bool $checkFolder Checks folder for trailing slash and existence
    * @return string
    */
-  public static function upload(string $tmpName,string $targetFolder,string $targetName,bool $checkFolder=false): bool {
+  public static function upload(string $tmpName,string $targetFolder,string $targetName,bool $checkFolder=false): string {
 	  if( $checkFolder ){
 		  $targetFolder = rtrim($targetFolder,Frontend::PATHGLUE);
 		  if( !is_dir($targetFolder) )
