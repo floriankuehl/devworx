@@ -2,6 +2,8 @@
 
 namespace Devworx\Utility;
 
+use \Devworx\Frontend;
+
 class FileUtility {
   
   const MIME_TYPES = [
@@ -40,7 +42,7 @@ class FileUtility {
         if( in_array($file,self::IGNORE) )
           continue;
         
-        $fullPath = "{$path}/{$file}";
+        $fullPath = rtrim($path,Frontend::PATHGLUE) . Frontend::PATHGLUE . $file;
         if( empty($ext) ){
           $result []= $absolute ? $fullPath : $file;
           continue;
@@ -94,12 +96,12 @@ class FileUtility {
    */
   public static function upload(string $tmpName,string $targetFolder,string $targetName,bool $checkFolder=false): bool {
 	  if( $checkFolder ){
-		  $targetFolder = rtrim($targetFolder,DIRECTORY_SEPARATOR);
+		  $targetFolder = rtrim($targetFolder,Frontend::PATHGLUE);
 		  if( !is_dir($targetFolder) )
 			  mkdir($targetFolder,0x777,true);
 	  }
 	  $targetName = StringUtility::cleanupFile(basename($targetName));
-	  $targetName = $targetFolder . DIRECTORY_SEPARATOR . $targetName;
+	  $targetName = $targetFolder . Frontend::PATHGLUE . $targetName;
 	  return move_uploaded_file($tmpName, $targetName) ? $targetName : '';
   }
   
@@ -114,7 +116,7 @@ class FileUtility {
   public static function uploadAll(array $files,string $targetFolder,bool $checkFolder=false): array {
 	  $result = [];
 	  if( $checkFolder ){
-		  $targetFolder = rtrim($targetFolder,DIRECTORY_SEPARATOR);
+		  $targetFolder = rtrim($targetFolder,Frontend::PATHGLUE);
 		  if( !is_dir($targetFolder) )
 			  mkdir($targetFolder,0x777,true);
 	  }
@@ -185,7 +187,7 @@ class FileUtility {
 			$list = scandir($path);
 			foreach ($list as $file) { 
 				if ($file != "." && $file != "..") { 
-					$full = $path . DIRECTORY_SEPARATOR . $file;
+					$full = $path . Frontend::PATHGLUE . $file;
 					if (is_dir($full) && !is_link($full))
 						self::unlinkRecursive($full);
 					else
