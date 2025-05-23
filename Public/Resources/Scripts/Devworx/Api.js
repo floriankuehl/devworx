@@ -3,17 +3,36 @@ export class Api {
   static #cookie = 'devworx'
   static #debug = !true
   static #text = !true
-  
+  static #context = 'api'
+  static #contentType = 'application/json'
   static #actions = {};
+  
+  static context(value){
+	  this.#context = value
+	  return this
+  }
+  
+  static getContext(){
+	  return this.#context
+  }
+  
+  static contentType(value){
+	  this.#contentType = value
+	  return this
+  }
+  
+  static getContentType(){
+	  return this.#contentType
+  }
   
   static text(value){
     this.#text = !!value
-    return this;
+    return this
   }
   
   static debug(value){
     this.#debug = !!value
-    return this;
+    return this
   }
   
   static register(name,func){
@@ -41,7 +60,7 @@ export class Api {
     return ""
   }
   
-  static async Get(filter,context='api',contentType='application/json'){
+  static async Get(filter){
     const query = new URLSearchParams(filter).toString()
     const response = await fetch(
       `${window.location.origin}${window.location.pathname}?${query}`,
@@ -51,8 +70,8 @@ export class Api {
         cache: "no-cache", // *default, no-cache, reload, force-cache, only-if-cached
         credentials: "same-origin", // include, *same-origin, omit
         headers: {
-          "Content-Type": contentType,
-          "X-Devworx-Context": context,
+          "Content-Type": this.#contentType,
+          "X-Devworx-Context": this.#context,
           "X-Devworx-Api": this.cookie()
         },
         redirect: "follow",
@@ -63,7 +82,7 @@ export class Api {
     return this.#debug || this.#text ? response.text() : response.json()
   }
   
-  static async Post(filter,data,context='api',contentType='application/json'){
+  static async Post(filter,data){
     const query = new URLSearchParams(filter).toString()
     const response = await fetch(
       `${window.location.origin}${window.location.pathname}?${query}`,
@@ -73,8 +92,8 @@ export class Api {
         cache: "no-cache", // *default, no-cache, reload, force-cache, only-if-cached
         credentials: "same-origin", // include, *same-origin, omit
         headers: {
-          "Content-Type": contentType,
-          "X-Devworx-Context": context,
+          "Content-Type": this.#contentType,
+          "X-Devworx-Context": this.#context,
           "X-Devworx-Api": this.cookie()
         },
         redirect: "follow",
