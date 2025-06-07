@@ -6,3 +6,6 @@
   <li><code>.htaccess</code> configures the server environment, prevents listing and listens to contextual routes like ./help and ./api</li>  
   <li><code>index.php</code> initializes the framework and displays whatever the Frontend processes</li>
 </ul>
+
+<h2>Devworx Scripts</h2>
+<p>The Devworx Script modules are located in Resources/Scripts/Devworx. They contain various custom html elements and useful helper classes.</p>
