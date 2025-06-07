@@ -13,14 +13,6 @@
   <li><code>View</code> handles rendering via <code>Renderer</code>, provides static functions for <code>Layout</code>, <code>Template</code> and <code>Partial</code></li>
 </ul>
 
-<h2>Renderer</h2>
-<p>This folder contains all Renderers like:</p>
-<ul>
-  <li><code>AbstractRenderer</code> handles rendering</li> 
-  <li><code>ConfigRenderer</code> handles Configuration driven frontend HTML rendering</li>
-  <li><code>FluidRenderer</code> handles template based rendering with placeholder syntax like {item.value}</li>
-  <li><code>JsonRenderer</code> handles template based JSON rendering from actions</li>
-</ul>
 
 <h2>Utility</h2>
 <p>This folder contains all utility classes like:</p>
