@@ -22,10 +22,15 @@ RewriteEngine On
 RewriteCond %{REQUEST_URI} ^/help/
 RewriteCond %{REQUEST_FILENAME} !-f
 RewriteCond %{REQUEST_FILENAME} !-d
-RewriteRule ^help/(.*)$ index.php?controller=documentation&action=show&file=$1 [E=CONTEXT:documentation,L,QSA]
 RewriteRule ^help/?$ index.php?controller=documentation&action=show&file=index.html [E=CONTEXT:documentation,L,QSA]
+RewriteRule ^help/(.*)$ index.php?controller=documentation&action=show&file=$1 [E=CONTEXT:documentation,L,QSA]
 
 RewriteCond %{REQUEST_URI} ^/api/
 RewriteRule ^api/$ index.php [E=CONTEXT:api,L,QSA]
+
+RewriteCond %{REQUEST_URI} ^/development/
+RewriteRule ^development/?$ index.php?controller=backend&action=index [E=CONTEXT:development,L,QSA]
+RewriteRule ^development/(.*)$ index.php?controller=backend&action=$1 [E=CONTEXT:development,L,QSA]
+
 RewriteRule ^$ index.php [E=CONTEXT:frontend,L,QSA]
-Header always set X-Devworx-Context %{CONTEXT}e env=CONTEXT
+Header always set X-Devworx-Context "%{CONTEXT}e" env=CONTEXT
