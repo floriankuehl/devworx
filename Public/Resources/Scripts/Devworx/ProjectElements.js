@@ -1,6 +1,6 @@
-import {AutoRegistering} from './Elements.js'
+import CustomElement from './CustomElement.js'
 
-export class Story extends AutoRegistering(HTMLAnchorElement) {
+export class Story extends CustomElement(HTMLAnchorElement) {
 	
 	static get baseTag(){ return 'a' }
 	

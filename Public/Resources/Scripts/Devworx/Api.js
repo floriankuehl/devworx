@@ -1,4 +1,4 @@
-export class Api {
+export default class Api {
   
   static #cookie = 'devworx'
   static #debug = !true

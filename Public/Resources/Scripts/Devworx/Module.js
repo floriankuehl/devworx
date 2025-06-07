@@ -1,11 +1,12 @@
-export * from './Format.js'
-export * from './Api.js'
+export {default as Format} from './Format.js'
+export {default as Api} from './Api.js'
+export {default as CustomElement} from './CustomElement.js'
 
 import * as Elements from './Elements.js'
 import * as ViewHelpers from './ViewHelpers.js'
 import * as ProjectElements from './ProjectElements.js'
 
-function getBaseClass(constructor) {
+export function getBaseClass(constructor) {
   let proto = constructor.prototype;
   let prev = null;
 
@@ -18,7 +19,7 @@ function getBaseClass(constructor) {
   return prev.constructor.name;
 }
 
-function registerCustomElements(module) {
+export function registerCustomElements(module,debug=false) {
   Object.keys(module).forEach((key) => {
     const value = module[key];
 	
@@ -29,8 +30,9 @@ function registerCustomElements(module) {
 	  ( typeof value.elementTag === 'string' ) &&
 	  ( !customElements.get(value.elementTag) )
 	) {
-		value.register();
-		//console.log(`Added ${getBaseClass(value)} ${value.name} as ${value.elementTag}`);	
+		const ok = value.register();
+		if( debug )
+			console.log(`Added ${getBaseClass(value)} ${value.name} as ${value.elementTag}`,ok);	
 	}
   });
 }
