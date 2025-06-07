@@ -13,7 +13,7 @@
 </ul>
 
 <h2>General</h2>
-<p>All Custom Elements and static classes are exported by default, so you can choose an import name for them.</p>
+<p>All Custom Elements and static classes are exported by default, so you can choose an import name for them. The base class for every devworx custom element contains coordination helper, informations about the base class and the namespace for the HTML Tag, aswell as static registering and instanciation. See CustomElement.js</p>
 
 <h2>Module</h2>
 <p>To use the Devworx scripts accordingly, you need to include your setup.js via <code>&lt;script type="module" src="Resources/Scripts/setup.js"&gt;&lt;/script&gt;</code></p>
@@ -25,4 +25,19 @@
 &lt;/script&gt;</code>
 
 <h2>Custom Elements</h2>
-<p>To build a custom element, use <code>import CustomElement from './Resources/Scripts/Devworx/CustomElement.js'</code> and <code>class Foo extends CustomElement(HTMLElement){}</code></p>
+<p>To build a custom element, use the following pattern:</p>
+<code>import CustomElement from './Resources/Scripts/Devworx/CustomElement.js'
+export default class Foo extends CustomElement(HTMLElement){
+  static namespace = 'devworx'
+  constructor(){
+    super()
+    //shadow attach or element creation
+  }
+  init(){
+    super.init()
+    //connectedCallback
+    return this
+  }
+}</code>
+
+<p>Dont forget to use ElementUtility to register your element.</p>
