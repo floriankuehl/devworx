@@ -11,3 +11,8 @@
   <li><code>ProjectElements</code> provides a file for adding project based elements</li>
   <li><code>ViewHelpers</code> provides exports for all element classes in the folder ViewHelpers</li>
 </ul>
+
+<p>To import the complete module, you can use <code>import * as Devworx from './Devworx/Module.js'</code>.</p>
+<p>All custom elements will be installed by importing.</p>
+
+<p>To build a custom element, use <code>import CustomElement from './Devworx/CustomElement.js'</code> and <code>class Foo extends CustomElement(HTMLElement){}</code></p>
