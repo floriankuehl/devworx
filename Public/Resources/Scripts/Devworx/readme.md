@@ -17,9 +17,14 @@
 
 <h2>Module</h2>
 <p>To use the Devworx scripts accordingly, you need to include your setup.js via <code>&lt;script type="module" src="Resources/Scripts/setup.js"&gt;&lt;/script&gt;</code></p>
-
-<h2>Import</h2>
 <p>To import the complete module in your setup.js, you can use <code>import * as Devworx from './Devworx/Module.js'</code>. All custom elements will be installed by importing.</p>
+<p>You can also do it inline like:</p>
+<code>
+  &lt;script type="module"&gt;
+    import * as Devworx from './Resources/Scripts/Devworx/Module.js'
+    console.log( Devworx )
+  &lt;/script&gt;
+</code>
 
 <h2>Custom Elements</h2>
-<p>To build a custom element, use <code>import CustomElement from './Devworx/CustomElement.js'</code> and <code>class Foo extends CustomElement(HTMLElement){}</code></p>
+<p>To build a custom element, use <code>import CustomElement from './Resources/Scripts/Devworx/CustomElement.js'</code> and <code>class Foo extends CustomElement(HTMLElement){}</code></p>
