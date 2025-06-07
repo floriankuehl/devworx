@@ -5,7 +5,8 @@
     'CONTEXT' => [
       'frontend' => 'Frontend Context',
       'api' => 'API Context',
-      'documentation' => 'Documentation Context'
+      'documentation' => 'Documentation Context',
+      'development' => 'Development Context'
     ],
     'DB' => [
       "localhost",
