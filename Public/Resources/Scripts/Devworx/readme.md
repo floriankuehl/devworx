@@ -12,7 +12,14 @@
   <li><code>ViewHelpers</code> provides exports for all element classes in the folder ViewHelpers</li>
 </ul>
 
-<p>To import the complete module, you can use <code>import * as Devworx from './Devworx/Module.js'</code>.</p>
-<p>All custom elements will be installed by importing.</p>
+<h2>General</h2>
+<p>All Custom Elements and static classes are exported by default, so you can choose an import name for them.</p>
 
+<h2>Module</h2>
+<p>To use the Devworx scripts accordingly, you need to include your setup.js via <code>&gt;script type="module" src="Resources/Scripts/setup.js"&lt;&gt;/script&lt;</code></p>
+
+<h2>Import</h2>
+<p>To import the complete module in your setup.js, you can use <code>import * as Devworx from './Devworx/Module.js'</code>. All custom elements will be installed by importing.</p>
+
+<h2>Custom Elements</h2>
 <p>To build a custom element, use <code>import CustomElement from './Devworx/CustomElement.js'</code> and <code>class Foo extends CustomElement(HTMLElement){}</code></p>
