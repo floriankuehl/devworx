@@ -2,15 +2,7 @@
 
 namespace Devworx\Walkers;
 
-/**
- * The walker interface
- */
-interface IWalker {
-  function Start(array &$list): void;
-  function Step(array &$list,$index,&$row): void;
-  function Walk(array &$list): void;
-  function End(array &$list): void;
-}
+use \Devworx\Interfaces\IWalker;
 
 /**
  * Represents an abstract class for extending a list step by step
