@@ -1,4 +1,6 @@
-export default function (Base) {
+import CustomElements from './ElementUtility.js'
+
+export default function CustomElement(Base) {
   return class extends Base {
 	#ready = false
 	
@@ -7,84 +9,10 @@ export default function (Base) {
 	static get elementTag() { return `${this.namespace}-${this.name.toLowerCase()}` }
 	static get elementOptions() { return this.baseTag ? { extends: this.baseTag } : undefined }
 	
-	static createElement(callback=null){
-		let result = customElements.get(this.elementTag) ? 
-			document.createElement(this.elementTag) :
-			document.createElement(this.baseTag,{is:this.elementTag})
-		if( callback ) callback(result,this)
-		return result
-	}
+	static createElement(callback=null){ return CustomElements.instance(this,callback) }
+	static register(){ return CustomElement.registerClass(this)	}
 	
-    static register() {
-		//console.log( 'register', this.elementTag )
-		customElements.define(this.elementTag, this, this.elementOptions);
-		return customElements.get(this.elementTag)
-    }
-	
-	create(
-		tag,
-		attributes=undefined,
-		classes=undefined,
-		callback=undefined
-	){
-		const result = document.createElement(tag)
-		if( attributes ){
-			switch( typeof attributes ){
-				case'object':{
-					if( Array.isArray(attributes) ){
-						if( typeof attributes[0] === 'object' )
-							result.append(...attributes)
-						else
-							result.classList.add(...attributes)
-					} else if( classes instanceof HTMLCollection ){
-						result.append(...HTMLCollection)
-					} else if( attributes instanceof HTMLElement ) {
-						result.append(attributes)
-					} else {
-						for( let k of Object.keys(attributes) )
-							result.setAttribute(k,attributes[k])
-					}
-				}break
-				case'string':{
-					result.innerHTML += attributes
-				}break;
-				case'function':{
-					return attributes(result)
-				}break
-			}
-		}
-		if( classes ){
-			switch( typeof classes ){
-				case'object':{
-					if( Array.isArray(classes) ){
-						if( typeof classes[0] === 'object' ){
-							result.append(...classes)
-						} else {
-							result.classList.add(...classes)
-						}
-					} else if( classes instanceof HTMLCollection ){
-						result.append(...classes)
-					} else if( classes instanceof HTMLElement ){
-						result.append(classes)
-					} else {
-						for( let k of Object.keys(classes) )
-							result.style[k] = classes[k]
-					}
-				}break
-				case'string':{
-					result.innerHTML += classes
-				}break;
-				case'function':{
-					return classes(result)
-				}break
-			}
-		}
-		return callback ? callback(result) : result
-	}
-	
-	set timeout(func){
-		setTimeout(func,100)
-	}
+	set timeout(func){ setTimeout(func,100)	}
 
 	get rect(){
 		return {
@@ -132,14 +60,15 @@ export default function (Base) {
 	
 	init(){
 		this.#ready = true
+		return this
 	}
 	
 	connectedCallback() {
-		if( !this.#ready )
-			this.init()
+		return this.#ready ? this : this.init()
 	}
 
 	disconnectedCallback() {
+		this.#ready = false
 		//console.log(`${this.elementTag} removed from page`);
 	}
 
