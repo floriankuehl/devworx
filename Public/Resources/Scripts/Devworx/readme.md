@@ -16,7 +16,7 @@
 <p>All Custom Elements and static classes are exported by default, so you can choose an import name for them.</p>
 
 <h2>Module</h2>
-<p>To use the Devworx scripts accordingly, you need to include your setup.js via <code>&gt;script type="module" src="Resources/Scripts/setup.js"&lt;&gt;/script&lt;</code></p>
+<p>To use the Devworx scripts accordingly, you need to include your setup.js via <code>&lt;script type="module" src="Resources/Scripts/setup.js"&gt;&lt;/script&gt;</code></p>
 
 <h2>Import</h2>
 <p>To import the complete module in your setup.js, you can use <code>import * as Devworx from './Devworx/Module.js'</code>. All custom elements will be installed by importing.</p>
