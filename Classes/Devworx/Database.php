@@ -120,9 +120,10 @@ class Database implements IDatabase {
 	 * @return array|null
 	 */
 	function tables(): mixed {
-		$index = $this->query('SHOW TABLES;');
-		$key = array_key_first( $index );
-		return $index[$key];
+		$tables = $this->query('SHOW TABLES;');
+		if( is_array($tables) && !empty($tables) )
+			return array_merge(...$tables);
+		return null;
 	}
 	
 	/**
@@ -134,7 +135,7 @@ class Database implements IDatabase {
 	function explain(string $table): mixed {
 		if( empty($table) )
 			return [];
-		return $this->prepare("EXPLAIN ?;","s",[$table],false,MYSQLI_ASSOC);
+		return $this->query("EXPLAIN {$table};",false,MYSQLI_ASSOC);
 	}
 	
 	/**
@@ -144,14 +145,14 @@ class Database implements IDatabase {
 	 */
 	function pk(string $table): mixed {
 		if( empty($table) ) return null;
-		$result = $this->prepare("
+		$result = $this->query("
 		  SELECT column_name AS pk 
 		  FROM information_schema.columns
 		  WHERE 
-			 table_name = ?
+			 table_name = '{$table}'
 			 AND column_key = 'PRI';
-		","s",[$table],true,MYSQLI_ASSOC);
-		return $result['pk'];
+		",true,MYSQLI_ASSOC);
+		return $result['pk'] ?? null;
 	}
 	
 	/**
@@ -165,13 +166,13 @@ class Database implements IDatabase {
 	function pkIs(string $table,string $field): bool {
 		if( empty($table) || empty($field) ) 
 			return false;
-		$result = $this->prepare("
+		$result = $this->query("
 		  SELECT EXISTS(
 			SELECT 1
 			FROM information_schema.columns
 			WHERE 
-			   table_name= ? 
-			   AND column_name = ?
+			   table_name= '{$table}'
+			   AND column_name = '{$field}'
 			   AND column_key = 'PRI'
 		  ) AS hasPK;
 		","ss",[$table,$field],true,MYSQLI_ASSOC);
