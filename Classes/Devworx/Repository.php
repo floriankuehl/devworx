@@ -94,7 +94,7 @@ class Repository {
     return $string ? implode(" AND ",self::SYSTEM_CONDITIONS) : self::SYSTEM_CONDITIONS;
   }
   
-  public function __construct($values,string $className=null){
+  public function __construct($values,string $className=null,string $namespace='Frontend'){
     global $DB;
     
     $this->db = $DB;
@@ -113,7 +113,7 @@ class Repository {
       
       if( !$this->loadCachedSettings() ){
         if( is_null($className) ){
-          $className = "Frontend\\Models\\".ucfirst($this->table);
+          $className = "{$namespace}\\Models\\".ucfirst($this->table);
         }
 		
         if( class_exists($className) )
