@@ -175,7 +175,7 @@ class Database implements IDatabase {
 			   AND column_name = '{$field}'
 			   AND column_key = 'PRI'
 		  ) AS hasPK;
-		","ss",[$table,$field],true,MYSQLI_ASSOC);
+		",true,MYSQLI_ASSOC);
 		return intval($result['hasPK']) > 0;
 	}
 
