@@ -114,11 +114,11 @@ class Repository {
       if( !$this->loadCachedSettings() ){
         if( is_null($className) ){
           $className = "Frontend\\Models\\".ucfirst($this->table);
-          if( class_exists($className) )
+        }
+		
+        if( class_exists($className) )
             $this->mapToClass = $className;
-        } else
-          $this->mapToClass = $className;
-        
+		
         if( empty($this->details) ){
           $this->initialize();
           $this->cacheSettings();
@@ -181,17 +181,7 @@ class Repository {
    * @return bool
    */
   public function hasPK(): bool {
-    $result = $this->db->query("
-      SELECT EXISTS(
-        SELECT 1
-        FROM information_schema.columns
-        WHERE 
-           table_name='{$this->table}'
-           AND column_name = '{$this->pk}'
-           AND column_key = 'PRI'
-      ) AS hasPK;
-    ",true,MYSQLI_ASSOC);
-    return intval($result['hasPK']) > 0;
+    return $this->db->pkIs($this->table,$this->pk);
   }
   
   /** 
@@ -200,14 +190,7 @@ class Repository {
    * @return string
    */
   public function getPK(): string {
-    $result = $this->db->query("
-      SELECT column_name AS pk 
-      FROM information_schema.columns
-      WHERE 
-         table_name='{$this->table}'
-         AND column_key = 'PRI';
-    ",true,MYSQLI_ASSOC);
-    return $result['pk'];
+    return $this->db->pk($this->table);
   }
   
   /** 
@@ -223,7 +206,7 @@ class Repository {
     $details = [];    
     
     $this->pk = $this->getPK();
-    $explain = $this->db->query('EXPLAIN '.$this->table.';',false,MYSQLI_ASSOC);
+    $explain = $this->db->explain($this->table);
     //echo \Devworx\Utility\DebugUtility::var_dump(['table'=>$this->table,'explain'=>$explain]);
     
     foreach( $explain as $i => $field ){
