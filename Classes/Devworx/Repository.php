@@ -93,7 +93,14 @@ class Repository {
   public static function getSystemConditions(bool $string=false): string|array {
     return $string ? implode(" AND ",self::SYSTEM_CONDITIONS) : self::SYSTEM_CONDITIONS;
   }
-  
+
+  /** 
+   * The constructor for Repositories
+   *
+   * @param string|array $values table name or attribute array
+   * @param string|null $className if null a model class will be guessed based on namespace
+   * @param string $namespace the model base namespace, only used if className is null
+   */
   public function __construct($values,string $className=null,string $namespace='Frontend'){
     global $DB;
     
