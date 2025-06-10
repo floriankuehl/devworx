@@ -66,9 +66,11 @@ interface IDatabase {
 	 * @param string $query The query string
 	 * @param string $format The field format string
 	 * @param array $values The provided values
+	 * @param int $mode The single result mode flag
+	 * @param int $mode The result mode flag (MySQLi)
 	 * @return mixed
 	 */
-	function prepare(string $query,string $format,array $values): mixed;
+	function prepare(string $query,string $format,array $values,bool $one,int $mode): mixed;
 	
 	/**
 	 * Fetches data by query
@@ -79,6 +81,39 @@ interface IDatabase {
 	 * @return mixed
 	 */
 	function query(string $query,bool $one,int $mode): mixed;
+	
+	/**
+	 * Retrieves all table names
+	 *
+	 * @return array|null
+	 */
+	function tables(): mixed;
+	
+	/**
+	 * Retrieves all field informations of a table
+	 *
+	 * @param string $table The query string
+	 * @return array|null
+	 */
+	function explain(string $table): mixed;
+	
+	/**
+	 * Retrieves the column name of the primary key of a table
+	 *
+	 * @param string $table The table
+	 * @return string|null
+	 */
+	function pk(string $table): mixed;
+	
+	/**
+	 * Checks if a primary key column with name $field exists in table $table
+	 *
+	 * @param string $table The table
+	 * @param string $field The column name
+	 * @return bool
+	 */
+	function pkIs(string $table,string $field): bool;
+	
 	
 	/**
 	 * Returns the last inserted id
@@ -94,6 +129,7 @@ interface IDatabase {
 	 * @return string
 	 */
 	function escape(string $value): string;
+	
 	
 	/**
 	 * Gets a single database row by the primary key

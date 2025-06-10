@@ -56,7 +56,10 @@ class Frontend extends ConfigManager {
    * @return void
    */
   public static function setHeaderConfig(string $key, ...$path): void {
-	  self::setHeader($key, self::getConfig(...$path));
+	  $value = self::getConfig(...$path);
+	  if( is_null($value) )
+		  throw new \Exception('missing config path: ' . implode('/',$path) . ' in context ' . self::$context);
+	  self::setHeader($key, $value);
   }
   
   /**
@@ -450,6 +453,43 @@ class Frontend extends ConfigManager {
 	);
   }
   
+  
+  /**
+   * Handles global controller::action combination
+   *
+   * @param string $controller The controller
+   * @param string $action The action
+   * @return string
+   */
+  public static function controllerActionPair(string $controller,string $action): string {
+	  //return strtolower( "{$controller}::{$action}" );
+	  return ucfirst($controller) . '::' . ucfirst($action);
+  }
+  
+  /**
+   * Gets the systemwide default controller action
+   *
+   * @return string
+   */
+  public static function getDefaultControllerAction():string {
+	return self::controllerActionPair(
+		self::$config['system']['defaultController'],
+		self::$config['system']['defaultAction']
+	);
+  }
+  
+  /**
+   * Gets the current context controller action
+   *
+   * @return string
+   */
+  public static function getContextControllerAction():string {
+	return self::controllerActionPair(
+		self::$config['context']['controller'],
+		self::$config['context']['action'] 
+	);
+  }
+  
   /**
    * Loads a specific context
    *
@@ -467,7 +507,7 @@ class Frontend extends ConfigManager {
 		
 		self::$config['context'] = [
 			'controller' => self::getCurrentController(),
-			'action' => self::getCurrentAction(),
+			'action' => self::getCurrentAction()
 		];
 		self::$config['user'] = AuthUtility::getCurrentUser();
 		
@@ -487,6 +527,8 @@ class Frontend extends ConfigManager {
 		  
 		return true;
 	  }
+	  
+	  throw new \Exception("unable to load configuration file");
 	  return false;
   }
   
@@ -500,33 +542,32 @@ class Frontend extends ConfigManager {
 	return self::loadContext( self::getContext() );
   }
   
+  
+  
   /**
    * Checks if the current controller and action matches the default
    *
    * @return bool
    */
   public static function isDefaultAction(): bool {
-    return (
-      self::$config['context']['controller'] === self::$config['system']['defaultController'] && 
-      self::$config['context']['action'] === self::$config['system']['defaultAction']
-    );
+	return self::getDefaultControllerAction() === self::getContextControllerAction();
   }
   
   /**
    * Checks if the current controller and action are public by configuration
    *
+   * @param string $ca optional controller action to check, if empty, the current context controller action is checked
    * @return bool
    */
-  public static function isPublicControllerAction(string $caPair=''): bool {
-    if( empty($caPair) )
-      $caPair = self::$config['context']['controller'] . '::' . self::$config['context']['action'];
-    return in_array($caPair,self::$config['system']['publicControllerActions']);
+  public static function isPublicControllerAction(string $ca=null): bool {
+    $ca = $ca ?? self::getContextControllerAction();
+    return in_array($ca,self::$config['system']['publicControllerActions']);
   }
   
   /**
    * Processes the current controller action to the body content
    *
-   * @return IController|null
+   * @return AbstractController|null
    */
   public static function processControllerAction(): ?AbstractController {
     $instance = self::loadController();
@@ -547,7 +588,7 @@ class Frontend extends ConfigManager {
       $publicAction = self::isPublicControllerAction() || ( self::isApiContext() && $userOnline );
       
       if( !( self::isDefaultAction() || $publicAction || $userOnline ) ){
-        self::redirectDefault();
+		self::redirectDefault();
       }
       
       $ctrl = self::processControllerAction();

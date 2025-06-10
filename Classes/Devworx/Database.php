@@ -113,6 +113,71 @@ class Database implements IDatabase {
 		  $result->fetch_array($mode) : 
 		  $result->fetch_all($mode);
 	}
+	
+	/**
+	 * Retrieves all table names
+	 *
+	 * @return array|null
+	 */
+	function tables(): mixed {
+		$tables = $this->query('SHOW TABLES;');
+		if( is_array($tables) && !empty($tables) )
+			return array_merge(...$tables);
+		return null;
+	}
+	
+	/**
+	 * Retrieves all field informations of a table
+	 *
+	 * @param string $table the table name.
+	 * @return array|null
+	 */
+	function explain(string $table): mixed {
+		if( empty($table) )
+			return [];
+		return $this->query("EXPLAIN {$table};",false,MYSQLI_ASSOC);
+	}
+	
+	/**
+	 * Returns the primary key of a given table
+	 *
+	 * @return string|null
+	 */
+	function pk(string $table): mixed {
+		if( empty($table) ) return null;
+		$result = $this->query("
+		  SELECT column_name AS pk 
+		  FROM information_schema.columns
+		  WHERE 
+			 table_name = '{$table}'
+			 AND column_key = 'PRI';
+		",true,MYSQLI_ASSOC);
+		return $result['pk'] ?? null;
+	}
+	
+	/**
+	 * Checks if the given table's field is marked as primary key
+	 * Asks MySQLi information_schema
+	 *
+	 * @param string $table the given table
+	 * @param string $field the given field
+	 * @return bool
+	 */
+	function pkIs(string $table,string $field): bool {
+		if( empty($table) || empty($field) ) 
+			return false;
+		$result = $this->query("
+		  SELECT EXISTS(
+			SELECT 1
+			FROM information_schema.columns
+			WHERE 
+			   table_name = '{$table}'
+			   AND column_name = '{$field}'
+			   AND column_key = 'PRI'
+		  ) AS hasPK;
+		",true,MYSQLI_ASSOC);
+		return intval($result['hasPK']) > 0;
+	}
 
 	/**
 	 * Returns a prepared MySQL statement
@@ -141,10 +206,13 @@ class Database implements IDatabase {
 	 * @param string $query The SQL query string 
 	 * @param string $format The MySQL field format string 
 	 * @param array $values The field values for the placeholders
+	 * @param bool $one single result mode
+	 * @param int $mode The mysqli result mode
 	 * @return mixed
 	 */
-	function prepare(string $query,string $format,array $values): mixed {
+	function prepare(string $query,string $format,array $values,bool $one=false,$mode=MYSQLI_NUM): mixed {
 		$stmt = $this->statement($query,$format,$values);
+		
 		$stmt->execute();
 		$result = $stmt->get_result();
 		$stmt->close();
@@ -152,12 +220,7 @@ class Database implements IDatabase {
 		if( is_bool($result) ) 
 		  return $result;
 
-		$rows = [];
-		while ($row = $result->fetch_array(MYSQLI_ASSOC)) {
-		  $rows []= $row;
-		}
-
-		return $rows;
+		return $one ? $result->fetch_array($mode) : $result->fetch_all($mode);
 	}
 
 	/**
@@ -178,7 +241,7 @@ class Database implements IDatabase {
 	function escape(string $value): string {
 		return $this->connection->real_escape_string($value);
 	}
-
+	
 	/**
 	 * Gets a single database row by the primary key
 	 *
@@ -207,8 +270,8 @@ class Database implements IDatabase {
 	function add(string $table,array $data): int {
 		$fields = array_map([$this,'escape'], array_keys($data) );
 		$values = array_map( function($v){ return "'{$v}'"; }, array_values($data) );
-		$fields = implode(",",$fields);
-		$values = implode(",",$values);
+		$fields = implode(',',$fields);
+		$values = implode(',',$values);
 		$result = $this->result("INSERT INTO {$table} ({$fields}) VALUES ({$values});");
 		return $result == FALSE ? 0 : $this->insertID();
 	}
@@ -242,6 +305,13 @@ class Database implements IDatabase {
 	 * @return bool
 	 */
 	function remove(string $table,string $pk,int $uid): bool {
+		if( 
+			empty($table) || 
+			empty($pk) || 
+			empty($uid) ||
+			($uid < 0)
+		) return false;
+		
 		return (bool) $this->result("DELETE FROM {$table} WHERE ({$pk} = '{$uid}') LIMIT 1;");
 	}
 
