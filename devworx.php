@@ -1,8 +1,6 @@
 <?php
 	namespace Devworx;
 
-	
-
 	$GLOBALS['DEVWORX'] = [
 		'CONTEXT' => [
 			'api' => 'API context',
