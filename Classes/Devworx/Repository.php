@@ -93,7 +93,7 @@ class Repository {
   public static function getSystemConditions(bool $string=false): string|array {
     return $string ? implode(" AND ",self::SYSTEM_CONDITIONS) : self::SYSTEM_CONDITIONS;
   }
-
+  
   /** 
    * The constructor for Repositories
    *
