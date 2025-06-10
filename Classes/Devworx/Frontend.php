@@ -56,7 +56,10 @@ class Frontend extends ConfigManager {
    * @return void
    */
   public static function setHeaderConfig(string $key, ...$path): void {
-	  self::setHeader($key, self::getConfig(...$path));
+	  $value = self::getConfig(...$path);
+	  if( is_null($value) )
+		  throw new \Exception('missing config path: ' . implode('/',$path) . ' in context ' . self::$context);
+	  self::setHeader($key, $value);
   }
   
   /**
@@ -487,6 +490,8 @@ class Frontend extends ConfigManager {
 		  
 		return true;
 	  }
+	  
+	  throw new \Exception("unable to load configuration file");
 	  return false;
   }
   
