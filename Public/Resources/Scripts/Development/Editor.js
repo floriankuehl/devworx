@@ -1,10 +1,18 @@
 export {default as Board} from './Board.js'
 export {default as Node} from './Node.js'
-export * from './Property.js'
-export * from './Relation.js'
-export * from './Action.js'
-import Node from './Node.js'
+export {default as Table} from './Table.js'
 
+export {default as Property} from './Property.js'
+export {default as Properties} from './Properties.js'
+export {default as PropertyUtility} from './PropertyUtility.js'
+
+export {default as Relation} from './Relation.js'
+export {default as Relations} from './Relations.js'
+export {default as RelationUtility} from './RelationUtility.js'
+
+export {default as Action} from './Action.js'
+export {default as Actions} from './Actions.js'
+export {default as ActionUtility} from './ActionUtility.js'
 
 export const MySQLTypes = [
   ['integer','INT',11],
@@ -19,48 +27,3 @@ export const MySQLTypes = [
   ['str64','TEXT',64],
   ['text','TEXT',0]
 ]
-
-export function LoadNode(board,tableName,tableInfo,check=undefined){
-	
-	const node = Node.createElement(
-		newNode => newNode.load(
-			board,
-			tableName,
-			tableInfo,
-			null,
-			check.actions
-		)
-	)
-	
-	if( check ){
-		if( check.controller.fileExists ){
-			if( check.controller.classExists )
-				node.addStatus('Controller','text-bg-success')
-			else
-				node.addStatus('Controller','text-bg-warning')
-		} else
-			node.addStatus('Controller','text-bg-danger')
-		
-		if( check.model.fileExists ){
-			if( check.model.classExists )
-				node.addStatus('Model','text-bg-success')
-			else
-				node.addStatus('Model','text-bg-warning')
-		} else
-			node.addStatus('Model','text-bg-danger')
-		
-		if( check.repository.fileExists ){
-			if( check.repository.classExists )
-				node.addStatus('Repository','text-bg-success')
-			else
-				node.addStatus('Repository','text-bg-warning')
-		} else
-			node.addStatus('Repository','text-bg-danger')
-		
-		if( check.template.fileExists )
-			node.addStatus('Template','text-bg-success')
-		else
-			node.addStatus('Template','text-bg-danger')
-	}
-	return node
-}

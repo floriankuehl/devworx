@@ -1,38 +1,33 @@
 import CustomElement from '../Devworx/CustomElement.js'
 import ElementUtility from '../Devworx/ElementUtility.js'
+import Api from '../Devworx/Api.js'
 
-import {PropertyUtility} from './Property.js'
-import {RelationUtility} from './Relation.js'
-import {ActionUtility} from './Action.js'
+import Node from './Node.js'
+import PropertyUtility from './PropertyUtility.js'
+import RelationUtility from './RelationUtility.js'
+import ActionUtility from './ActionUtility.js'
 
 export default class Board extends CustomElement(HTMLElement){
 	
 	#controls
-	#createProperty
-	#createRelation
-	#createAction
-	
-	#activeModel
+
+	#activeNode
 	#activeProperty
 	#activeRelation
 	#activeAction
 	
 	constructor() { 
 		super()
-		
 		this.#controls = ElementUtility.create('nav',null,['d-flex','flex-row','gap-2','py-2'])
-		this.#createProperty = ElementUtility.create('button','Create Property',['btn','btn-primary'])
-		this.#createRelation = ElementUtility.create('button','Create Relation',['btn','btn-primary'])
-		this.#createAction = ElementUtility.create('button','Create Action',['btn','btn-primary'])
     }
 	
-	get activeModel(){ return this.#activeModel }
-	set activeModel(value){
-		if( this.#activeModel )
-			this.#activeModel.removeAttribute('selected')
+	get activeNode(){ return this.#activeNode }
+	set activeNode(value){
+		if( this.#activeNode )
+			this.#activeNode.removeAttribute('selected')
 		if( value )
 			value.setAttribute('selected','true')
-		this.#activeModel = value
+		this.#activeNode = value
 	}
 	
 	get activeProperty(){ return this.#activeProperty }
@@ -61,9 +56,31 @@ export default class Board extends CustomElement(HTMLElement){
 		return data
 	}
 	
+	async loadTable(tableName){
+		return await Api.Get({controller:'Model',action:'schema'})
+			.then(json=>{
+				for( let table of Object.keys(json.table) ){
+					this.loadNode( table, json[table] )
+				}
+				return json
+			})
+	}
+	
+	loadNode(tableName,info){
+		return Node.createElement(
+			node => node.load(
+				this,
+				tableName,
+				info.properties,
+				info.relations,
+				info.actions
+			)
+		)
+	}
+	
 	loadEvents(node){
 		node.addEventListener('click',e=>{
-			this.activeModel = node
+			this.activeNode = node
 		})
 		node.querySelectorAll('devworx-property')
 			.forEach(item=>{
@@ -93,28 +110,6 @@ export default class Board extends CustomElement(HTMLElement){
 	
 	init(){
 		super.init()
-		
-		this.#controls.append(
-			this.#createProperty, 
-			this.#createRelation,
-			this.#createAction
-		)
-		
-		this.#createProperty.addEventListener('click',e=>{
-			const prop = PropertyUtility.Ask()
-			if( prop )this.propertyList.fields.append(prop)
-		})
-		
-		this.#createRelation.addEventListener('click',e=>{
-			const relation = RelationUtility.Ask()
-			if( relation ) this.relationList.append(relation)
-		})
-	
-		this.#createAction.addEventListener('click',e=>{
-			const action = ActionUtility.Ask()
-			if( action ) this.actionList.append(action)
-		})
-	
-		this.append(this.#controls)
+		this.append( this.#controls )
 	}
 }

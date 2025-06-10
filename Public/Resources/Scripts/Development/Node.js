@@ -1,9 +1,9 @@
 import CustomElement from '../Devworx/CustomElement.js'
 import ElementUtility from '../Devworx/ElementUtility.js'
 
-import {Property,PropertyUtility} from './Property.js'
-import {Relation,RelationUtility} from './Relation.js'
-import {Action,ActionUtility} from './Action.js'
+import PropertyUtility from './PropertyUtility.js'
+import RelationUtility from './RelationUtility.js'
+import ActionUtility from './ActionUtility.js'
 
 export default class Node extends CustomElement(HTMLElement){
 	
@@ -12,16 +12,10 @@ export default class Node extends CustomElement(HTMLElement){
 	#status
 	
 	#propertyList
-	#propertyHeader
 	#relationList
-	#relationHeader
 	#actionList
-	#actionHeader
 	
 	#controls
-	#createProperty
-	#createRelation
-	#createAction
 	
 	//static get baseTag(){ return 'form' }
 	
@@ -43,10 +37,6 @@ export default class Node extends CustomElement(HTMLElement){
 	get actionList(){ return this.#actionList }
 	set actionList(value){ this.#actionList = value }
 	
-	get createProperty(){ return this.#createProperty }
-	get createRelation(){ return this.#createRelation }
-	get createAction(){ return this.#createAction }
-	
 	addStatus(text,colorClass){
 		this.#status.append( ElementUtility.create('div',text,['badge','px-2', 'py-1', colorClass]) )
 	}
@@ -55,7 +45,7 @@ export default class Node extends CustomElement(HTMLElement){
 		super()
 		
 		this.#table = this.querySelector('label') ?? document.createElement('label')
-		this.#table.classList.add('text-dark','h4')
+		this.#table.classList.add('text-light','h4','p-2')
 		this.#table.setAttribute('contenteditable','true')
 		
 		this.#status = document.createElement('div')
@@ -64,24 +54,20 @@ export default class Node extends CustomElement(HTMLElement){
 		this.#propertyList = this.querySelector('devworx-properties') ?? ElementUtility.create(
 			'devworx-properties',
 			{type:'Property'},
-			['d-flex','flex-column','col-12','p-3','border','border-dark']
+			['d-flex','flex-column','col-12','p-3','border','border-light']
 		)
 		
 		this.#relationList = this.querySelector('devworx-relations') ?? ElementUtility.create(
 			'devworx-relations',
 			{type:'Relation'},
-			['d-flex','flex-column','col-12','p-3','border','border-dark']
+			['d-flex','flex-column','col-12','p-3','border','border-light']
 		)
 		
 		this.#actionList = this.querySelector('devworx-actions') ?? ElementUtility.create(
 			'devworx-actions',
 			{type:'Action'},
-			['d-flex','flex-column','col-12','p-3','border','border-dark']
+			['d-flex','flex-column','col-12','p-3','border','border-light']
 		)
-		
-		this.#propertyHeader = ElementUtility.create('header','',['d-flex','flex-row'])
-		this.#relationHeader = ElementUtility.create('header','',['d-flex','flex-row'])
-		this.#actionHeader = ElementUtility.create('header','',['d-flex','flex-row'])
     }
 	
 	init(){
@@ -96,16 +82,6 @@ export default class Node extends CustomElement(HTMLElement){
 			this.#relationList,
 			this.#actionList
 		)
-			
-		this.#propertyHeader.append(...PropertyUtility.header())
-		this.#propertyList.prepend(this.#propertyHeader)
-			
-		this.#relationHeader.append(...RelationUtility.header())
-		this.#relationList.prepend(this.#relationHeader)
-		
-		this.#actionHeader.append(...ActionUtility.header())
-		this.#actionList.prepend(this.#actionHeader)
-		
 		return this
 	}
 	
