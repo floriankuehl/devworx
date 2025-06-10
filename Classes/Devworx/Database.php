@@ -171,7 +171,7 @@ class Database implements IDatabase {
 			SELECT 1
 			FROM information_schema.columns
 			WHERE 
-			   table_name= '{$table}'
+			   table_name = '{$table}'
 			   AND column_name = '{$field}'
 			   AND column_key = 'PRI'
 		  ) AS hasPK;
