@@ -5,7 +5,7 @@
   
   $user = isset($user) ? $user : new User();
 ?>
-<form class="p-2" method="POST" action="?controller=Login&action=register">
+<form class="p-2" method="POST" action="?controller=user&action=register">
   <div class="d-flex flex-row mb-2">
     <label for="user_name" class="col-2">Username</label>
     <?php echo Html::detectInput($user,'name',['required'=>'required','maxlength'=>64]); ?>
