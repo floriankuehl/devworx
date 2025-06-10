@@ -22,7 +22,7 @@ class ModelController extends \Devworx\AbstractController {
 	];
 	
 	const SYSTEMFIELDS = [
-		'uid','cruser','created','updated','deleted'
+		'uid','cruser','created','updated','deleted','hidden'
 	];
 	
 	public function initialize(): void {
@@ -68,16 +68,16 @@ class ModelController extends \Devworx\AbstractController {
 					'name' => $field['Field'],
 					'key' => $field['Key'],
 					'type' => $field['Type'],
-					'phpType' => $phpType,
+					'phptype' => $phpType,
+					'dbtype' => $type,
 					'nullable' => $field['Null'] == 'YES',
 					'value' => $field['Default'],
-					'typeName' => $type,
 					'length' => $length,
 					'extra' => $field['Extra'],
 					'system' => in_array($field['Field'],self::SYSTEMFIELDS,true),
 				];
 			},
-			$DB->query("EXPLAIN {$tableName};",false,MYSQLI_ASSOC)
+			$DB->explain($tableName)
 		);
 	}
 	
@@ -101,6 +101,7 @@ class ModelController extends \Devworx\AbstractController {
 		$repositoryClass = "{$modelClass}Repository";
 		
 		return [
+			'name' => $table,
 			'model' => $this->getExistence([
 				'short' => $modelClass,
 				'class' => "{$namespace}\\Models\\{$modelClass}",
@@ -118,7 +119,9 @@ class ModelController extends \Devworx\AbstractController {
 			]),
 			'template' => $this->getExistence([
 				'file' => "{$templateFolder}/{$modelClass}"
-			])
+			]),
+			'properties' => $this->getSchema($table),
+			'relations' => []
 		];
 	}
 	
@@ -239,7 +242,19 @@ class ModelController extends \Devworx\AbstractController {
 	}
 	
 	public function editorAction(){
+		global $DB;
 		
+		$create = false;
+		$namespace = $this->request->getArgument('namespace') ?? 'Frontend';
+		
+		$names = $DB->tables();
+		
+		$tables = [];
+		foreach( $names as $name ){
+			$tables[$name] = $this->checkTable($namespace,$name,[],$create);
+		}
+		
+		$this->view->assign('tables', $tables);
 	}
 	
 	public function schemaAction(){
@@ -251,26 +266,21 @@ class ModelController extends \Devworx\AbstractController {
 		$create = false;
 		$namespace = $this->request->getArgument('namespace') ?? 'Frontend';
 		
-		if( $this->request->hasArgument('table') )
-			$tableIndex = [
-				'Table' => [
-					$this->request->getArgument('table')
-				]
-			];
-		else 		
-			$tableIndex = $DB->query('SHOW TABLES;');
+		if( $this->request->hasArgument('table') ){
+			$list = $this->request->getArgument('table');
+			if( empty($list) ) 
+				$list = [];
+			if( is_string($list) )
+				$list = [$list];
+		} else
+			$list = $DB->tables();
 		
 		$tables = [];
-		$checks = [];
-		foreach( $tableIndex as $key => $tableList ){
-			foreach( $tableList as $tableName ){
-				$tables[$tableName] = $this->getSchema($tableName);
-				$checks[$tableName] = $this->checkTable($namespace,$tableName,[],$create);
-			}
+		foreach( $list as $table ){
+			$tables[$table] = $this->checkTable($namespace,$table,[],$create);
 		}
-				
+										
 		$this->view->assign('tables', $tables);
-		$this->view->assign('checks', $checks);
 	}
 	
 	public function checkAction(){
