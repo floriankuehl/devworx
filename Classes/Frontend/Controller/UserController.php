@@ -11,18 +11,36 @@ use \Frontend\Models\User;
 
 class UserController extends \Devworx\AbstractController {
     
-	protected $userID = 0;
-	protected $user = [];
+	protected $user = false;
 	
 	public function initialize(): void {
-		$this->user = Frontend::getCurrentUser();
-		$this->userID = $this->user['uid'];
+		$this->user = Frontend::getCurrentUser() ?? false;
 	}
 	
-	public function indexAction(){
-		$this->view->assign('user',$this->user);
+	public function loginAction(){
+		
+		if( AuthUtility::cookie() || AuthUtility::post() ){
+			//Referrer Tracking?
+			$ca = explode('::',Frontend::getConfig('system','afterLogin'));
+			Frontend::redirect(...$ca);
+			return;
+		}
+
+		if( $this->request->isPost() ){
+			FlashMessageUtility::Add('warning','Credentials not found');
+			return;
+		}
+
+		AuthUtility::lock();	
 	}
- 
+
+	public function logoutAction(){
+		if( $this->user ){
+			AuthUtility::lock();
+			Frontend::redirectDefault();
+		}
+	}
+
 	public function registerAction(){
 		global $DB;
 
@@ -60,31 +78,17 @@ class UserController extends \Devworx\AbstractController {
 		}
 	}
 
-	public function loginAction(){
-		if( AuthUtility::cookie() || AuthUtility::post() ){
-			//Referrer Tracking?
-			$ca = explode('::',Frontend::getConfig('system','afterLogin'));
-			Frontend::redirect(...$ca);
-			return;
+	public function indexAction(){
+		if( $this->user ){
+			$this->view->assign('user',$this->user);
 		}
-
-		if( $this->request->isPost() ){
-			FlashMessageUtility::Add('warning','Credentials not found');
-			return;
-		}
-
-		AuthUtility::lock();
-	}
-
-	public function logoutAction(){
-		AuthUtility::lock();
-		Frontend::redirectDefault();
 	}
   
 	public function profileAction(){
-		if( empty($this->user) ) return;
-		$user = ModelUtility::toModel( $this->user, User::class );
-		$this->view->assign('user',$user);
+		if( $this->user ){
+			$user = ModelUtility::toModel( $this->user, User::class );
+			$this->view->assign('user',$user);
+		}
 	}
   
 	public function updateAction(){
