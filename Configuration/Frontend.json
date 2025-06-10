@@ -48,11 +48,12 @@
     "defaultNamespace": "Frontend",
     "controllerArgument": "controller",
     "actionArgument": "action",
-    "defaultController": "Login",
-    "defaultAction": "Login",
-	"afterLogin": "Dashboard::index",
+    "defaultController": "User",
+    "defaultAction": "login",
+	"afterLogin": "User::index",
     "publicControllerActions": [
-      "Login::Login"
+	"User::login",
+	"User::register"
     ],
     "cache": "Cache"
   },
