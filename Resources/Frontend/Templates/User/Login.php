@@ -2,7 +2,7 @@
 <section class="d-flex flex-column h-100 justify-content-center align-items-center">
   <form 
     method="POST" 
-    action="?controller=login&action=login" 
+    action="?controller=user&action=login" 
     class="d-flex flex-column p-3 border border-dark"
   >
     <div class="d-flex flex-row flex-wrap mb-2">
