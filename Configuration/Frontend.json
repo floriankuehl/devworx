@@ -49,11 +49,11 @@
     "controllerArgument": "controller",
     "actionArgument": "action",
     "defaultController": "User",
-    "defaultAction": "login",
-	"afterLogin": "User::index",
+    "defaultAction": "Login",
+	"afterLogin": "User::Index",
     "publicControllerActions": [
-	"User::login",
-	"User::register"
+	"User::Login",
+	"User::Register"
     ],
     "cache": "Cache"
   },
