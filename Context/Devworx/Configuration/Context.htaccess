@@ -1,0 +1,2 @@
+RewriteRule ^$ index.php [E=CONTEXT:Devworx,L,QSA]
+Header always set X-Devworx-Context "%{CONTEXT}e" env=CONTEXT
