@@ -13,8 +13,8 @@
 <h3>Context-Based MVC Solution</h3>
 <p>The solution can be controlled in the frontend and API context via controllers and actions. The <code>LoginHash</code> can be provided by Cookie or via request header.</p>
 <p>Devworx comes with the idea to use itself in different contexts, based on JSON configuration files. The available contexts are globally defined in the <code>devworx.php</code> and are used by the <code>\Devworx\Frontend</code> class.</p>
-<p>The currently available contexts are <code>frontend,api and documentation</code>.</p>
-<p>See <code>./Public/.htaccess</code> to learn, how the context is determined by URI.</p>
+<p>The currently available contexts are <code>Devworx, Frontend, Api and Documentation</code>.</p>
+<p>See <code>./Public/.htaccess</code> and <code>Devworx\Cache\HtaccessCache</code> to learn, how the context is determined by URI.</p>
 
 <h3>Configuration</h3>
 <p>The solution can be configured via JSON files, based on the provided context, that are stored in the Configuration folder. These files are used to configurate the system itself, as well as as the frontend page.</p>
@@ -30,7 +30,7 @@
 <p>For standard rendering, the <code>Devworx\Renderer\JSONRenderer</code> is used.</p>
 
 <h3>Documentation Context</h3>
-<p>This context is used for automated documentation with <code>doxygen</code> and can be accessed by requesting <code>./help/</code>.</p>
+<p>This context is used for automated documentation with <code>doxygen</code> and can be accessed by requesting <code>./documentation/</code>.</p>
 <p>To ensure doxygen is working, check the <code>Context/Documentation/Configuration/Context.json</code> configuration and <code>Context/Documentation/Configuration/Doxygen.txt</code></p>
 <p>If you want to regenerate the documentation, see <code>DoxygenUtility</code> or flush the <code>Documentation cache</code> via the action <code>CacheController::flush</code>.</p>
 <p>Internally, the <code>Documentation</code> controller routes the HTML files of the Doxygen Documentation to the frontend via the action <code>Documentation::show</code>.</p>
@@ -98,6 +98,12 @@
 <h3>ClassCache</h3>
 <p>The <code>Devworx\Cache\ClassCache</code> can collect namespace information for the <code>Devworx\Autoloader</code> by suggesting the basic folder-to-namespace structure.</p>
 
+<h3>ConfiguraitonCache</h3>
+<p>The <code>Devworx\Cache\ConfigurationCache</code> can collect a configuration array from <code>Context/Devworx/Configuration/Context.json</code> and merges with <code>Context/{Context}/Configuration/Context.json</code></p>
+
+<h3>HtaccessCache</h3>
+<p>The <code>Devworx\Cache\HtaccessCache</code> can collect htaccess parts from the framework <code>Context/Devworx/Configuration/Global.htaccess</code> and from the contexts <code>Context/{Context}/Configuration/Context.htaccess</code>. Finally writes to Public/.htaccess</p>
+
 <h3>Repository cache</h3>
 <p>The <code>Devworx\Repository</code> features automatic file caching of MySQL database schemas. This allows type usage without database queries.</p>
 
@@ -105,4 +111,4 @@
 <p>All models can be refreshed by analysing the MySQL table structure, checking getters and setters and rewriting the model files. use with care!</p>
 
 <h3>Documentation cache</h3>
-<p>The code is documented with PHP doc-blocks, and the developer can use doxygen for building a html help structure for the complete code structure. Just provide a path to the doxygen binarys in the <code>Configuration/Documentation.json</code>.</p>
+<p>The code is documented with PHP doc-blocks, and the developer can use doxygen for building a html help structure for the complete code structure. Just provide a path to the doxygen binarys in the <code>Context/Documentation/Configuration/Context.json</code>.</p>
