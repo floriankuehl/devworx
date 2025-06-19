@@ -16,6 +16,7 @@
 <h2>Frontend</h2>
 <p>The Frontend context contains all project-related files that differ from the system contexts.</p>
 
+<h1>A basic context</h1>
 <p>Context folder structure:</p>
 <ul>
   <li>Classes
