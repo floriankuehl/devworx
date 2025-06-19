@@ -18,7 +18,7 @@
 
 <h3>Configuration</h3>
 <p>The solution can be configured via JSON files, based on the provided context, that are stored in the Configuration folder. These files are used to configurate the system itself, as well as as the frontend page.</p>
-<p>See <code>Resources/Layouts/Page.php</code> and <code>Configuration/Frontend.json</code></p>
+<p>See <code>Context/Devworx/Resources/Private/Layouts/Page.php</code> and <code>Context/Devworx/Configuration/Context.json</code></p>
 
 <h3>Frontend Context</h3>
 <p>This context is used for the "normal" processing of the user frontend, such as Login, Registering, Dashboard, Caches etc. This is basically the user interaction context.</p>
@@ -31,7 +31,7 @@
 
 <h3>Documentation Context</h3>
 <p>This context is used for automated documentation with <code>doxygen</code> and can be accessed by requesting <code>./help/</code>.</p>
-<p>To ensure doxygen is working, check the <code>Configuration/Documentation.json</code> configuration and <code>Doxygen/constants.txt</code></p>
+<p>To ensure doxygen is working, check the <code>Context/Documentation/Configuration/Context.json</code> configuration and <code>Context/Documentation/Configuration/Doxygen.txt</code></p>
 <p>If you want to regenerate the documentation, see <code>DoxygenUtility</code> or flush the <code>Documentation cache</code> via the action <code>CacheController::flush</code>.</p>
 <p>Internally, the <code>Documentation</code> controller routes the HTML files of the Doxygen Documentation to the frontend via the action <code>Documentation::show</code>.</p>
 <p>No renderer is used, because the files are routed directly.</p>
@@ -39,7 +39,7 @@
 <h2>Classes</h2>
 <p>All the utility classes, as well as some core classes, have static functions for easy reuse in different codes. The <code>Devworx\Frontend</code> class handles the whole architecture statically.</p>
 <p>Controllers, Requests, Repositories, Models, Renderers and Views work by instancing.</p>
-<p>Classes are loaded automatically by namespace. e.g.: <code>Devworx\Frontend</code> loads <code>./Classes/Devworx/Frontend.php</code>.</p>
+<p>Classes are loaded automatically by namespace. e.g.: <code>Devworx\Frontend</code> loads <code>Context/Devworx/Classes/Frontend.php</code>.</p>
 
 <h3>Error Handling</h3>
 <p>Utility classes such as <code>DebugUtility</code> make implementing debugging and error handling logic easier.</p>
@@ -80,17 +80,23 @@
 <p>See <code>Devworx\View</code> class for further clearance.</p>
 
 <h3>Resources</h3>
-<p>A distinction is made between private and public resources. Private resources are, for example, layouts, templates, and partials. Public resources are all styles, images, icons, and scripts. All private resources are located in the <code>./Resources/[Context]</code> folder. The public resources are located in the <code>./Public/Resources</code> folder. All root paths can be configured in the <code>./Configuration/*.json</code> files.</p>
+<p>A distinction is made between private and public resources. Private resources are, for example, layouts, templates, and partials. Public resources are all styles, images, icons, and scripts. All private resources are located in the <code>Context/{Context}/Resources/Private</code> folder. The public resources are located in the <code>Context/{Context}/Resources/Public</code> folder. All root paths can be configured in the <code>Context/{Context}/Configuration/Context.json</code> files.</p>
 
 <h3>Styling</h3>
 <p><code>Bootstrap 5.3</code> and <code>Material Icons from Google</code> are used by standard. But it is easy to change the framework's styling via the configuration files.</p>
 
 <h3>Custom HTML Elements</h3>
-<p>The solution contains its own HTML elements to handle lists and formats. These are imported via JavaScript module. See <code>./Public/Resources/Scripts</code>.</p>
-<p>To ensure easy implementation, the custom elements inherit from <code>AutoRegistering(HtmlElement)</code>, that provide the tag name and the base tag of the new element. All custom elements are loaded by module in <code>./Public/Resources/Scripts/setup.js</code>.</p>
+<p>The solution contains its own HTML elements to handle lists and formats. These are imported via JavaScript module. See <code>Context/Devworx/Resources/Public/Scripts</code>.</p>
+<p>To ensure easy implementation, the custom elements inherit from <code>AutoRegistering(HtmlElement)</code>, that provide the tag name and the base tag of the new element. All custom elements are loaded by module in <code>/resources/Devworx/Script/Module.js</code>.</p>
 <p>The solution contains javascript addons for dialogs, toggle logic, confirming, formatting and a example for providing serverside rendered templates or partials.</p>
 
 <h2>Caches</h2>
+
+<h3>CachesCache</h3>
+<p>The <code>Devworx\Cache\CachesCache</code> can collect different caches inside the context by reading <code>Devworx/Configuration/Caches.json</code> and optionally merged with <code>{Context}/Configuration/Caches.json</code>.</p>
+
+<h3>ClassCache</h3>
+<p>The <code>Devworx\Cache\ClassCache</code> can collect namespace information for the <code>Devworx\Autoloader</code> by suggesting the basic folder-to-namespace structure.</p>
 
 <h3>Repository cache</h3>
 <p>The <code>Devworx\Repository</code> features automatic file caching of MySQL database schemas. This allows type usage without database queries.</p>
