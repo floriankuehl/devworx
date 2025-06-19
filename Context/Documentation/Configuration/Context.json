@@ -1,73 +1,65 @@
 {
-  "head": {
-    "title": "Devworx Documentation",
-    "meta": {
-      "description": ""
-    },
-    "metaHttpEquiv": {
-	  "Cache-Control": "no-cache, no-store, must-revalidate",
-	  "Pragma": "no-cache",
-	  "Expires": 0,
-      "Content-Type": "text/html",
-      "Content-Script-Type": "text/javascript",
-      "Content-Style-Type": "text/css"
-    },
-    "styles": {},
-    "scripts": {},
-    "content": ""
-  },
-  "body": {
-    "styles": {},
-    "scripts": {},
-	"content": ""
-  },
-  "system": {
-    "defaultNamespace": "Documentation",
-    "defaultController": "Documentation",
-    "defaultAction": "show",
-	"afterLogin": "Documentation::show",
-    "publicControllerActions": [
-      "Documentation::show"
-    ]
-  },
-  "doxygen": {
-	"bin": "C:\\Program Files\\doxygen\\bin\\doxygen.exe",
-	"workdir": "Doxygen",
-	"constants": "Configuration/Doxygen.txt",
-	"doxyfile": "doxyfile.txt",
-	"output": "Documentation",
-	"language": "English",
-	"warnings": "warnings.txt",
-	"exclude": "Cache Doxygen",
-	"project": {
-		"name": "Storytime",
-		"description": "A story creation framework, based on Devworx",
-		"logo": "",
-		"icon": "",
-		"version": "0.1"
+	"head": {
+		"title": "Devworx Documentation",
+		"meta": {
+			"description": ""
+		},
+		"styles": {},
+		"scripts": {},
+		"content": ""
 	},
-	"docset": {
-		"id": "com.floriankuehl.Storytime",
-		"name": "Storytime, a story creation framework, based on Devworx",
-		"url": "",
-		"bundle": "com.floriankuehl.Storytime",
-		"publisher": "Florian Kühl"
+	"body": {
+		"styles": {},
+		"scripts": {},
+		"content": ""
 	},
-	"html": {
-		"output": "html",
-		"header": "",
-		"footer": "",
-		"stylesheet": "",
-		"extraStylesheet": "",
-		"files": "",
-		"colorStyle": "AUTO_LIGHT",
-		"hue": 220,
-		"saturation": 100,
-		"gamma": 80
+	"system": {
+		"defaultNamespace": "Documentation",
+		"defaultController": "Documentation",
+		"defaultAction": "show",
+		"afterLogin": "Documentation::show",
+		"publicControllerActions": [
+			"Documentation::show"
+		]
+	},
+	"doxygen": {
+		"bin": "C:\\Program Files\\doxygen\\bin\\doxygen.exe",
+		"workdir": "Doxygen",
+		"constants": "Configuration/Doxygen.txt",
+		"doxyfile": "doxyfile.txt",
+		"output": "Documentation",
+		"language": "English",
+		"warnings": "warnings.txt",
+		"exclude": "Cache Doxygen",
+		"project": {
+			"name": "Devworx",
+			"description": "A great framework",
+			"logo": "",
+			"icon": "",
+			"version": "0.1"
+		},
+		"docset": {
+			"id": "com.floriankuehl.Devworx",
+			"name": "Devworx, a great framework",
+			"url": "",
+			"bundle": "com.floriankuehl.Devworx",
+			"publisher": "Florian Kühl"
+		},
+		"html": {
+			"output": "html",
+			"header": "",
+			"footer": "",
+			"stylesheet": "",
+			"extraStylesheet": "",
+			"files": "",
+			"colorStyle": "AUTO_LIGHT",
+			"hue": 220,
+			"saturation": 100,
+			"gamma": 80
+		}
+	},
+	"view": {
+		"renderer": "",
+		"layout": ""
 	}
-  },
-  "view": {
-    "renderer": "",
-    "layout": ""
-  }
 }
