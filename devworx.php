@@ -13,7 +13,7 @@
 			"127.0.0.1",
 			"root",
 			"",
-			"storytime"
+			"devworx"
 		],
 
 		//global configurations
