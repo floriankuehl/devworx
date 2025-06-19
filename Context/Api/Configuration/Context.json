@@ -41,7 +41,6 @@
 		"configurationRootPath": "Configuration",
 		"layoutRootPath": "Resources/Layouts",
 		"templateRootPath": "Resources/Templates",
-		"partialRootPath": "Resources/Partials",
-		"documentRootPath": "Resources/Documents"
+		"partialRootPath": "Resources/Partials"
 	}
 }
