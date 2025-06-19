@@ -11,7 +11,7 @@
 		"sameSite": "strict"
 	},
 	"head": {
-		"title": "Devworx Development",
+		"title": "Devworx Api",
 		"favicon": "",
 		"meta": {},
 		"metaHttpEquiv": {
