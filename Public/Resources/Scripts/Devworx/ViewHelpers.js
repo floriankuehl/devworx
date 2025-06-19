@@ -1,5 +1,0 @@
-export {default as ID} from './ViewHelpers/ID.js'
-export {default as Time} from './ViewHelpers/Time.js'
-export {default as Timespan} from './ViewHelpers/Timespan.js'
-export {default as Currency} from './ViewHelpers/Currency.js'
-export {default as Salary} from './ViewHelpers/Salary.js'
