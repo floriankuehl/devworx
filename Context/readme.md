@@ -1,5 +1,5 @@
 <h1>The Context folder</h1>
-<p>This folder contains every context for Devworx.</p>
+<p>This folder contains every context for Devworx. The framework is located in the folder Devworx and serves a context for Login, Profile and Logout.</p>
 
 <p>Context folder structure:</p>
 <ul>
