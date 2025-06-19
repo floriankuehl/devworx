@@ -1,0 +1,40 @@
+# Global
+<Files .htaccess>
+Order allow,deny
+Deny from all
+</Files>
+
+Options -Indexes
+IndexIgnore *
+IndexIgnore *.png *.zip *.jpg *.gif *.doc *.pdf *.csv
+
+<FilesMatch "\.(ini|conf|log|sh|json|csv|xml)$">
+Order allow,deny
+Deny from all
+</FilesMatch>
+
+RewriteEngine On
+
+# Api
+RewriteCond %{REQUEST_URI} ^/api/
+RewriteRule ^api/$ index.php [E=CONTEXT:Api,L,QSA]
+
+# Development
+RewriteCond %{REQUEST_URI} ^/development/
+RewriteRule ^development/?$ index.php?controller=backend&action=index [E=CONTEXT:Development,L,QSA]
+RewriteRule ^development/(.*)$ index.php?controller=backend&action=$1 [E=CONTEXT:Development,L,QSA]
+
+# Documentation
+RewriteCond %{REQUEST_URI} ^/documentation/
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteRule ^documentation/?$ index.php?controller=documentation&action=show&file=index.html [E=CONTEXT:Documentation,L,QSA]
+RewriteRule ^documentation/(.*)$ index.php?controller=documentation&action=show&file=$1 [E=CONTEXT:Documentation,L,QSA]
+
+# Frontend
+RewriteCond %{REQUEST_URI} ^/frontend/
+RewriteRule ^frontend/$ index.php [E=CONTEXT:Frontend,L,QSA]
+
+# Devworx
+RewriteRule ^$ index.php [E=CONTEXT:Devworx,L,QSA]
+Header always set X-Devworx-Context "%{CONTEXT}e" env=CONTEXT
