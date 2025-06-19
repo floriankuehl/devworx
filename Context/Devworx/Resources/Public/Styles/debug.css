@@ -1,0 +1,45 @@
+.debugger {
+  padding: 1rem;
+  border: 1px solid #aaa;
+  
+  background: #efefef;
+}
+
+.debugger header {
+  padding: .5rem;
+  background-color: #fff;
+  color: #e00;
+}
+
+.debugger pre {
+  margin:0 !important;
+  max-height: 100%;
+  overflow:auto;
+}
+
+.debugger [data-type="trace"] {
+  display: flex;
+  flex-flow: column nowrap;
+  padding: 1rem;
+  background-color: #fff;
+}
+
+[data-type="trace"] > div {
+  display: flex;
+  flex-flow: column nowrap;
+}
+
+[data-type="tracerow"] {
+  display: flex;
+  flex-flow: row nowrap;
+  border-bottom: 1px solid #eee;
+  padding-block: .5rem;
+}
+
+[data-type="index"] { width: 2rem; margin-right:.5rem; }
+[data-type="index"]:before { content: '#'; }
+[data-type="class"] { color: #3b5399 }
+[data-type="type"] {}
+[data-type="function"] { color: #9278ee; margin-right: .5rem; }
+[data-type="line"] { color: #aaa }
+[data-type="line"]:before { content: 'on line ' }
