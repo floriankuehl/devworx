@@ -1,0 +1,27 @@
+devworx-app,
+devworx-view,
+devworx-list {
+  display:block;
+  width:100%;
+}
+
+devworx-app {
+	background: var(--bs-dark);
+	min-height: 100svh;
+}
+
+devworx-view { background: #333333 }
+devworx-app > main {}
+devworx-list {}
+
+/* VIEW HELPERS */
+
+devworx-id, 
+devworx-time, 
+devworx-timespan, 
+devworx-salary {}
+
+devworx-id {}
+devworx-time {}
+devworx-timespan {}
+devworx-salary {}

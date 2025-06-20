@@ -1,0 +1,5 @@
+RewriteCond %{REQUEST_URI} ^/documentation/
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteRule ^documentation/?$ index.php?controller=documentation&action=show&file=index.html [E=CONTEXT:Documentation,L,QSA]
+RewriteRule ^documentation/(.*)$ index.php?controller=documentation&action=show&file=$1 [E=CONTEXT:Documentation,L,QSA]

@@ -1,5 +1,2 @@
 /Cache/*
-/Public/Resources/*
-/Configuration/*.json
-/Doxygen/*
-/Resources/*
+/Public/resources/*

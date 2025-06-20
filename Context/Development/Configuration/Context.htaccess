@@ -1,0 +1,3 @@
+RewriteCond %{REQUEST_URI} ^/development/
+RewriteRule ^development/?$ index.php?controller=backend&action=index [E=CONTEXT:Development,L,QSA]
+RewriteRule ^development/(.*)$ index.php?controller=backend&action=$1 [E=CONTEXT:Development,L,QSA]

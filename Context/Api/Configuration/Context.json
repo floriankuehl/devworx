@@ -1,0 +1,46 @@
+{
+	"doctype": "json",
+	"lang": "en",
+	"charset": "utf-8",
+	"body": {
+		"content": ""
+	},
+	"cookie": {
+		"name": "devworx",
+		"expires": 86400,
+		"sameSite": "strict"
+	},
+	"head": {
+		"title": "Devworx Api",
+		"favicon": "",
+		"meta": {},
+		"metaHttpEquiv": {
+			"Cache-Control": "no-cache, no-store, must-revalidate",
+			"Pragma": "no-cache",
+			"Expires": 0,
+			"Content-Type": "application/json",
+			"Content-Script-Type": "text/javascript",
+			"Content-Style-Type": "text/css"
+		},
+		"styles": {},
+		"scripts": {},
+		"content": ""
+	},
+	"system": {
+		"defaultNamespace": "Api",
+		"controllerArgument": "controller",
+		"actionArgument": "action",
+		"defaultController": "auth",
+		"defaultAction": "index",
+		"publicControllerActions": []
+	},
+	"view": {
+		"renderer": "Devworx\\Renderer\\JsonRenderer",
+		"layout": "Page",
+		"encoding": "",
+		"configurationRootPath": "Configuration",
+		"layoutRootPath": "Resources/Layouts",
+		"templateRootPath": "Resources/Templates",
+		"partialRootPath": "Resources/Partials"
+	}
+}

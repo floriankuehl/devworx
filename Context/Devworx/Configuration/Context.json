@@ -1,0 +1,72 @@
+{
+	"doctype": "html",
+	"lang": "en",
+	"charset": "utf-8",
+	"controller": "",
+	"action": "",
+	"cookie": {
+		"name": "devworx",
+		"expires": 86400,
+		"sameSite": "strict"
+	},
+	"head": {
+		"title": "Devworx",
+		"favicon": "",
+		"meta": {
+			"viewport": "width=device-width, initial-scale=1.0",
+			"author": "Florian Kühl",
+			"description": "",
+			"generator": "Devworx Engine",
+			"robots": "NOINDEX,NOFOLLOW"
+		},
+		"metaHttpEquiv": {
+			"Cache-Control": "no-cache, no-store, must-revalidate",
+			"Pragma": "no-cache",
+			"Expires": 0,
+			"Content-Type": "text/html",
+			"Content-Script-Type": "text/javascript",
+			"Content-Style-Type": "text/css"
+		},
+		"styles": {
+			"index": "/resources/devworx/Styles/index.css"
+		},
+		"scripts": {},
+		"modules": {},
+		"content": ""
+	},
+	"body": {
+		"styles": {},
+		"scripts": {},
+		"modules": {
+			"setup": "/resources/devworx/Scripts/setup.js"
+		},
+		"content": ""
+	},
+	"system": {
+		"controllerArgument": "controller",
+		"actionArgument": "action",
+		"defaultNamespace": "Devworx",
+		"defaultController": "User",
+		"defaultAction": "Login",
+		"afterLogin": "User::Index",
+		"publicControllerActions": [
+			"User::Login",
+			"User::Register"
+		]
+	},
+	"view": {
+		"renderer": "Devworx\\Renderer\\FluidRenderer",
+		"layout": "Page",
+		"configurationRootPath": "Configuration",
+		"layoutRootPath": "Resources/Private/Layouts",
+		"templateRootPath": "Resources/Private/Templates",
+		"partialRootPath": "Resources/Private/Partials",
+		"documentRootPath": "Resources/Public/Documents",
+		"imageRootPath": "Resources/Public/Images",
+		"scriptsPath": "Resources/Public/Scripts",
+		"stylesPath": "Resources/Public/Styles"
+	},
+	"namespaces": {
+		"f": "Frontend\\ViewHelpers"
+	}
+}

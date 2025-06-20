@@ -1,0 +1,9 @@
+:root {
+  --mi-icon-size: 28px;
+  
+  --bs-highlight: rgb(208, 208, 255);
+  --bs-highlight-color: var(--bs-dark);
+  
+  --bs-body-background: var(--bs-dark);
+  --bs-body-color: var(--bs-light);
+}
