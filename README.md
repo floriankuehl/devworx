@@ -98,7 +98,7 @@
 <h3>ClassCache</h3>
 <p>The <code>Devworx\Cache\ClassCache</code> can collect namespace information for the <code>Devworx\Autoloader</code> by suggesting the basic folder-to-namespace structure.</p>
 
-<h3>ConfiguraitonCache</h3>
+<h3>ConfigurationCache</h3>
 <p>The <code>Devworx\Cache\ConfigurationCache</code> can collect a configuration array from <code>Context/Devworx/Configuration/Context.json</code> and merges with <code>Context/{Context}/Configuration/Context.json</code></p>
 
 <h3>HtaccessCache</h3>
