@@ -28,6 +28,7 @@ tables.map(item=>item.addEventListener('click',e=>{
 	const context = item.getAttribute('context')
 	
 	//Api.text = true
+	//Api.debug = true;
 	Api.Get({
 		controller:'Model',
 		action:'schema',

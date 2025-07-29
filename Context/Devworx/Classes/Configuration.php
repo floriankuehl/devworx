@@ -189,13 +189,14 @@ class Configuration {
 			return false;
 		}
 		
+		$globalContext = $GLOBALS['DEVWORX']['CONTEXT'];
 		if( empty($context) )
-			$context = $GLOBALS['DEVWORX']['FRAMEWORK'];
+			$context = $globalContext === '' ? $GLOBALS['DEVWORX']['FRAMEWORK'] : $globalContext;
 		
 		if( self::load( $context ) )
 			return true;
 		
-		throw new \Exception("Context configuration {$context} could not be loaded from cache");
+		trigger_error("Context configuration {$context} could not be loaded from cache",E_USER_WARNING);
 		return false;
 		
 		

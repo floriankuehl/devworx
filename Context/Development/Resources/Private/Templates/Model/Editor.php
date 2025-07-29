@@ -37,8 +37,8 @@
 <div class="d-flex flex-column gap-2 px-3">
 <devworx-list type="Table" class="d-flex flex-row flex-wrap">
 <?php
-	forEach( $tables as $context => $tables ){
-		foreach( $tables as $table => $info ){
+	forEach( $context->get('tables') as $ctx => $list ){
+		foreach( $list as $table => $info ){
 			$noController = ( $info['controller'] === false ) || ( $info['controller']['fileExists'] === false );
 			$noModel = ( $info['model'] === false ) || ( $info['model']['fileExists'] === false );
 			$noRepository = ( $info['repository'] === false ) || ( $info['repository']['fileExists'] === false );
@@ -46,7 +46,7 @@
 			if( $noController && $noModel && $noRepository ) continue;
 			echo View::Partial('TablePreview',[
 				'table' => $table,
-				'context' => $context,
+				'ctx' => $ctx,
 				'info' => $info
 			]);
 		}

@@ -7,13 +7,11 @@ use Devworx\Interfaces\IRequest;
 use Devworx\Interfaces\IView;
 
 use Devworx\Utility\PathUtility;
-use Devworx\Utility\StringUtility;
-use Devworx\Utility\ModelUtility;
-use Devworx\Utility\CookieUtility;
 
 use Devworx\Configuration;
 use Devworx\View;
 use Devworx\Request;
+use Devworx\Redirect;
 
 /**
  * The base class for controllers
@@ -111,6 +109,27 @@ abstract class AbstractController implements IController {
 	 */
 	function getBlockLayout(): bool {
 		return $this->blockLayout;
+	}
+	
+	/** 
+	 * Redirects to a specific controller action
+	 *
+	 * @return void
+	 */
+	function redirect(
+		string $action, 
+		string $controller=null, 
+		array $arguments=null, 
+		string $anchor=null, 
+		int $status=301 
+	): void {
+		Redirect::action( 
+			$controller ?? $this->getId(),
+			$action,
+			$arguments,
+			$anchor,
+			$status
+		);
 	}
 
 	/** 

@@ -21,6 +21,10 @@ address { margin-bottom: 0 }
 	--bs-btn-padding-y: 0.15rem;
 }
 
+.list-group-item {
+	--bs-list-group-color: var(--bs-dark);
+}
+
 .mi {
   font-family: 'Material Icons';
   font-weight: normal;

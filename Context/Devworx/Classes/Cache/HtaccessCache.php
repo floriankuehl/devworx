@@ -2,7 +2,7 @@
 
 namespace Devworx\Cache;
 
-use \Devworx\Context;
+use \Devworx\Devworx;
 use \Devworx\Cache\AbstractCache;
 use \Devworx\Utility\PathUtility;
 use \Devworx\Utility\FileUtility;
@@ -40,16 +40,18 @@ final class HtaccessCache extends AbstractFileCache {
 		
 		if( file_exists( $file ) ) return true;
 
+		$framework = Devworx::framework();
+
 		$content = [];
 		$this->checkAdd(
-			Context::framework(),
+			$framework,
 			'Global',
 			'Global.htaccess',
 			$content
 		);
 		
-		foreach( Context::contexts() as $ctx ){
-			if( $ctx === Context::framework() ) 
+		foreach( Devworx::contexts() as $ctx ){
+			if( $ctx === $framework ) 
 				continue;
 			$this->checkAdd(
 				$ctx,
@@ -60,8 +62,8 @@ final class HtaccessCache extends AbstractFileCache {
 		}
 		
 		$this->checkAdd(
-			Context::framework(),
-			Context::framework(),
+			$framework,
+			$framework,
 			'Context.htaccess',
 			$content
 		);

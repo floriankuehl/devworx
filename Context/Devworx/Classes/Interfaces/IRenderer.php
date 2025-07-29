@@ -9,10 +9,11 @@ interface IRenderer
      *
      * @param mixed $template Template-Definition (String, Array, Objekt etc.)
      * @param array $variables Context variables
+	 * @param string $renderContext the name of the render context
 	 * @param string $encoding The encoding for the renderer
      * @return mixed Rendered representation
      */
-    public function render(mixed $template, array $variables, string $encoding): mixed;
+    public function render(mixed $template, array $variables, string $renderContext, string $encoding): mixed;
 
 
 	/**

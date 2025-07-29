@@ -65,6 +65,19 @@ interface IController {
 	 */
 	function getView(): IView;
 
+	/** 
+	 * Redirects to a specific controller action
+	 *
+	 * @return void
+	 */
+	function redirect(
+		string $action, 
+		string $controller=null, 
+		array $arguments=null, 
+		string $anchor=null, 
+		int $status=301 
+	): void;
+
 	/**
 	 * Iniailizes the controller
 	 *

@@ -7,6 +7,7 @@ use \Devworx\Interfaces\IRepository;
 use \Devworx\Utility\ModelUtility;
 use \Devworx\Utility\PathUtility;
 use \Devworx\Caches;
+use \Devworx\Devworx;
 
 abstract class AbstractRepository implements IRepository {
   
@@ -49,7 +50,10 @@ abstract class AbstractRepository implements IRepository {
 			$class = explode('\\',get_class($this));
 			$context = $class[0];
 
-			$cache = Caches::get('Repository');
+			$repositoryFolder = Devworx::repositoryFolder();
+			$modelFolder = Devworx::modelFolder();
+
+			$cache = Caches::get( $repositoryFolder );
 			if( $cache === null ) return;
 			
 			if( $cache->needsUpdate($context, $this->table) )
@@ -58,7 +62,7 @@ abstract class AbstractRepository implements IRepository {
 			$data = $cache->get( $context, $this->table );
 
 			if( ( $data['mapResult'] ?? null ) === null ){
-				$model = $context . "\\Models\\" . ucfirst($this->table);
+				$model = "\\{$context}\\{$modelFolder}\\" . ucfirst($this->table);
 				$data['mapResult'] = $className ?? $model;
 			}
 			
@@ -426,11 +430,13 @@ abstract class AbstractRepository implements IRepository {
 	 * 
 	 * @param mixed $uid The uid of the row
 	 * @param string $fields The fields to read from the row
-	 * @return array|object
+	 * @return array|object|bool
 	 */
-	public function findByUid($uid,string $fields='*'): array|object {
+	public function findByUid($uid,string $fields='*'): array|object|bool {
 		$system = implode(" AND ",$this->conditions);
-		$result = Database::query("SELECT {$fields} FROM {$this->table} WHERE ({$this->pk} = '{$uid}') AND {$system} LIMIT 1;",true,MYSQLI_ASSOC);
+		$result = Database::query("SELECT {$fields} FROM {$this->table} WHERE ({$this->pk} = '{$uid}') AND {$system} LIMIT 1;",true);
+		if( $result === FALSE )
+			return $result;
 		return empty($this->mapResult) ? $result : ModelUtility::toModel( $result, $this->mapResult );
 	}
 

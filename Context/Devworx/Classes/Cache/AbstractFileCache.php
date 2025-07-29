@@ -2,10 +2,10 @@
 
 namespace Devworx\Cache;
 
+use \Devworx\Devworx;
 use \Devworx\Interfaces\IFileCache;
 use \Devworx\Utility\PathUtility;
 use \Devworx\Utility\FileUtility;
-use \Devworx\Context;
 
 abstract class AbstractFileCache extends AbstractCache implements IFileCache {
 	
@@ -137,7 +137,7 @@ abstract class AbstractFileCache extends AbstractCache implements IFileCache {
 		}
 		
 		$result = true;
-		$contexts = empty($context) ? Context::contexts() : [$context];
+		$contexts = empty($context) ? Devworx::contexts() : [$context];
 		
 		foreach( $contexts as $ctx ){
 			foreach( $this->list as $item ){

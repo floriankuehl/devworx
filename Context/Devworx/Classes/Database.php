@@ -227,11 +227,19 @@ class Database implements IDatabase {
 	 * @param string $table
 	 * @return array
 	 */
-	public static function repository(string $table): array {
+	public static function repository(string $table,string $context=''): array {
 		$meta = self::explain($table);
 		$fields = $types = $placeholders = $details = [];
 		$pk = self::pk($table) ?? self::DEFAULT_PK;
 
+		$modelName = ucfirst($table);
+		$modelFolder = Devworx::modelFolder();
+		
+		$context = ucfirst( empty($context) ? Devworx::context() : $context );
+		$model = "\\{$context}\\{$modelFolder}\\{$modelName}";
+		
+		$mapResult = class_exists($model) ? $model : '';
+		
 		foreach ($meta as $column) {
 			preg_match('/^(\w+)(?:\((\d+)\))?/', $column['Type'], $match);
 			$type = $match[1] ?? 'varchar';
@@ -248,6 +256,7 @@ class Database implements IDatabase {
 			'fields' => $fields,
 			'types' => implode('', $types),
 			'placeholders' => implode(',', $placeholders),
+			'mapResult' => $mapResult,
 		];
 	}
 

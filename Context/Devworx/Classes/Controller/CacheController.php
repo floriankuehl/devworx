@@ -3,6 +3,7 @@
 namespace Devworx\Controller;
 
 use \Devworx\Frontend;
+use \Devworx\Devworx;
 use \Devworx\Context;
 use \Devworx\Caches;
 use \Devworx\Redirect;
@@ -19,8 +20,8 @@ class CacheController extends AbstractController {
 	public function initialize(): void {
 		$this->cacheFolder = PathUtility::cache();
 
-		foreach( Context::contexts() as $context ){
-			$folder = PathUtility::context($context,'Models');
+		foreach( Devworx::contexts() as $context ){
+			$folder = PathUtility::context($context, Devworx::modelFolder());
 			if( is_dir($folder) )
 				$this->modelFolders[$context] = $folder;
 		}
@@ -37,19 +38,19 @@ class CacheController extends AbstractController {
 				*/
 			}break;
 			case'Documentation': {
-				$ctx = Context::get();
-				if( Frontend::loadContext('Documentation') ){
-					$config = ConfigManager::get('doxygen');
+				$ctx = Devworx::context();
+				if( Context::load('Documentation') ){
+					$config = Configuration::get('doxygen');
 					$folder = realpath( PathUtility::currentContext( $config['workdir'], $config['output'] ) );
 					if( empty($folder) ) return false;
 					FileUtility::unlinkRecursive( $folder );
-					Frontend::loadContext($ctx);
+					Context::load($ctx);
 					return true;
 				}
 			} break;
 			default:{
 				if( empty($context) ){
-					foreach( Context::contexts() as $context ){
+					foreach( Devworx::contexts() as $context ){
 						Caches::flush($cacheName,$context);
 					}
 					return true;
@@ -66,10 +67,10 @@ class CacheController extends AbstractController {
 				//BuildUtility::checkModels(); 
 			}break;
 			case'Documentation':{
-				$context = Context::get();
-				if( Frontend::loadContext('Documentation') ){
+				$context = Devworx::context();
+				if( Context::load('Documentation') ){
 					DoxygenUtility::Doxygen();
-					Frontend::loadContext($context);
+					Context::load($context);
 				}
 			}break;
 			default: {
@@ -92,13 +93,12 @@ class CacheController extends AbstractController {
 		if( $cache === '' ) return;
 
 		$context = $this->request->getArgument('context') ?? '';
-		if( $context === '' ) $context = Context::get();
+		if( $context === '' ) $context = Devworx::context();
 		
 		$rebuild = $this->request->getArgument('rebuild') ?? false;
 		
 		$this->flushCache($cache,$context);	
-		if( $rebuild )
-			$this->rebuildCache($cache,$context);
+		if( $rebuild ) $this->rebuildCache($cache,$context);
 					
 		Redirect::referrer();
 	}

@@ -2,7 +2,7 @@
 
 namespace Devworx\Utility;
 
-use \Devworx\Models\AbstractModel;
+use Devworx\Model\AbstractModel;
 
 class ModelUtility {
   
@@ -29,7 +29,7 @@ class ModelUtility {
    */
   public static function toModel(array $row, string $class): AbstractModel {
     if( empty($class) )
-      throw new \Exception("No class provided");
+      trigger_error("No class provided",E_USER_ERROR);
     if( !is_a($class,AbstractModel::class,true) )
       throw new \Exception("Class must inherit from AbstractModel");
     

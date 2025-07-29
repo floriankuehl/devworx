@@ -4,6 +4,7 @@ namespace Devworx;
 
 use \Devworx\Configuration;
 use \Devworx\Interfaces\IView;
+use \Devworx\Renderer\RenderContext;
 use \Devworx\Utility\PathUtility;
 
 /**
@@ -21,6 +22,8 @@ class View implements IView {
 	protected $encoding = '';
 	/** @var string The name of the renderer */
 	protected $renderer = '';
+	/** @var string The context of the renderer */
+	protected $renderContext = '';
 	/** @var mixed The container for all provided variables */
 	protected $all = false;
   
@@ -29,12 +32,14 @@ class View implements IView {
 		string $fileName='',
 		array $variables=null,
 		string $renderer='',
+		string $renderContext='',
 		string $encoding=''
 	){
 		$this->id = $id;
 		$this->fileName = $fileName;
 		$this->variables = is_null($variables) ? [] : $variables;
 		$this->renderer = empty($renderer) ? Configuration::get('view','renderer') : $renderer;
+		$this->renderContext = $renderContext;
 		$this->encoding = $encoding;
 	}
   
@@ -74,6 +79,25 @@ class View implements IView {
 	 */
 	function setRenderer(string $renderer): void {
 		$this->renderer = $renderer;
+	}
+	
+	/**
+	 * Getter for the renderer context
+	 *
+	 * @return string
+	 */
+	function getRenderContext(): string {
+		return $this->renderContext;
+	}
+
+	/**
+	 * Setter for the renderer context
+	 *
+	 * @param string $renderContext The value for the renderer context
+	 * @return void
+	 */
+	function setRenderContext(string $renderContext): void {
+		$this->renderContext = $renderContext;
 	}
 
 	/**
@@ -219,6 +243,7 @@ class View implements IView {
 		  $this->fileName,
 		  $this->variables,
 		  $this->renderer,
+		  $this->renderContext,
 		  $this->encoding
 		);
 	}
@@ -231,6 +256,22 @@ class View implements IView {
 	function __toString(): string {
 		return $this->render();
 	}
+	
+	static function oldRender(){
+		ob_start();
+		if( is_array($variables) && !empty($variables) )
+			extract(
+			  $variables,
+			  EXTR_OVERWRITE
+			);
+		
+		$result = include($fileName);
+		if( is_numeric($result) )
+			$result = ob_get_clean();
+		else
+			ob_end_flush();
+		return $result;
+	}
 
 	/**
 	 * Static render function for views
@@ -238,6 +279,7 @@ class View implements IView {
 	 * @param string $fileName The template fileName
 	 * @param array $variables The variables for the template
 	 * @param string $renderer The renderer to use for the template
+	 * @param string $renderContext The context for the renderer
 	 * @param string $encoding The encoding for the template
 	 * @return mixed
 	 */
@@ -245,29 +287,16 @@ class View implements IView {
 		string $fileName,
 		array $variables=null,
 		string $renderer = '',
+		string $renderContext = '',
 		string $encoding = ''
 	): mixed {
 		$result = null;
-		if( is_file($fileName) ){
-		  ob_start();
-		  if( is_array($variables) && !empty($variables) )
-			extract(
-			  $variables,
-			  EXTR_OVERWRITE
-			);
-		  $result = include($fileName);
-		  if( is_numeric($result) )
-			$result = ob_get_clean();
-		  else
-			ob_end_flush();
-		  
-		  if (class_exists($renderer)) {
+		if( file_exists($fileName)  ){
+		  if( class_exists($renderer) ){
 			$instance = new $renderer();
-			if (method_exists($instance, 'supports') && $instance->supports($result)) {
-				return $instance->render($result, $variables, $encoding);
-			}
+			return $instance->renderFile($fileName, $variables, $renderContext, $encoding);
 		  }
-		  return $result;
+		  throw new \RuntimeException("Unknown renderer {$renderer}");
 		}
 		throw new \RuntimeException("Missing file {$fileName}");
 		return $result;
@@ -291,6 +320,7 @@ class View implements IView {
 		  $path,
 		  $arguments,
 		  $renderer,
+		  RenderContext::LAYOUT,
 		  $encoding
 		);
 	}
@@ -315,6 +345,7 @@ class View implements IView {
 		  $path,
 		  $arguments,
 		  $renderer,
+		  RenderContext::TEMPLATE,
 		  $encoding
 		);
 	}
@@ -337,6 +368,7 @@ class View implements IView {
 		  $path,
 		  $arguments,
 		  $renderer,
+		  RenderContext::PARTIAL,
 		  $encoding
 		);
 	}

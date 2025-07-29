@@ -20,14 +20,18 @@ class JsonRenderer extends AbstractRenderer {
 	return is_array($template) || is_object($template);
   }
   
-  /**
-   * Renders a given source with provided variables
-   * If source is an array, the provided keys in variables are extracted from the source array.
-   * If source is not an array, the variables are encoded
-   *
-   * @return mixed
-   */
-  public function render(\mixed $source,array $variables,string $encoding=''): string {
+	/**
+	 * Renders a given source with provided variables
+	 * If source is an array, the provided keys in variables are extracted from the source array.
+	 * If source is not an array, the variables are encoded
+	 *
+	 * @param mixed $source The given source template text
+	 * @param array $variables The provided variables for this renderer
+	 * @param string $encoding The standard encoding for this renderer
+	 * @param string $renderContext the context of the renderer
+     * @return mixed
+     */
+  public function render(\mixed $source,array $variables,string $renderContext='',string $encoding=''): string {
     header("Content-Type: application/{$encoding};charset=utf-8");
     $fn = empty($encoding) ? $encoding : "{$encoding}_encode";
     

@@ -5,48 +5,81 @@ namespace Devworx;
 /**
  * The Autoloader class
  * Manages loading classes from different folders.
-  * Scans for folders in "devworx/Context"
+ * Scans for folders in "/KeyName::Contex"
  **/
 class Autoloader
 {
-	/**
-	 * @var string $root the root folder
-	 **/
-    protected static string $root;
-	
-	/**
-	 * @var string $context the context folder
-	 **/
-    protected static string $context;
-	
 	/**
 	 * @var array $contextMap the namespace map
 	 **/
     protected static array $contextMap = [];
 	
 	/**
-	 * initializes the autoloader
-	 *
-	 * @return void
+	 * @var array $classMap the class map
 	 **/
-    public static function initialize(): void
-    {
-		self::$root = $GLOBALS['DEVWORX']['PATH']['ROOT'];
-		self::$context = $GLOBALS['DEVWORX']['PATH']['CONTEXT'];
-		
-		self::addContext('Devworx');
-		$GLOBALS['DEVWORX']['CONTEXTS'] = self::scanContexts();
-    }
+    protected static array $classMap = [];
 	
-	public static function createContextMap(array $contexts): array {
-		return array_walk(
+	/**
+	 * Adds all contexts to the contextMap
+	 *
+	 * @param array $contexts the given contexts
+	 * @return bool
+	 **/
+	public static function createContextMap(array $contexts): bool {
+		return array_reduce(
 			$contexts,
-			fn($context)=>self::addContext($context)
+			function($acc, $context) {
+				$ok = self::addContext($context);
+				if (!$ok) 
+					trigger_error("Autoloader: Kontext $context konnte nicht hinzugefügt werden",E_USER_ERROR);
+				return $acc && $ok;
+			},
+			true
 		);
 	}
 	
-	public static function addContext(string $context): void {
-		self::$contextMap[$context] = implode('/',[ self::$context, ucfirst($context), 'Classes' ]);
+	/**
+	 * Adds a context to the contextMap
+	 *
+	 * @param string $context the given context
+	 * @param string $folder the context folder the namespace points to
+	 * @param bool $overwrite the flag to prevent overwriting
+	 * @return bool
+	 **/
+	public static function addContext(string $context, string $folder='', bool $overwrite=false): bool {
+		if( self::knownContext($context) && !$overwrite )
+			return false;
+		self::$contextMap[$context] = implode('/',[ 
+			Devworx::contextFolder(), 
+			ucfirst($context), 
+			empty($folder) ? Devworx::classesFolder() : $folder
+		]);
+		return true;
+	}
+	
+	/**
+	 * Adds an alias to the contextMap
+	 *
+	 * @param string $context the given context
+	 * @param string $folder the context folder the namespace points to
+	 * @param bool $overwrite the flag to prevent overwriting
+	 * @return bool
+	 **/
+	public static function addAlias(string $context, string $folder, bool $overwrite=false): bool {
+		if( self::knownContext($context) && !$overwrite )
+			return false;
+		self::$contextMap[$context] = implode('/',[ Devworx::contextFolder(), $folder ]);
+		return true;
+	}
+	
+	/**
+	 * Checks if a context exists in the contextMap
+	 *
+	 * @param string $context the given context
+	 * @return bool
+	 **/
+	public static function knownContext(string $context): bool {
+		return array_key_exists($context,self::$contextMap);
 	}
 	
 	/**
@@ -59,16 +92,56 @@ class Autoloader
 			self::$contextMap[$k] = $v;
 	}
 
-	public static function scanContexts():array{
-		$folder = self::$root . DIRECTORY_SEPARATOR . self::$context;
-        if (is_dir($folder)) {
-            return array_filter(
-				scandir($folder),
-				fn($dir)=>is_dir("$folder/$dir") && !( $dir === '.' || $dir === '..' )
-			);
-        }
-		throw new \Exception("Folder {$folder} not found in Autoloader::scanContexts");
-		return [];
+	/**
+	 * generates a filename to the php class file
+	 *
+	 * @return string $result the full file path in the Context-Folder
+	 **/
+	public static function fileName(string $context,string $name): string {
+		return implode(DIRECTORY_SEPARATOR,[
+			Devworx::privatePath(),
+			self::$contextMap[$context],
+			str_replace('\\',DIRECTORY_SEPARATOR,$name) . '.php'
+		]);
+	}
+
+	/**
+	 * checks if a $context $name pair is loadable
+	 *
+	 * @param string $context the given context
+	 * @param string $name the given class name without namespace
+	 * @param string $file gives out the file name
+	 * @param string $class gives out the FQCN
+	 *
+	 * @return bool $result the combination can be loaded
+	 **/
+	public static function loadable(string $context, string $name, string &$file=null, string &$class=null): bool {
+		$file = self::fileName($context,$name);
+		$class = "\\{$context}\\{$name}";
+		return self::knownContext($context) && file_exists($file);
+	}
+	
+	/**
+	 * trys to load a $context $name pair, registers loaded classes in the classMap
+	 * loads file if context is known and file exists
+	 *
+	 * @param string $context the given context
+	 * @param string $name the given class name without namespace
+	 * @param string $file gives out the file name
+	 * @param string $class gives out the FQCN
+	 *
+	 * @return bool $result the class exists
+	 **/
+	public static function try(string $context, string $name, ?string &$file=null, ?string &$class=null): bool {
+		if( self::loadable( $context, $name, $file, $class ) ){
+			require_once($file);
+			if( class_exists($class,false) ){
+				self::$classMap[ $class ] = $file;
+				return true;
+			}
+			return false;
+		}
+		return false;
 	}
 
 	/**
@@ -79,31 +152,33 @@ class Autoloader
 	 **/
     public static function load(string $className): bool
     {
-        $className = ltrim($className, '\\');
-        $parts = explode('\\', $className);
+		if( empty($className) )
+			return false;
+		
+		$className = ltrim($className, '\\');
+        $name = explode('\\', $className);
+		$context = array_shift($name);
+		$name = implode('\\',$name);
+		
+		if( empty($context) )
+			return false;
 
-        if (count($parts) < 2) return false;
-
-        $context = array_shift($parts);
-        if (!isset(self::$contextMap[$context])){
-			throw new \Exception("Context {$context} not found in Autoloader::contextMap");
+		if( empty($name) ){
+			if( self::try( Devworx::context(), $context ) ){
+				return true;
+			}
+			if( self::try( Devworx::framework(), $context ) ){
+				return true;
+			}
+			trigger_error("Autoloader: $className not found in current context nor framework",E_USER_ERROR);
 			return false;
 		}
 		
-		$relativePath = implode(DIRECTORY_SEPARATOR, $parts) . '.php';
-        $basePath = self::$contextMap[$context];
-        $fullPath = $GLOBALS['DEVWORX']['PATH']['ROOT'] . DIRECTORY_SEPARATOR . $basePath . DIRECTORY_SEPARATOR . $relativePath;
-
-		if (file_exists($fullPath)) {
-            require_once $fullPath;
-            return true;
-        }
-
-        //throw new \Exception("Autoloader: $className not found in path $fullPath");
-        return false;
+        return self::try( $context, $name );
     }
 	
 	public static function loadCachedContextMap(){
+		//not used atm. Overkill?
 		foreach( \Devworx\Caches::get('Class')->all() as $k => $v )
 			self::$contextMap[$k] = $v;
 	}

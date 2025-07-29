@@ -28,7 +28,7 @@ final class RepositoryCache extends AbstractFileCache {
 		
 		return $this->set(
 			$context,
-			Database::repository($more[0]),
+			Database::repository($more[0],$context),
 			$more[0]
 		);
 	}

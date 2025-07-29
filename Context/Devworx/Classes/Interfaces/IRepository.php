@@ -33,7 +33,7 @@ interface IRepository {
 	public function findOneBy(string $key,$value,string $fields='*'): array|object|null;
 	public function filter(array $filter,string $fields='*',string $order='',int $offset=0,int $limit=0): array;
 	
-	public function findByUid($uid,string $fields='*'): array|object;
+	public function findByUid($uid,string $fields='*'): array|object|bool;
 	public function add(array $data): int;
 	public function addAll(array $rows): array;
 	

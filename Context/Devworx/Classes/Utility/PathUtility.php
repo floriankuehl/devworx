@@ -2,8 +2,10 @@
 
 namespace Devworx\Utility;
 
-use \Devworx\Frontend;
-use \Devworx\Configuration;
+use Devworx\Frontend;
+use Devworx\Devworx;
+use Devworx\Enums\KeyName;
+use Devworx\Configuration;
 
 class PathUtility {
 	
@@ -18,7 +20,7 @@ class PathUtility {
 	public static function build(string $rootKey,...$segments){
 		$segments = array_map(fn($s)=>trim($s,self::PATHGLUE),$segments);
 			return implode(self::PATHGLUE,[
-			$GLOBALS['DEVWORX']['PATH'][$rootKey],
+			Devworx::path($rootKey),
 			...$segments
 		]);
 	}
@@ -30,7 +32,7 @@ class PathUtility {
 	 * @return string
 	 */
 	public static function private(...$segments): string {
-		return self::build('ROOT',...$segments);
+		return self::build( KeyName::Private->value,...$segments);
 	}
 	
 	/**
@@ -50,7 +52,7 @@ class PathUtility {
 	 * @return string
 	 */
 	public static function public(...$segments): string {
-		return self::build('PUBLIC',...$segments);
+		return self::build( KeyName::Public->value,...$segments);
 	}
 	
 	/**
@@ -119,7 +121,7 @@ class PathUtility {
 	*/
 	public static function context(string $context,...$segments): string {
 		return self::private( 
-			$GLOBALS['DEVWORX']['PATH']['CONTEXT'], 
+			Devworx::contextFolder(), 
 			ucfirst($context), 
 			...$segments 
 		);
@@ -133,7 +135,7 @@ class PathUtility {
 	 * @return string
 	 */
 	public static function resource(string $context,...$segments): string {
-		return '/' . self::public( 'resources', strtolower($context), ...$segments);
+		return '/' . self::public( strtolower( Devworx::resourceFolder() ), strtolower($context), ...$segments);
 	}
 	
 	/**
@@ -144,7 +146,7 @@ class PathUtility {
 	 */
 	public static function cache(...$segments): string {
 		return self::private( 
-			$GLOBALS['DEVWORX']['PATH']['CACHE'], 
+			Devworx::cacheFolder(), 
 			...$segments
 		);
 	}
@@ -158,32 +160,11 @@ class PathUtility {
 	public static function configuration(string $context,...$segments): string {
 		return self::context( 
 			$context,
-			$GLOBALS['DEVWORX']['PATH']['CONFIG'],
+			Devworx::configurationFolder(),
 			...$segments
 		);
 	}
 
-	/**
-	 * Returns a URL for a controller action with optional GET-arguments
-	 *
-	 * @param string $controller The controller name
-	 * @param string $action The action name
-	 * @param array|null $arguments The additional arguments
-	 * @param string|null $anchor The optional anchor of the url
-	 * @return string
-	 */
-	public static function action(string $controller,string $action,array $arguments=null,string $anchor=null): string {
-		$formData = ArrayUtility::combine(
-			[
-				Configuration::get('system','controllerArgument') => $controller,
-				Configuration::get('system','actionArgument') => $action
-			],
-			$arguments
-		);
-		return "?" . http_build_query($formData) . ( is_null($anchor) ? '' : "#{$anchor}" );
-	}
-	
-	
 	/**
 	 * Generates a context based path
 	 *
@@ -191,7 +172,7 @@ class PathUtility {
 	 * @return string
 	 */
 	public static function currentContext(...$segments): string {
-		return self::context( $GLOBALS['DEVWORX']['CONTEXT'], ...$segments );
+		return self::context( Devworx::context(), ...$segments );
 	}
   
 	/**
@@ -201,7 +182,7 @@ class PathUtility {
 	 * @return string
 	 */
 	public static function currentResource(...$segments): string {
-		return self::resource( $GLOBALS['DEVWORX']['CONTEXT'],...$segments);
+		return self::resource( Devworx::context(),...$segments);
 	}
 	
 	/**
@@ -235,5 +216,25 @@ class PathUtility {
 	 */
 	public static function currentConfig(array $path,...$segments): string {
 		return self::currentContext( Configuration::get(...$path), ...$segments );
+	}
+	
+	/**
+	 * Returns a URL for a controller action with optional GET-arguments
+	 *
+	 * @param string $controller The controller name
+	 * @param string $action The action name
+	 * @param array|null $arguments The additional arguments
+	 * @param string|null $anchor The optional anchor of the url
+	 * @return string
+	 */
+	public static function action(string $controller,string $action,array $arguments=null,string $anchor=null): string {
+		$formData = ArrayUtility::combine(
+			[
+				Configuration::get('system','controllerArgument') => $controller,
+				Configuration::get('system','actionArgument') => $action
+			],
+			$arguments
+		);
+		return "?" . http_build_query($formData) . ( is_null($anchor) ? '' : "#{$anchor}" );
 	}
 }

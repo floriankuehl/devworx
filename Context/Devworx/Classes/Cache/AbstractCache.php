@@ -3,7 +3,8 @@
 namespace Devworx\Cache;
 
 use \Devworx\Interfaces\ICache;
-use \Devworx\Context;
+use \Devworx\Devworx;
+
 
 abstract class AbstractCache implements ICache {
 	
@@ -127,7 +128,7 @@ abstract class AbstractCache implements ICache {
 	function initialize(string $context,...$more): bool {
 		if( empty($context) ){
 			$result = true;
-			foreach( Context::contexts() as $ctx ){
+			foreach( Devworx::contexts() as $ctx ){
 				if( $this->needsUpdate($ctx,...$more) )
 					$result = $result && $this->create($ctx,...$more);
 			}

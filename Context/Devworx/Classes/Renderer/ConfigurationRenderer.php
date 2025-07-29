@@ -140,9 +140,10 @@ class ConfigurationRenderer extends AbstractRenderer {
    * @param mixed $source The configuration data
    * @param array $variables The variables to provide while rendering
    * @param string $encoding The standard encoding for the renderer
+   * @param string $renderContext the context of the renderer
    * @return mixed
    */
-  public function render(mixed $source,array $variables=null,string $encoding=''): mixed {
+  public function render(mixed $source,array $variables=null,string $renderContext='',string $encoding=''): mixed {
     if( is_array($source) ){
       foreach( $source as $key => $value ){
         if( is_array($value) ){

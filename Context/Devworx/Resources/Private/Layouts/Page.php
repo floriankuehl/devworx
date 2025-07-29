@@ -14,10 +14,10 @@
   <body>
     <devworx-app>
 	<?php 
-		if( \Devworx\Frontend::isActiveLogin() ){
-		  echo \Devworx\View::Partial('Navigation',[
-			'controller' => $controller,
-			'action' => $action
+		if( Devworx\Frontend::isActiveLogin() ){
+		  echo Devworx\View::Partial('Navigation',[
+			'controller' => Devworx\Configuration::get('context','controller'),
+			'action' => Devworx\Configuration::get('context','action')
 		  ]);
 		} 
 	?>

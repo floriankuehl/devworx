@@ -1,7 +1,9 @@
 .debugger {
   padding: 1rem;
   border: 1px solid #aaa;
-  
+  display:flex;
+  flex-direction:column;
+  width: 100%;
   background: #efefef;
 }
 
@@ -15,6 +17,7 @@
   margin:0 !important;
   max-height: 100%;
   overflow:auto;
+  color: #666 !important;
 }
 
 .debugger [data-type="trace"] {

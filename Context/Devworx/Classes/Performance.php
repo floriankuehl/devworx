@@ -34,6 +34,7 @@ class Performance {
 		
 		$dump = [];
 		$total = 0;
+		
 		foreach( self::$cache->all() as $context => $list ){
 			$spans = array_map(
 				fn($row) => isset($row[1]) ? $row[1] - $row[0] : 0,
@@ -48,6 +49,8 @@ class Performance {
 			];
 			$total += $contextTotal;
 		}
+		
+		ksort($dump);
 		
 		return FileUtility::setJson($fileName,[
 			'data' => $dump,

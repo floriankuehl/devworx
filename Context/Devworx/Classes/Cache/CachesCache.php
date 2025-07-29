@@ -2,7 +2,7 @@
 
 namespace Devworx\Cache;
 
-use \Devworx\Context;
+use \Devworx\Devworx;
 use \Devworx\Cache\AbstractCache;
 use \Devworx\Utility\PathUtility;
 use \Devworx\Utility\FileUtility;
@@ -16,7 +16,7 @@ class CachesCache extends AbstractFileCache {
 	}
 	
 	function file(string $context,...$more):string {
-		$context = strtolower( $context === '' ? Context::get() : $context );
+		$context = strtolower( $context === '' ? Devworx::context() : $context );
 		return "{$this->folder}/{$context}.json";
 	}
 	
@@ -24,9 +24,9 @@ class CachesCache extends AbstractFileCache {
 		$file = $this->file($context,...$more);
 		if( file_exists( $file ) ) return true;
 
-		$config = PathUtility::configuration(Context::framework(),$this->id().'.json');
+		$config = PathUtility::configuration(Devworx::framework(),$this->id().'.json');
 		
-		if( empty($context) || ( $context === Context::framework() ) )
+		if( empty($context) || ( $context === Devworx::framework() ) )
 			return FileUtility::set($file,FileUtility::get($config));
 		
 		$data = file_exists($config) ? FileUtility::getJson($config) : [];
@@ -41,7 +41,7 @@ class CachesCache extends AbstractFileCache {
 	}
 	
 	function all(string $context): \Traversable {
-		if( empty($context) ) $context = Context::framework();
+		if( empty($context) ) $context = Devworx::framework();
 		return new \ArrayIterator( $this->get($context) );
 	}
 	

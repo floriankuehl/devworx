@@ -4,7 +4,7 @@ namespace Development\Controller;
 
 use \Devworx\Database;
 use \Devworx\Frontend;
-use \Devworx\Context;
+use \Devworx\Devworx;
 use \Devworx\Configuration;
 use \Devworx\Redirect;
 use \Devworx\Utility\PathUtility;
@@ -97,10 +97,10 @@ class ModelController extends \Devworx\Controller\AbstractController {
 	
 	protected function getInfo(string $context,string $table,bool $schema=true){
 		
-		$controllerFolder = PathUtility::context( $context, 'Classes', 'Controller' );
-		$modelFolder = PathUtility::context( $context, 'Classes', 'Models' );
-		$repositoryFolder = PathUtility::context( $context, 'Classes', 'Repository' );
-		$templateFolder = PathUtility::context( $context, 'Resources', 'Templates' );
+		$controllerFolder = PathUtility::context( $context, 'Classes', Devworx::controllerFolder() );
+		$modelFolder = PathUtility::context( $context, 'Classes', Devworx::modelFolder() );
+		$repositoryFolder = PathUtility::context( $context, 'Classes', Devworx::repositoryFolder() );
+		$templateFolder = PathUtility::context( $context, 'Resources', 'Private', 'Templates' );
 		
 		$hasController = is_dir($controllerFolder);
 		$hasModel = is_dir($modelFolder);
@@ -111,11 +111,13 @@ class ModelController extends \Devworx\Controller\AbstractController {
 		$controllerClass = "{$modelClass}Controller";
 		$repositoryClass = "{$modelClass}Repository";
 		
+		
+		
 		return [
 			'name' => $table,
 			'model' => $hasModel ? $this->getExistence([
 				'short' => $modelClass,
-				'class' => "{$context}\\Models\\{$modelClass}",
+				'class' => "{$context}\\Model\\{$modelClass}",
 				'file' => "{$modelFolder}/{$modelClass}.php",
 			]) : false,
 			'controller' => $hasController ? $this->getExistence([
@@ -268,7 +270,7 @@ class ModelController extends \Devworx\Controller\AbstractController {
 		$names = Database::tables();
 		
 		$tables = [];
-		foreach( Context::contexts() as $context ){
+		foreach( Devworx::contexts() as $context ){
 			foreach( $names as $name ){
 				$tables[$context][$name] = $this->checkTable($context,$name,[],$create);
 			}
@@ -279,6 +281,7 @@ class ModelController extends \Devworx\Controller\AbstractController {
 	public function schemaAction(){
 		
 		$this->setBlockLayout(true);
+		$this->setBlockRendering(true);
 		
 		$create = false;		
 		if( $this->request->hasArgument('table') ){
@@ -290,13 +293,15 @@ class ModelController extends \Devworx\Controller\AbstractController {
 		} else
 			$list = Database::tables();
 		
-		$context = $this->request->getArgument('context') ?? Context::get();
+		$context = $this->request->getArgument('context') ?? Devworx::context();
 		
 		$tables = [];
 		foreach( $list as $table ){
 			$tables[$table] = $this->checkTable($context,$table,[],$create);
 		}
-		$this->view->assign('tables', $tables);
+		
+		echo json_encode($tables,JSON_PRETTY_PRINT);
+		//$this->view->assign('tables', $tables);
 	}
 	
 	public function checkAction(){
@@ -307,7 +312,7 @@ class ModelController extends \Devworx\Controller\AbstractController {
 			return;
 		
 		$create = false;
-		foreach( Context::contexts() as $context ){
+		foreach( Devworx::contexts() as $context ){
 			foreach( $input as $table => $schema ){
 				$input[$context][$table] = $this->checkTable($context,$tableName,$schema,$create);
 			}

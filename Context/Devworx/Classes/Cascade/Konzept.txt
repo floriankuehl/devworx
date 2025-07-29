@@ -1,0 +1,81 @@
+Ich möchte folgendes:
+
+Es gibt zwei Schreibweisen der Syntax, einmal in Inline-Form und einmal in HTML Form.
+Grundsätzlich soll es ein "Grundvokabular" geben, bestehend aus rudimentären Bausteinen wie Variablen-Deklaration und -Zugriff, Conditions, Schleifen und Switch-Anweisungen.
+Das Grundvokabular kann dann noch durch weitere ViewHelper oder NodeTypes erweitert werden.
+
+Inline-Form:
+- Variablenzugriff: 
+	Einfach: {user}
+	Properties oder assoziative Keys: {user.name}
+	Array-Index: {users.0.name}
+
+- Variablendeklaration: 
+	Assoziative Arrays: {name:'Alex',isAdmin:true}
+	Lineare Arrays: {0: 'foo', 1: 'bar'}
+	Einzelwerte: {set(value:123.45,name:'stair')}
+
+- Bedingungen: 
+	ternary conditions: {user.isAdmin ? 'Admin' : 'User'}
+	mit optionalem then oder else: {if(condition:user.isAdmin,then:'foo',else:'bar')}
+	mit Body (z.B. in einer Section oder einem Partial):
+		{if(condition:'{user.age} > 18')}
+			{'adult' -> set(name:'term')}
+		{else if(codition:'{user.age} > 12')}
+			{'teenage' -> set(name:'term')}
+		{else}
+			{'kid' -> set(name:'term')}
+		{endIf}
+		{if(condition:user.isAdmin)}
+			{'Admin' -> set(name:'role')}
+		{else}
+			{'User' -> set(name:'role')}
+		{endIf}
+		<p>You are {role} and {user.age} years old, so that means you are {term}.</p>
+		
+- Methodenaufrufe: 
+	- Aufruf ohne Parameter: {user.render}
+	- Aufruf mit benannten Parametern: {user.render(template:'MyTemplate')}
+	
+
+
+- Mathematische Funktionen wie: {(1900 + user.age) / 2}
+
+- ViewHelper: 
+	- Ohne namespace (oder mit System-Namespace): {link.profile(label:"Profile",user:{user:user.id})}
+	- Mit namespace: {f:format.number(value: user.age, decimals:2)}
+	- Default-Argument für ViewHelper ermöglichen, um direktes Piping von Eingangswerten zu ermöglichen
+	- Klassifizierug nach:
+		- ViewHelper: Für allgemeine ViewHelper, "render"-Funktion wird bei Aufruf getriggert.
+		Beispiel: 	
+			{123.45 -> sqrt() -> f:format.number(decimals:2) -> set(name:'heaven')} 
+			wird zu: einer im Template verfügbaren Variable mit dem Namen "heaven" mit dem Wert 11.11
+		- TagBasedViewHelper: Für HTML-basierte ViewHelper wie "link"
+		Beispiel: {"Profile" -> link.profile(user:user.id)} wird zu <a href="user/profile?user={user.id}">Profile</a>
+
+- Loops:
+		{for(each:users,as:'user',iteration:i}
+			<link.profile user="{user.uid}">
+				<figure>
+					<img src="{user.image}">
+					<figcaption>{user.name}</figcaption>
+				</figure>
+			</link.profile>
+		{endFor}
+
+- Piping: 
+	- Funktions- und ViewHelper-Rückgaben : {user.render -> f:format.html() -> explode(delimiter:"\n")}
+	- Variablen: {user -> {id:0,name:"",isAdmin:false} -> render(partial:'User/Profile')}
+		Anmerkung: die Werte von {user} werden hier dem nächsten Array hinzugefügt, also überschrieben.
+	- Bedingungen: {user.isAdmin -> if(then:'Admin',else:'User')}
+	- Loops: {for(each:users,as:'user') -> f:render(section:'quicklink')}
+
+HTML-Form:
+- Bedingungen wie: <if condition="{user.isAdmin}"><then>Hello Admin {user.name}</then>User<else></if>
+- Loops wie: <for each="{users}" as="user" iteration="it"><li>{user.isAdmin ? 'Admin' : 'User'} {it.cycle}: {user.name}</li></for>
+- ViewHelper wie: <link.route route="user.profile">Profile</link.route>
+- ViewHelper mit Namespace wie: <f:format.number decimals="2"></f:format.number>
+
+Caching:
+Damit das Ganze performant bleibt, sollen die Nodes in raw PHP Funktionen umgewandelt werden, die dann in einem Cache gespeichert werden sollen.
+

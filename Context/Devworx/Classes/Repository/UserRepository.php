@@ -7,7 +7,7 @@ class UserRepository extends AbstractRepository {
 		parent::__construct([
 			'table' => 'user',
 			'pk' => 'uid',
-			'mapResult' => \Devworx\Models\User::class
+			'mapResult' => \Devworx\Model\User::class
 		]);
 	}
 }

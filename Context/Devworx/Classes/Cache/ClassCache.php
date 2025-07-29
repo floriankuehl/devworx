@@ -2,7 +2,7 @@
 
 namespace Devworx\Cache;
 
-use \Devworx\Context;
+use \Devworx\Devworx;
 use \Devworx\Cache\AbstractVariableCache;
 use \Devworx\Utility\PathUtility;
 use \Devworx\Utility\FileUtility;
@@ -17,11 +17,11 @@ class ClassCache extends AbstractVariableCache {
 	function create(string $context,...$more): bool {
 		if( empty($context) ){
 			$result = true;
-			foreach( Context::contexts() as $ctx )
+			foreach( Devworx::contexts() as $ctx )
 				$result = $result && $this->create($ctx,...$more);
 			return $result;
 		}
-		$folder = Context::folder();
+		$folder = Devworx::contextFolder();
 		return $this->set($context,"{$folder}/{$context}/Classes");
 	}
 	

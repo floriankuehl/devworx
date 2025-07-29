@@ -202,9 +202,10 @@ class FluidRenderer extends AbstractRenderer {
 	 * @param mixed $source The given source template text
 	 * @param array $variables The provided variables for this renderer
 	 * @param string $encoding The standard encoding for this renderer
+	 * @param string $renderContext the context of the renderer
 	 * @return string
 	 */
-	public function render(mixed $template,array $variables,string $encoding=''): string {
+	public function render(mixed $template,array $variables,string $renderContext='',string $encoding=''): string {
 		if (is_string($template) && str_contains($template, '{')) {
 			$keys = self::extractVariables($template);
 			if (is_null($keys)) return $template;

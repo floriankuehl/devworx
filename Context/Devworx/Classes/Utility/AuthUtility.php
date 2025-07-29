@@ -4,7 +4,7 @@ namespace Devworx\Utility;
 
 use \Devworx\Frontend;
 use \Devworx\Database;
-use \Devworx\Context;
+use \Devworx\Devworx;
 use \Api\Utility\ApiUtility;
 
 class AuthUtility {
@@ -65,7 +65,7 @@ class AuthUtility {
 	 * @return string|null
 	 */
 	public static function getStoredHash(): ?string {
-		return Context::is('Api') ? 
+		return Devworx::isContext('Api') ? 
 		ApiUtility::getKey() : 
 		CookieUtility::get();
 	}

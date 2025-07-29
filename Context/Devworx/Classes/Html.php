@@ -2,7 +2,7 @@
 
 namespace Devworx;
 
-use \Devworx\Models\AbstractModel;
+use \Devworx\Model\AbstractModel;
 
 /**
  * A HTML helper class

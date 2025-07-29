@@ -2,14 +2,15 @@
 
 namespace Devworx;
 
-use \Devworx\Configuration;
-use \Devworx\Utility\ArrayUtility;
-use \Devworx\Utility\CookieUtility;
-use \Devworx\Utility\StringUtility;
-use \Devworx\Utility\PathUtility;
-use \Devworx\Utility\DebugUtility;
-
-use \Devworx\Controller\AbstractController;
+use Devworx\Configuration;
+use Devworx\Utility\ArrayUtility;
+use Devworx\Utility\CookieUtility;
+use Devworx\Utility\StringUtility;
+use Devworx\Utility\PathUtility;
+use Devworx\Utility\GeneralUtility;
+use Devworx\Utility\DebugUtility;
+use Devworx\Enums\KeyName;
+use Devworx\Controller\AbstractController;
 
 /**
  * The main frontend class, that handles the basics of every requested page.
@@ -161,22 +162,20 @@ class Frontend {
 		
 		Performance::start(__METHOD__);
 		
-		$controller = ucfirst(Configuration::get('context','controller'));
-
-		$context = empty($context) ? Context::get() : $context;
-		$className = "{$context}\\Controller\\{$controller}Controller";
-
-		if( class_exists($className) ){
-			$instance = new $className();
-			$instance->initialize();
+		$instance = GeneralUtility::make(
+			Devworx::controllerFolder(),
+			Configuration::get('context','controller'),
+			$context
+		);
+				
+		if( $instance === null ){
 			Performance::stop(__METHOD__);
 			return $instance;
-		} else {
-			Performance::stop(__METHOD__);
-			throw new \Exception("Controller $className not found!<br>");
 		}
+		
+		$instance->initialize();
 		Performance::stop(__METHOD__);
-		return null;
+		return $instance;
 	}
 	
 	/**
@@ -201,7 +200,7 @@ class Frontend {
 	public static function processControllerAction(): ?AbstractController {
 		Performance::start(__METHOD__);
 		$instance = self::loadController();
-		if( is_null( $instance ) ){
+		if( $instance === null ){
 			Performance::stop(__METHOD__);
 			return $instance;
 		}
@@ -224,7 +223,7 @@ class Frontend {
 		if( Context::load() ){
 			$userOnline = self::isActiveLogin();
 			$publicAction = self::isPublicControllerAction();
-			$isApiCall = Context::is('Api') && $userOnline;
+			$isApiCall = Devworx::isContext('Api') && $userOnline;
 
 			if( !( self::isDefaultAction() || $publicAction || $userOnline || $isApiCall ) ){
 				Performance::stop(__METHOD__);
@@ -238,10 +237,11 @@ class Frontend {
 			$ctrl = self::processControllerAction();
 			if( is_null($ctrl) ){
 				Performance::stop(__METHOD__);
-				throw new \Exception("unknown controller {$context}\\Controller\\" . Configuration::get('context','controller'));
+				$context = Devworx::context();
+				trigger_error("unknown controller {$context}\\Controller\\" . Configuration::get('context','controller'),E_USER_ERROR);
 				return '';
 			}
-
+			
 			if( $ctrl->getBlockRendering() ){
 				Performance::stop(__METHOD__);
 				return '';
@@ -268,41 +268,25 @@ class Frontend {
 	}
 	
 	/**
-	 * Initializes the Autoloader, Database and Caches, is called in devworx.php
-	 *
+	 * Initializes the Autoloader, Database and Caches, is called after setting the globals in devworx.php
+	 * 
 	 * @return void
 	 */
 	public static function initialize(): void {
 		
-		require_once("../Context/Devworx/Classes/Autoloader.php");
-		
-		Autoloader::initialize();
-		spl_autoload_register([Autoloader::class,'load'], true, true);
-		set_exception_handler( [ Utility\DebugUtility::class, 'exception' ] );
-		
 		Performance::initialize(__METHOD__);
 		
-		/*
-		Services::set('db', fn() => Database::class);
-		Services::set('devworx.cfg', fn() => $GLOBALS['DEVWORX']['CFG']);
-		Services::set('devworx.path', fn() => $GLOBALS['DEVWORX']['PATH']);
-		Services::set('contexts', fn() => $GLOBALS['DEVWORX']['CONTEXT']);
-		Services::set('autoloader', fn() => Autoloader::class);
-		Services::set('cache', fn() => Caches::class);
-		Services::set('debugger', fn() => \Devworx\Utility\DebugUtility::class);
-		*/
+		Performance::start('Database');
+		Database::initialize(...Devworx::get( KeyName::Database ));
+		Performance::stop('Database');
 		
-		Performance::start(__METHOD__.'::Database');
-		Database::initialize(...$GLOBALS['DEVWORX']['DB']);
-		Performance::stop(__METHOD__.'::Database');
-		
-		Performance::start(__METHOD__.'::Caches');
+		Performance::start('Caches');
 		Caches::initialize();
-		Performance::stop(__METHOD__.'::Caches');
+		Performance::stop('Caches');
 		
-		Performance::start(__METHOD__.'::ContextMap');
-		Autoloader::loadCachedContextMap();
-		Performance::stop(__METHOD__.'::ContextMap');
+		//Performance::start('ContextMap');
+		//Autoloader::loadCachedContextMap();
+		//Performance::stop('ContextMap');
 		
 		Performance::stop(__METHOD__);
 		// Optional: OPCache Precompile Tool aktivieren

@@ -2,10 +2,12 @@
 
 namespace Devworx;
 
+use \Devworx\Devworx;
 use \Devworx\Frontend;
 use \Devworx\Configuration;
 use \Devworx\Performance;
 
+use \Devworx\Utility\ArrayUtility;
 use \Devworx\Utility\AuthUtility;
 use \Devworx\Utility\SessionUtility;
 use \Devworx\Utility\ApiUtility;
@@ -21,116 +23,6 @@ class Context {
 		'Pragma' => ['head','metaHttpEquiv','Pragma'],
 		'Expires' => ['head','metaHttpEquiv','Expires']
 	];
-	
-	/**
-	 * Gets the global framework variable
-	 *
-	 * @return string
-	 */
-	public static function framework(): string {
-		return $GLOBALS['DEVWORX']['FRAMEWORK'];
-	}
-	
-	/**
-	 * Gets the global context variable
-	 *
-	 * @return string
-	 */	
-	public static function get(): string {
-		return $GLOBALS['DEVWORX']['CONTEXT'];
-	}
-	
-	/**
-	 * Sets the global context variable
-	 *
-	 * @param string $context the new context
-	 * @return void
-	 */	
-	public static function set(string $context): void {
-		$GLOBALS['DEVWORX']['CONTEXT'] = $context;
-	}
-	
-	/**
-	 * Checks if the program runs in a specific context
-	 *
-	 * @param string $context the context to check against
-	 * @return bool
-	 */
-	public static function is(string $context): bool{
-		return self::get() === $context;
-	}
-	
-	/**
-	 * Checks if the program context is known
-	 *
-	 * @param string $context The context key to check
-	 * @return bool
-	 */
-	public static function known(string $context): bool {
-		return in_array($context,self::contexts());
-	}
-	
-	/**
-	 * Gets the global contexts list
-	 *
-	 * @return array
-	 */	
-	public static function contexts(): array {
-		return $GLOBALS['DEVWORX']['CONTEXTS'];
-	}
-	
-	/**
-	 * Sets the global contexts list
-	 *
-	 * @param array $contexts the list to set
-	 * @return void
-	 */	
-	public static function setContexts(array $contexts): void {
-		$GLOBALS['DEVWORX']['CONTEXTS'] = $contexts;
-	}
-	
-	/**
-	 * Retrieves the current context with fallback to the framework name
-	 *
-	 * @return string
-	 */
-	public static function read(): string {
-		$headers = getallheaders();
-		$header = $GLOBALS['DEVWORX']['CFG']['CONTEXT_HEADER'];
-		$server = $GLOBALS['DEVWORX']['CFG']['CONTEXT_SERVER'];
-		return $headers[$header] ?? 
-			$_SERVER[$server] ?? 
-			$GLOBALS['DEVWORX']['CONTEXT'] ??
-			$GLOBALS['DEVWORX']['FRAMEWORK'];
-	}
-	
-	
-	/**
-	 * Gets the context folder name
-	 *
-	 * @return string
-	 */	
-	public static function folder(): string {
-		return $GLOBALS['DEVWORX']['PATH']['CONTEXT'];
-	}
-	
-	/**
-	 * Gets the context header key
-	 *
-	 * @return string
-	 */	
-	public static function headerKey(): string {
-		return $GLOBALS['DEVWORX']['CFG']['CONTEXT_HEADER'];
-	}
-	
-	/**
-	 * Gets the context server key
-	 *
-	 * @return string
-	 */	
-	public static function serverKey(): string {
-		return $GLOBALS['DEVWORX']['CFG']['CONTEXT_SERVER'];
-	}
 	
 	/**
 	 * Sets a header key-value-pair
@@ -151,19 +43,22 @@ class Context {
 		
 		Performance::start(__METHOD__);
 		
-		$context = ucfirst( empty($context) ? self::read() : $context );
-		if( !self::known($context) ){
+		$context = ucfirst( empty($context) ? Devworx::scanContext() : $context );
+		if( !Devworx::knownContext($context) ){
 			Performance::stop(__METHOD__);
-			throw new \Exception("unknown context {$context}");
+			
+			echo \Devworx\Utility\DebugUtility::var_dump(Devworx::contexts());
+			
+			trigger_error("unknown context {$context}",E_USER_ERROR);
 			return false;
 		}
 		
-		self::set($context);
+		Devworx::setContext($context);
 		
 		Performance::start(__METHOD__.'::Configuration::init');
 		if( !Configuration::initialize($context) ){
 			Performance::stop(__METHOD__.'::Configuration');
-			throw new \Exception("unable to initialize configuration for {$context}");
+			trigger_error("unable to initialize configuration for {$context}",E_USER_ERROR);
 			return false;
 		}
 		Performance::stop(__METHOD__.'::Configuration::init');
@@ -180,10 +75,10 @@ class Context {
 			if( $value === null ) continue;
 			self::setHeader($key, $value);
 		}
-		self::setHeader( self::headerKey(), self::get() );
+		self::setHeader( Devworx::headerKey(), Devworx::context() );
 		Performance::stop(__METHOD__.'::Headers');
 
-		if( self::is('Api') ){
+		if( Devworx::isContext('Api') ){
 			self::$encoding = 'json';
 			
 			Performance::start(__METHOD__.'::Api');
@@ -194,7 +89,7 @@ class Context {
 			return true;
 		}
 
-		if( self::is('Documentation') ){
+		if( Devworx::isContext('Documentation') ){
 			Performance::stop(__METHOD__);
 			return true;
 		}

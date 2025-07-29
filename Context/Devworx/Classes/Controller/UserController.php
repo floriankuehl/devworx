@@ -11,7 +11,7 @@ use \Devworx\Utility\ModelUtility;
 use \Devworx\Utility\ArrayUtility;
 
 use \Devworx\Repository\UserRepository;
-use \Devworx\Models\User;
+use \Devworx\Model\User;
 
 class UserController extends \Devworx\Controller\AbstractController {
     

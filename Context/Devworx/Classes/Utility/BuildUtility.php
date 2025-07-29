@@ -4,6 +4,7 @@ namespace Devworx\Utility;
 
 use \Devworx\Database;
 use \Devworx\Caches;
+use \Devworx\Devworx;
 use \Devworx\Repository\AbstractRepository;
 use \Devworx\Models\AbstractModel;
 use \ReflectionClass;
@@ -234,17 +235,21 @@ class BuildUtility {
 		];
 		$functionsBlock = implode("\n{$indent}",$functions);
 		
+		$framework = ucfirst( Devworx::framework() );
+		$repository = ucfirst( Devworx::repositoryFolder() );
+		$model = ucfirst( Devworx::modelFolder() );
+		
 		return implode(PHP_EOL, [
 			'<?php',
 			'',
-			"namespace {$namespace}\\Repository;",
+			"namespace {$namespace}\\{$repository};",
 			'',
-			"use \\Devworx\\Repository\\AbstractRepository;",
-			"use {$namespace}\\Models\\{$modelClass};",
+			"use \\{$framework}\\{$repository}\\Abstract{$repository};",
+			"use {$namespace}\\{$model}\\{$modelClass};",
 			'',
-			self::Comment('', "Repository for table {$table}", "Represents an interface to {$table} models"),
+			self::Comment('', "{$repository} for table {$table}", "Represents an interface to {$table} models"),
 			'',
-			"class {$modelClass}Repository extends AbstractRepository",
+			"class {$modelClass}{$repository} extends Abstract{$repository}",
 			'{',
 			"{$indent}{$functionsBlock}",
 			'}',
@@ -257,68 +262,60 @@ class BuildUtility {
 		string $name,
 		bool $json,
 		string $table,
-		string $pk='uid',
-		string $indent="\t"
-	){
-		$result = [];
-		switch( $name ){
-			case'list':{
-				$result = [
-					( $json ? '$this->setBlockLayout(true)' : '' ),
-					"{$indent}" . '$list = $this->repository->findAll();',
-					"{$indent}" . '$this->view->assign("list",$list);'
-				];
-			}break;
-			case'show':{
-				$result = [
-					( $json ? '$this->setBlockLayout(true)' : '' ),
-					"{$indent}" . '$uid = $this->request->getArgument("'.$pk.'") ?? 0;',
-					"{$indent}" . 'if( empty($uid) ) Frontend::redirect("'.$table.'","list");',
-					"{$indent}" . '$item = $this->repository->findByUid($uid);',
-					"{$indent}" . '$this->view->assign("item",$item);'
-				];
-			}break;
-			case'create':{
-				
-			}break;
-			case'edit':{
-				$result = [
-					( $json ? '$this->setBlockLayout(true)' : '' ),
-					"{$indent}" . '$itemUid = $this->request->getArgument("'.$pk.'") ?? 0;',
-					"{$indent}" . 'if( empty($itemUid) ) Frontend::redirect("'.$table.'","list");',
-					"{$indent}" . '$item = $this->repository->findByUid($itemUid);',
-					"{$indent}" . '$this->view->assign("item",$item);'
-				];
-			}break;
-			case'update':{
-				$result = [
-					( $json ? '$this->setBlockLayout(true)' : '' ),
-					"{$indent}" . '$item = $this->request->getArgument("'.$table.'");',
-					"{$indent}" . 'if( array_key_exists("'.$pk.'",$item) )',
-					"{$indent}{$indent}" . '$this->repository->put($item);',
-					"{$indent}" . 'else',
-					"{$indent}{$indent}" . '$item["'.$pk.'"] = $this->repository->add($item);',
-					"{$indent}" . '$this->view->assign("item",$item);'
-				];
-			}break;
-			case'delete':{
-				$result = [
-					( $json ? '$this->setBlockLayout(true)' : '' ),
-					"{$indent}" . '$itemUid = $this->request->getArgument("'.$pk.'") ?? 0;',
-					"{$indent}" . 'if( empty($itemUid) ) Frontend::redirect("'.$table.'","list");',
-					"{$indent}" . '$this->repository->remove($itemUid);'
-				];
-			}break;
-			default:{
-				$result = ["{$indent}"];
-			} break;
-		}
+		string $pk = 'uid',
+		string $indent = "\t"
+	) {
+		$header = ($json ? '$this->setBlockLayout(true)' : '');
+
+		$result = match ($name) {
+			'list' => [
+				$header,
+				"{$indent}" . '$list = $this->repository->findAll();',
+				"{$indent}" . '$this->view->assign(\"list\", $list);'
+			],
+
+			'show' => [
+				$header,
+				"{$indent}" . '$uid = $this->request->getArgument(\"{$pk}\") ?? 0;',
+				"{$indent}" . "if( empty(\$uid) ) Frontend::redirect(\"{$table}\", \"list\");",
+				"{$indent}" . '$item = $this->repository->findByUid($uid);',
+				"{$indent}" . '$this->view->assign(\"item\", $item);'
+			],
+
+			'edit' => [
+				$header,
+				"{$indent}" . '$itemUid = $this->request->getArgument(\"' . $pk . '\") ?? 0;',
+				"{$indent}" . "if( empty(\$itemUid) ) Frontend::redirect(\"{$table}\", \"list\");",
+				"{$indent}" . '$item = $this->repository->findByUid($itemUid);',
+				"{$indent}" . '$this->view->assign(\"item\", $item);'
+			],
+
+			'update' => [
+				$header,
+				"{$indent}" . '$item = $this->request->getArgument(\"' . $table . '\");',
+				"{$indent}" . "if( empty(\$item) || !is_array(\$item) ) return;",
+				"{$indent}" . "if( array_key_exists(\"{$pk}\", \$item) )",
+				"{$indent}{$indent}" . '$this->repository->put($item);',
+				"{$indent}" . "else",
+				"{$indent}{$indent}" . "\$item[\"{$pk}\"] = \$this->repository->add(\$item);",
+				"{$indent}" . '$this->view->assign(\"item\", $item);'
+			],
+
+			'delete' => [
+				$header,
+				"{$indent}" . '$itemUid = $this->request->getArgument(\"' . $pk . '\") ?? 0;',
+				"{$indent}" . "if( empty(\$itemUid) ) Frontend::redirect(\"{$table}\", \"list\");",
+				"{$indent}" . '$this->repository->remove($itemUid);'
+			],
+
+			default => ["{$indent}"]
+		};
 		
 		return [
-			self::Comment('',"The {$action} action"),
-			"public function {$action}Action(){",
+			self::Comment('', "The {$name} action"),
+			"public function {$name}Action() {",
 			...$result,
-			'}'
+			"}"
 		];
 	}
 	
@@ -342,19 +339,25 @@ class BuildUtility {
 		$modelClass = ucfirst($table);
 		$className = "{$modelClass}Controller";
 		
-		$properties = [
-			self::Comment('','@var Repository $repository The ' . $table . ' repository'),
-			'protected Repository $repository;',
-		];
+		$hasActions = isset($actions) && !empty($actions);
+		
+		$properties = [];
+		
+		if( $hasActions ){
+			$properties []= [
+				self::Comment('','@var '.$modelClass.'Repository $repository The ' . $modelClass .' repository for table '.$table),
+				'protected '.$modelClass.'Repository $repository;',
+			];
+		}
 		
 		$functions = [
 			self::Comment('',"Initialization of every controller action"),
-			"public function initialize(){",
-			"{$indent}" . '$this->repository = new '.$modelClass.'Repository();',
+			"public function initialize(): void {",
+			$hasActions ? ( "{$indent}" . '$this->repository = new '.$modelClass.'Repository();' ) : '',
 			"}"
 		];
 		
-		if( isset($actions) ){
+		if( $hasActions ){
 			foreach( $actions as $action ){
 				$functions = [
 					...$functions,
@@ -363,18 +366,24 @@ class BuildUtility {
 				];
 			}
 		}
+		
 		$propertiesBlock = implode("\n{$indent}", $properties);
 		$functionsBlock = implode("\n{$indent}", $functions);
+		
+		$framework = Devworx::framework();
+		$controller = Devworx::controllerFolder();
+		$model = Devworx::modelFolder();
+		$repository = Devworx::repositoryFolder();
 		
 		return implode(PHP_EOL, [
 			'<?php',
 			'',
-			"namespace {$namespace}\\Controller;",
+			"namespace {$namespace}\\{$controller};",
 			'',
-			"use \\Devworx\\Frontend;",
-			"use \\Devworx\\AbstractController;",
-			"use {$namespace}\\Models\\{$modelClass};",
-			"use {$namespace}\\Repository\\{$modelClass}Repository;",
+			"use \\{$framework}\\Frontend;",
+			"use \\{$framework}\\{$controller}\\Abstract{$controller};",
+			($hasActions ? "use {$namespace}\\{$model}\\{$modelClass};" : ''),
+			($hasActions ? "use {$namespace}\\{$repository}\\{$modelClass}{$repository};" : ''),
 			'',
 			self::Comment('', "Controller for table {$table}"),
 			'',
@@ -471,27 +480,33 @@ class BuildUtility {
 	 * @param array $tables optional table list
 	 * @return void
 	 */
-	public static function CheckModels(string $namespace='Frontend',array $tables=null): void {
-		global $DB;
+	public static function CheckModels(string $context='',array $tables=null): void {
 		if( is_null($tables) || empty($tables) ){
-			$tables = array_column($DB->query("SHOW TABLES;"), 0);	
+			$tables = Database::tables();
 		}
 
-		if( empty($namespace) ) $namespace = Frontend::$context;
-		$namespace = ucfirst($namespace);
-	
+		if( empty($context) ) $context = Devworx::context();
+		$context = ucfirst($context);
+
+		$modelFolder = Devworx::modelFolder();
+		$classesFolder = Devworx::classesFolder();
+
 		foreach($tables as $table) {
-		  $className = ucfirst($table);
-		  $fileName = \Devworx\Frontend::path("Classes", $namespace, "Models", "{$className}.php");
-		  $fqcn = "{$namespace}\\Models\\{$className}";
-		  if (file_exists($fileName)){
-			if( self::UpdateModel( $fqcn, $fileName ) )
-				echo "Updated {$fqcn} from {$table} in {$fileName}\n";
-			continue;
-		  }
-		  $code = self::Model($namespace . '\\Models', $className, "{$table}");
-		  file_put_contents($fileName, $code);
-		  echo "Generated {$fqcn} from {$table} in {$fileName}\n";
+			$className = ucfirst($table);
+			$fileName = \Devworx\Frontend::path( $classesFolder, $namespace, $modelFolder, "{$className}.php");
+			$fqcn = "{$context}\\{$modelFolder}\\{$className}";
+			if (file_exists($fileName)){
+				if( self::UpdateModel( $fqcn, $fileName ) )
+					echo "Updated {$fqcn} from {$table} in {$fileName}\n";
+				continue;
+			}
+			$code = self::Model(
+				"\\{$context}\\{$modelFolder}", 
+				$className, 
+				$table
+			);
+			file_put_contents($fileName, $code);
+			echo "Generated {$fqcn} from {$table} in {$fileName}\n";
 		}
 	}
 }

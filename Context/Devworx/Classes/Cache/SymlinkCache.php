@@ -2,7 +2,7 @@
 
 namespace Devworx\Cache;
 
-use \Devworx\Context;
+use \Devworx\Devworx;
 use \Devworx\Cache\AbstractCache;
 use \Devworx\Cache\AbstractVariableCache;
 use \Devworx\Utility\PathUtility;
@@ -29,8 +29,8 @@ class SymlinkCache extends AbstractVariableCache {
 		return realpath(
 			implode('/',[
 				getcwd(),
-				$GLOBALS['DEVWORX']['PATH']['ROOT'],
-				Context::folder(),
+				Devworx::privatePath(),
+				Devworx::contextFolder(),
 				$context,
 				'Resources',
 				'Public'
@@ -58,7 +58,6 @@ class SymlinkCache extends AbstractVariableCache {
 		$link = $this->symlinkFile($context);
 		if( is_link( $link ) ) unlink($link);
 		
-		$contexts = Context::folder();
 		$target = $this->symlinkTarget($context);	
 		return symlink($target, $link) && 
 			$this->set($context,[
