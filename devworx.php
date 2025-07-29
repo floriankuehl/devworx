@@ -1,49 +1,61 @@
 <?php
-	// Globale Framework-Konfiguration
-	$GLOBALS['DEVWORX'] = [
+	namespace Devworx;
 	
-		//name of the main framework and also the context folder 
-		'FRAMEWORK' => 'Devworx',
+	require_once 'Context/Devworx/Classes/Enums/KeyName.php';
+	use \Devworx\Enums\KeyName;	
+	
+	// Globale Framework-Konfiguration
+	$GLOBALS[ KeyName::Global->value ] = [
+		KeyName::Framework->value => 'Devworx',	//name of the main framework and also the context folder 
+		KeyName::Context->value => 'Devworx', 	//the current context
+		KeyName::Contexts->value => [],			//all the contexts
 		
-		'CONTEXT' => 'Devworx',
-		'CONTEXTS' => [],
-		
-		//parameters for the connect function
-		'DB' => [
+		//parameters for the pdo connection
+		KeyName::Database->value => [
 			"127.0.0.1",
 			"root",
 			"",
-			"devworx"
+			"storytime"
 		],
 
-		//global configurations
-		'CFG' => [
-			'DEBUG' => true,
-			'CONTEXT_HEADER' => 'X-Devworx-Context',
-			'CONTEXT_SERVER' => 'REDIRECT_CONTEXT',
-			'CONTEXT_LOGIN' => 'X-Devworx-Api'
+		KeyName::Debug->value => true,		//debug flag
+
+		//global keys
+		KeyName::Key->value => [
+			KeyName::ContextHeader->value => 'X-Devworx-Context',
+			KeyName::ContextServer->value => 'REDIRECT_CONTEXT',
+			KeyName::ContextLogin->value => 'X-Devworx-Api'
+		],
+		
+		//folders / namespace names
+		KeyName::Folder->value => [
+			KeyName::Cache->value => 'Cache',
+			KeyName::Context->value => 'Context',
+				KeyName::Configuration->value => 'Configuration',
+				KeyName::Classes->value => 'Classes',
+					KeyName::Controller->value => 'Controller',
+					KeyName::Repository->value => 'Repository',
+					KeyName::Model->value => 'Model',
+				KeyName::Resource->value => 'Resources',
+					KeyName::Private->value => 'Private',
+						KeyName::Layout->value => 'Layouts',
+						KeyName::Template->value => 'Templates',
+						KeyName::Partial->value => 'Partials',
+					KeyName::Public->value => 'Public',
+						KeyName::Script->value => 'Scripts',
+						KeyName::Style->value => 'Styles',
+						KeyName::Image->value => 'Images',
+						KeyName::Font->value => 'Fonts',
 		],
 		
 		//path information
-		'PATH' => [
-			'CONTEXT' => 'Context',
-			'CACHE' => 'Cache',
-			'CONFIG' => 'Configuration',
-			'ROOT' => '..',
-			'PUBLIC' => '.',
+		KeyName::Path->value => [
+			KeyName::Private->value => '..', //public to root
+			KeyName::Public->value => '.', //public to public
 		]
 	];
 	
-	// Error Handling
-	if ($GLOBALS['DEVWORX']['CFG']['DEBUG']) {
-		ini_set('display_errors', '1');
-		ini_set('display_startup_errors', '1');
-		error_reporting(E_ALL);
-	} else {
-		ini_set('display_errors', '0');
-		ini_set('display_startup_errors', '0');
-		error_reporting(0);
-	}
+	//file_put_contents('test.json',json_encode($GLOBALS[ KeyName::Global->value ],JSON_PRETTY_PRINT));
 	
-	require_once 'Context/Devworx/Classes/Frontend.php';
-	\Devworx\Frontend::initialize();
+	require_once 'Context/Devworx/Classes/Devworx.php';	
+	Devworx::initialize();

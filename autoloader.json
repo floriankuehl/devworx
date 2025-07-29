@@ -1,0 +1,7 @@
+{
+    "Api": "Context\\Api\\Classes",
+    "Development": "Context\\Development\\Classes",
+    "Devworx": "Context\\Devworx\\Classes",
+    "Documentation": "Context\\Documentation\\Classes",
+    "Frontend": "Context\\Frontend\\Classes"
+}
