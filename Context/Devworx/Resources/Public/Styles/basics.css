@@ -1,0 +1,52 @@
+*,*::before,*::after { box-sizing: border-box }
+
+body { 
+  min-height: 100vh;
+  /*width: max(400px, min(1440px,80vw)); margin-inline: auto;*/
+  width:100%;
+}
+
+a { 
+  text-decoration:none; 
+  color: var(--bs-light);
+  transition: color .5s, background-color .5s;
+}
+button:hover, a:hover { 
+  background-color: var(--bs-highlight) !important; 
+  color: var(--bs-highlight-color) !important; 
+}
+address { margin-bottom: 0 }
+
+.btn {
+	--bs-btn-padding-y: 0.15rem;
+}
+
+.list-group-item {
+	--bs-list-group-color: var(--bs-dark);
+}
+
+.mi {
+  font-family: 'Material Icons';
+  font-weight: normal;
+  font-style: normal;
+  font-size: var(--mi-icon-size);
+  color: var(--bs-dark);
+  display: inline-block;
+  text-decoration:none;
+  line-height: 1;
+  text-transform: none;
+  letter-spacing: normal;
+  word-wrap: normal;
+  white-space: nowrap;
+  direction: ltr;
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+  -moz-osx-font-smoothing: grayscale;
+  font-feature-settings: 'liga';
+  cursor:pointer;
+  transition: color .5s;
+}
+
+.mi-outline { font-family: 'Material Icons Outlined' }
+.mi-round { font-family: 'Material Icons Round' }
+.mi-sharp { font-family: 'Material Icons Sharp' }

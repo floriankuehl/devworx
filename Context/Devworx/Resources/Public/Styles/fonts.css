@@ -1,0 +1,40 @@
+@font-face {
+  font-family: 'Material Icons';
+  font-style: normal;
+  font-weight: 400;
+  src: url(../Fonts/MaterialIcons-Regular.ttf); /* For IE6-8 */
+  src: local('Material Icons'),
+    local('MaterialIcons-Regular'),
+    url(../Fonts/MaterialIcons-Regular.ttf) format("truetype");
+}
+
+@font-face {
+  font-family: 'Material Icons Round';
+  font-style: normal;
+  font-weight: 400;
+  src: url(../Fonts/MaterialIconsRound-Regular.otf); /* For IE6-8 */
+  src: local('Material Icons'),
+    local('MaterialIconsRound-Regular'),
+    url(../Fonts/MaterialIconsRound-Regular.otf) format("opentype");
+}
+
+@font-face {
+  font-family: 'Material Icons Sharp';
+  font-style: normal;
+  font-weight: 400;
+  src: url(../Fonts/MaterialIconsSharp-Regular.otf); /* For IE6-8 */
+  src: local('Material Icons'),
+    local('MaterialIconsSharp-Regular'),
+    url(../Fonts/MaterialIconsSharp-Regular.otf) format("opentype");
+}
+
+@font-face {
+  font-family: 'Material Icons Outlined';
+  font-style: normal;
+  font-weight: 400;
+  src: url(../Fonts/MaterialIconsOutlined-Regular.otf); /* For IE6-8 */
+  src: local('Material Icons'),
+    local('MaterialIconsOutlined-Regular'),
+    url(../Fonts/MaterialIconsOutlined-Regular.otf) format("opentype");
+}
+
