@@ -1,1 +1,0 @@
-<?= json_encode($tables,JSON_PRETTY_PRINT) ?>

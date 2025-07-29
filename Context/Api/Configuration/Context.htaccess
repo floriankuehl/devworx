@@ -1,2 +1,0 @@
-RewriteCond %{REQUEST_URI} ^/api/
-RewriteRule ^api/$ index.php [E=CONTEXT:Api,L,QSA]

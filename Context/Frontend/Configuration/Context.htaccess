@@ -1,2 +1,0 @@
-RewriteCond %{REQUEST_URI} ^/frontend/
-RewriteRule ^frontend/$ index.php [E=CONTEXT:Frontend,L,QSA]

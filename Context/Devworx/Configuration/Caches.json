@@ -1,7 +1,0 @@
-{
-	"Class": "\\Devworx\\Cache\\ClassCache",
-	"Symlink": "\\Devworx\\Cache\\SymlinkCache",
-	"Htaccess": "\\Devworx\\Cache\\HtaccessCache",
-	"Configuration": "\\Devworx\\Cache\\ConfigurationCache",
-	"Repository": "\\Devworx\\Cache\\RepositoryCache"
-}

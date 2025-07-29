@@ -1,1 +1,0 @@
-<div class="fm fm-<?php echo $type; ?> d-flex flex-column"><?php echo $message; ?></div>
