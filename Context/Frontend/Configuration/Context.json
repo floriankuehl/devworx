@@ -1,0 +1,40 @@
+{
+  "head": {
+    "title": "Storytime",
+	"favicon": "",
+    "meta": {
+      "description": ""
+    },
+    "styles": {
+      "index": "/resources/devworx/Styles/index.css",
+	  "frontend": "/resources/frontend/Styles/index.css"
+    },
+    "scripts": {
+      
+    },
+    "content": ""
+  },
+  "body": {
+    "content": "",
+    "styles": {
+      
+    },
+    "scripts": {
+      
+    },
+	"modules": {
+		"setupContext": "/resources/frontend/Scripts/setup.js"
+	}
+  },
+  "system": {
+    "defaultNamespace": "Frontend",
+    "defaultController": "Story",
+    "defaultAction": "List"
+  },
+  "view": {
+    "renderer": "Cascade\\Renderer\\CascadeRenderer"
+  },
+  "namespaces": {
+    "fe": "Frontend\\ViewHelpers"
+  }
+}
