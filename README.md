@@ -44,36 +44,39 @@
 <h3>Development Context</h3>
 <p>This context is used for extending or maintaining the project. This includes managing models, performance tracking, file statistics and backups. This context is not finished yet.</p>
 
-<h2>Rendering</h2>
+<h2>Rendering with Devworx Cascade</h2>
 <p>Devworx comes with a powerful rendering engine named <code>Cascade</code>, that allows the user to perform logic and math inside the template, without switching to PHP.</p>
 <p>Cascade parses a template character-wise with lookahead to identify nodes for the <code>Abstract Syntax Tree</code>. The code is interpreted into Nodes that can be compiled and evaluated.</p>
-<p>Cascade allows specific system functions to be called, but also enables ViewHelper calls by Namespace development</p>
-<p>Cascade is packed with a TemplateParser, Compiler and Cache</p>
 <ul>
   <li>Parser
     <ul>
-      <li>Character based</li>
+      <li>Character based Lexer mechanic</li>
       <li>Look-ahead</li>
     </ul>
   </li>
   <li>
     Interpreter
     <ul>
-      <li>NodeFactory creates Nodes</li>
+      <li>Node based AST</li>
       <li>HTMLNode
         <ul>
           <li>HTMLViewHelpers</li>
         </ul>
       </li>
-      <li>Identifier <code>{a}</code></li>
-      <li>Number <code>{1.23}</code></li>
-      <li>String <code>{'hello'}</code></li>
-      <li>Objects <code>{foo:'hello', bar:user.name, baz:false, bim:3.1415}</code></li>
-      <li>Arrays <code>{0:'hello', 1:user.name, 2:false, 3:3.1415}</code></li>
+      <li>Datatypes
+        <li>
+          <li>Identifier <code>{a}</code></li>
+          <li>Constants <code>{true} {false} {null}</code></li>
+          <li>Number <code>{1.23}</code></li>
+          <li>String <code>{'hello'}</code></li>
+          <li>Object <code>{foo:'hello', bar:user.name, baz:false, bim:3.1415}</code></li>
+          <li>Array <code>{0:'hello', 1:user.name, 2:false, 3:3.1415}</code></li>
+        </li>
+      </li>
       <li>
         Context interaction
         <ul>
-          <li>Namespace aliasing <code>{namespaces.d = Devworx\ViewHelper}
+          <li>Namespace aliasing <code>{namespaces.d = Devworx\ViewHelper}</code></li>
           <li>VariableAccess <code>{user.name}</code></li>
           <li>Assignment <code>{user.role = 'master'}</code></li>
         </ul>
@@ -81,11 +84,12 @@
       <li>
         Operations
         <ul>
-          <li>Unary <code>{a++}, {!a}</code></li>
-          <li>Binary <code>{a + b}, {a ** b}, {a > b}, {a !| b}</code></li>
+          <li>Unary <code>{a++} {!a} {a ?? b}</code></li>
+          <li>Binary <code>{a + b} {a ** b} {a > b} {a !| b}</code></li>
           <li>Ternary <code>{a ? b : c}</code></li>  
           <li>Variable comparison <code>{user.role == 'master' ? 'CHIEF' : 'WORKER'  }</code></li>
           <li>Array/Object merging <code>{foo:'bar'} + {custom:'value'}</code></li>
+          <li>Custom operators <code>{a !| b} {a !& b} {a !^ b} //nor, nand, xnor</code></li>
         </ul>
       </li>
       <li>
@@ -93,17 +97,16 @@
         <ul>
           <li>Named and unnamed arguments</li>
           <li>Regulated PHP System Functions <code>{sqrt()}, {sin(2.31)}, {abs(-4.2)}</code></li>
+          <li>Function aliases <code>{tolower('ABC')} //strtolower</code></li>
           <li>ViewHelpers <code>{d:format.currency(value:3.1415,decimals:2)}</code></li>
         </ul>
       </li>
-      <li>
-          Piping <code>{( user.age * 3.1415 ) -> d:format.currency(symbol:'YEN'} -> strtolower()}</code>
-      </li>
+      <li>Result-Piping <code>{user.age * 3.1415 -> d:format.currency(symbol:'YEN') -> tolower()}</code></li>
     </ul>
   </li>
-  <li>Compiling</li>
-  <li>Evaluating</li>
-  <li>Caching with Devworx FileCache, hashed by variables</li>
+  <li>Compiler constructs a precompiled concatenated array of strings inside a function call for caching</li>
+  <li>Evaluator executes the logic of each Node and evaluates the results</li>
+  <li>Caching works with a custom file cache, hashed by controller, action, context and variables</li>
 </ul>
 
 <h2>Classes</h2>
