@@ -22,32 +22,7 @@
 <p>The solution can be configured via JSON files, based on the provided context, that are stored in the Configuration folder. These files are used to configurate the system itself, as well as as the frontend page.</p>
 <p>See <code>Context/Devworx/Resources/Private/Layouts/Page.php</code> and <code>Context/Devworx/Configuration/Context.json</code></p>
 
-<h2>Contexts</h2>
-
-<h3>Devworx Context</h3>
-<p>This context is used for internal mechanics like Login, Registering, Password Handling and Cache Management. This is basically the user interaction context</p>
-
-<h3>Frontend Context</h3>
-<p>This context is used for the "normal" processing of the user frontend, like a Dashboard or the customized routines of your project.</p>
-<p>For standard rendering, the <code>Cascade\Renderer\CascadeRenderer</code> is used.</p>
-
-<h3>API Context</h3>
-<p>This context is used for <code>JSON</code> based interaction, with controllers. To use the api context, you can either request <code>./api/</code> or provide the <code>X-Devworx-Context</code> header with the login hash of the user as the value.</p>
-<p>As long as the cookie or the header is set, the api can be easily accessed with <code>JavaScript fetch API</code>.</p>
-<p>For standard rendering, the <code>Devworx\Renderer\JSONRenderer</code> is used.</p>
-
-<h3>Documentation Context</h3>
-<p>This context is used for automated documentation with <code>doxygen</code> and can be accessed by requesting <code>./documentation/</code>.</p>
-<p>To ensure doxygen is working, check the <code>Context/Documentation/Configuration/Context.json</code> configuration and <code>Context/Documentation/Configuration/Doxygen.txt</code></p>
-<p>If you want to regenerate the documentation, see <code>DoxygenUtility</code> or flush the <code>Documentation cache</code> via the action <code>CacheController::flush</code>.</p>
-<p>Internally, the <code>Documentation</code> controller routes the HTML files of the Doxygen Documentation to the frontend via the action <code>Documentation::show</code>.</p>
-<p>No renderer is used, because the files are routed directly.</p>
-
-<h3>Development Context</h3>
-<p>This context is used for extending or maintaining the project. This includes managing models, performance tracking, file statistics and backups. This context is not finished yet.</p>
-<p>Here you can test new features without affecting the frontend context directly.</p>
-
-<h2>Rendering with Devworx Cascade</h2>
+<h2>Cascade</h2>
 <p>Devworx comes with a powerful rendering engine named <code>Cascade</code>, that allows the user to perform logic and math inside the template, without switching to PHP.</p>
 <p>Cascade parses a template character-wise with lookahead to identify nodes for the <code>Abstract Syntax Tree</code>. The code is interpreted into Nodes that can be compiled and evaluated.</p>
 <p>Test-Szenarios: <code>Context/Development/Resources/Private/Templates/Backend/Cascade.php</code></p>
@@ -112,6 +87,31 @@
   <li>Evaluator executes the logic of each Node and evaluates the results</li>
   <li>Caching works with a custom file cache, hashed by controller, action, context and variables</li>
 </ul>
+
+<h2>Contexts</h2>
+
+<h3>Devworx Context</h3>
+<p>This context is used for internal mechanics like Login, Registering, Password Handling and Cache Management. This is basically the user interaction context</p>
+
+<h3>Frontend Context</h3>
+<p>This context is used for the "normal" processing of the user frontend, like a Dashboard or the customized routines of your project.</p>
+<p>For standard rendering, the <code>Cascade\Renderer\CascadeRenderer</code> is used.</p>
+
+<h3>API Context</h3>
+<p>This context is used for <code>JSON</code> based interaction, with controllers. To use the api context, you can either request <code>./api/</code> or provide the <code>X-Devworx-Context</code> header with the login hash of the user as the value.</p>
+<p>As long as the cookie or the header is set, the api can be easily accessed with <code>JavaScript fetch API</code>.</p>
+<p>For standard rendering, the <code>Devworx\Renderer\JSONRenderer</code> is used.</p>
+
+<h3>Documentation Context</h3>
+<p>This context is used for automated documentation with <code>doxygen</code> and can be accessed by requesting <code>./documentation/</code>.</p>
+<p>To ensure doxygen is working, check the <code>Context/Documentation/Configuration/Context.json</code> configuration and <code>Context/Documentation/Configuration/Doxygen.txt</code></p>
+<p>If you want to regenerate the documentation, see <code>DoxygenUtility</code> or flush the <code>Documentation cache</code> via the action <code>CacheController::flush</code>.</p>
+<p>Internally, the <code>Documentation</code> controller routes the HTML files of the Doxygen Documentation to the frontend via the action <code>Documentation::show</code>.</p>
+<p>No renderer is used, because the files are routed directly.</p>
+
+<h3>Development Context</h3>
+<p>This context is used for extending or maintaining the project. This includes managing models, performance tracking, file statistics and backups. This context is not finished yet.</p>
+<p>Here you can test new features without affecting the frontend context directly.</p>
 
 <h2>Classes</h2>
 <p>All the utility classes, as well as some core classes, have static functions for easy reuse in different codes. The <code>Devworx\Frontend</code> class handles the whole architecture statically.</p>
