@@ -1,8 +1,10 @@
 <h1>Devworx Framework</h1>
 
 <strong>PHP framework for rapid prototyping</strong>
-<p>This structure facilitates other developers to quickly get into the project and efficiently create prototypes.</p>
-<p>No 3rd Party PHP Libraries are used for essential workload. Doxygen is integrated for automatic HTML documentation.</p>
+<p>This structure facilitates other developers to quickly get into the project and efficiently create prototypes with fast database access and a flexible environment for own extensions.</p>
+<p>No 3rd Party PHP Libraries are used for the essential workload of a MVC driven PHP engine.</p>
+<p>Doxygen is integrated in the <code>Documentation</code> context for automatic HTML documentation.</p>
+<p>The L10n mechanic will be integrated via Cascade ViewHelper.</p>
 <p>The software can be customized and extended as desired, as it is intended to save time for developers.</p>
 
 <h2>Inspiration</h2>
@@ -43,6 +45,7 @@
 
 <h3>Development Context</h3>
 <p>This context is used for extending or maintaining the project. This includes managing models, performance tracking, file statistics and backups. This context is not finished yet.</p>
+<p>Here you can test new features without affecting the frontend context directly.</p>
 
 <h2>Rendering with Devworx Cascade</h2>
 <p>Devworx comes with a powerful rendering engine named <code>Cascade</code>, that allows the user to perform logic and math inside the template, without switching to PHP.</p>
