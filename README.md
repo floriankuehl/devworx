@@ -20,9 +20,12 @@
 <p>The solution can be configured via JSON files, based on the provided context, that are stored in the Configuration folder. These files are used to configurate the system itself, as well as as the frontend page.</p>
 <p>See <code>Context/Devworx/Resources/Private/Layouts/Page.php</code> and <code>Context/Devworx/Configuration/Context.json</code></p>
 
+<h3>Devworx Context</h3>
+<p>This context is used for System-mechanics like Login, Registering and Cache Management. This is basically the user interaction context</p>
+
 <h3>Frontend Context</h3>
-<p>This context is used for the "normal" processing of the user frontend, such as Login, Registering, Dashboard, Caches etc. This is basically the user interaction context.</p>
-<p>For standard rendering, the <code>Devworx\Renderer\FluidRenderer</code> is used.</p>
+<p>This context is used for the "normal" processing of the user frontend, like a Dashboard or the customized routines of your project.</p>
+<p>For standard rendering, the <code>Cascade\Renderer\CascadeRenderer</code> is used.</p>
 
 <h3>API Context</h3>
 <p>This context is used for <code>JSON</code> based interaction, with controllers. To use the api context, you can either request <code>./api/</code> or provide the <code>X-Devworx-Context</code> header with the login hash of the user as the value.</p>
@@ -36,6 +39,9 @@
 <p>Internally, the <code>Documentation</code> controller routes the HTML files of the Doxygen Documentation to the frontend via the action <code>Documentation::show</code>.</p>
 <p>No renderer is used, because the files are routed directly.</p>
 
+<h3>Development Context</h3>
+<p>This context is used for extending or maintaining the project. This includes managing models, performance tracking, file statistics and backups. This context is not finished yet.</p>
+
 <h2>Classes</h2>
 <p>All the utility classes, as well as some core classes, have static functions for easy reuse in different codes. The <code>Devworx\Frontend</code> class handles the whole architecture statically.</p>
 <p>Controllers, Requests, Repositories, Models, Renderers and Views work by instancing.</p>
@@ -46,8 +52,8 @@
 <p>Exceptions are caught by an own Exception-Handler.</p>
 
 <h2>Database</h2>
-<p>The <code>Database</code> class serves as a MySQLi database interface and is accessible via <code>global $DB</code>. It contains functions like <code>query, statement, get, add, put and remove.</code></p>
-<p>Database entries in Devworx have a basic structure that allows for easy data handling and mapping to any <code>AbstractModel</code>.</p>
+<p>The <code>Database</code> class serves as a PDO database interface and is accessible by calling it statically. It contains functions like <code>query, statement, get, add, put and remove.</code></p>
+<p>Database entries (aka Models) in Devworx have a basic structure that allows for easy data handling and mapping to any <code>AbstractModel</code>.</p>
 <ul>
   <li><b>uid</b> <span>PK int (Unique ID of the row)</span></li>
   <li><b>cruser</b> <span>int (UserID of the creation user)</span></li>
