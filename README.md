@@ -13,15 +13,17 @@
 <h3>Context-Based MVC Solution</h3>
 <p>The solution can be controlled in the frontend and API context via controllers and actions. The <code>LoginHash</code> can be provided by Cookie or via request header.</p>
 <p>Devworx comes with the idea to use itself in different contexts, based on JSON configuration files. The available contexts are globally defined in the <code>devworx.php</code> and are used by the <code>\Devworx\Frontend</code> class.</p>
-<p>The currently available contexts are <code>Devworx, Frontend, Api and Documentation</code>.</p>
+<p>The currently available contexts are <code>Devworx, Frontend, Api, Development and Documentation</code>.</p>
 <p>See <code>./Public/.htaccess</code> and <code>Devworx\Cache\HtaccessCache</code> to learn, how the context is determined by URI.</p>
 
 <h3>Configuration</h3>
 <p>The solution can be configured via JSON files, based on the provided context, that are stored in the Configuration folder. These files are used to configurate the system itself, as well as as the frontend page.</p>
 <p>See <code>Context/Devworx/Resources/Private/Layouts/Page.php</code> and <code>Context/Devworx/Configuration/Context.json</code></p>
 
+<h2>Contexts</h2>
+
 <h3>Devworx Context</h3>
-<p>This context is used for System-mechanics like Login, Registering and Cache Management. This is basically the user interaction context</p>
+<p>This context is used for internal mechanics like Login, Registering, Password Handling and Cache Management. This is basically the user interaction context</p>
 
 <h3>Frontend Context</h3>
 <p>This context is used for the "normal" processing of the user frontend, like a Dashboard or the customized routines of your project.</p>
@@ -42,6 +44,68 @@
 <h3>Development Context</h3>
 <p>This context is used for extending or maintaining the project. This includes managing models, performance tracking, file statistics and backups. This context is not finished yet.</p>
 
+<h2>Rendering</h2>
+<p>Devworx comes with a powerful rendering engine named <code>Cascade</code>, that allows the user to perform logic and math inside the template, without switching to PHP.</p>
+<p>Cascade parses a template character-wise with lookahead to identify nodes for the <code>Abstract Syntax Tree</code>. The code is interpreted into Nodes that can be compiled and evaluated.</p>
+<p>Cascade allows specific system functions to be called, but also enables ViewHelper calls by Namespace development</p>
+<p>Cascade is packed with a TemplateParser, Compiler and Cache</p>
+<ul>
+  <li>Parser
+    <ul>
+      <li>Character based</li>
+      <li>Look-ahead</li>
+    </ul>
+  </li>
+  <li>
+    Interpreter
+    <ul>
+      <li>NodeFactory creates Nodes</li>
+      <li>HTMLNode
+        <ul>
+          <li>HTMLViewHelpers</li>
+        </ul>
+      </li>
+      <li>Identifier <code>{a}</code></li>
+      <li>Number <code>{1.23}</code></li>
+      <li>String <code>{'hello'}</code></li>
+      <li>Objects <code>{foo:'hello', bar:user.name, baz:false, bim:3.1415}</code></li>
+      <li>Arrays <code>{0:'hello', 1:user.name, 2:false, 3:3.1415}</code></li>
+      <li>
+        Context interaction
+        <ul>
+          <li>Namespace aliasing <code>{namespaces.d = Devworx\ViewHelper}
+          <li>VariableAccess <code>{user.name}</code></li>
+          <li>Assignment <code>{user.role = 'master'}</code></li>
+        </ul>
+      </li>
+      <li>
+        Operations
+        <ul>
+          <li>Unary <code>{a++}, {!a}</code></li>
+          <li>Binary <code>{a + b}, {a ** b}, {a > b}, {a !| b}</code></li>
+          <li>Ternary <code>{a ? b : c}</code></li>  
+          <li>Variable comparison <code>{user.role == 'master' ? 'CHIEF' : 'WORKER'  }</code></li>
+          <li>Array/Object merging <code>{foo:'bar'} + {custom:'value'}</code></li>
+        </ul>
+      </li>
+      <li>
+        Functions
+        <ul>
+          <li>Named and unnamed arguments</li>
+          <li>Regulated PHP System Functions <code>{sqrt()}, {sin(2.31)}, {abs(-4.2)}</code></li>
+          <li>ViewHelpers <code>{d:format.currency(value:3.1415,decimals:2)}</code></li>
+        </ul>
+      </li>
+      <li>
+          Piping <code>{( user.age * 3.1415 ) -> d:format.currency(symbol:'YEN'} -> strtolower()}</code>
+      </li>
+    </ul>
+  </li>
+  <li>Compiling</li>
+  <li>Evaluating</li>
+  <li>Caching with Devworx FileCache, hashed by variables</li>
+</ul>
+
 <h2>Classes</h2>
 <p>All the utility classes, as well as some core classes, have static functions for easy reuse in different codes. The <code>Devworx\Frontend</code> class handles the whole architecture statically.</p>
 <p>Controllers, Requests, Repositories, Models, Renderers and Views work by instancing.</p>
@@ -52,7 +116,7 @@
 <p>Exceptions are caught by an own Exception-Handler.</p>
 
 <h2>Database</h2>
-<p>The <code>Database</code> class serves as a PDO database interface and is accessible by calling it statically. It contains functions like <code>query, statement, get, add, put and remove.</code></p>
+<p>The <code>Database</code> class serves as a PDO database interface and is accessible by calling it statically. It contains basic functions for database interaction.</p>
 <p>Database entries (aka Models) in Devworx have a basic structure that allows for easy data handling and mapping to any <code>AbstractModel</code>.</p>
 <ul>
   <li><b>uid</b> <span>PK int (Unique ID of the row)</span></li>
@@ -79,7 +143,12 @@
 <p>The <code>LoginHash</code> consists of the login name and password. The passwords are NOT stored in the database, only the hashes. The hash is used directly to retrieve user information from the database, also as the API key for JSON access.</p>
 
 <h2>Rendering</h2>
-<p>The rendering is done via <code>AbstractRenderer</code>. The <code>FluidRenderer</code> enables string templating with placeholders. The <code>JSONRenderer</code> allows direct output in JSON. ViewHelpers are (yet) not available.</p>
+<p>The rendering is done via <code>AbstractRenderer</code>. Devworx contains multiple types of renderers.</p>
+<ul>
+  <li>The <code>CascadeRenderer</code> enables Cascade Syntax in templates</li>
+  <li>The <code>FluidRenderer</code> enables very simple string templating with placeholders.</li>
+  <li>The <code>JSONRenderer</code> allows direct output in JSON</li>
+</ul>
 
 <h3>Templating</h3>
 <p>The solution uses the principle of layout, template, and partial. The layout provides the outer frame that is the same for all results and renders the corresponding template of the requested action. Partials are small code snippets that can be used in templates and layouts, as well as in the actions, to generate output.</p>
