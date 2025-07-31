@@ -2,7 +2,7 @@
 
 <strong>PHP framework for rapid prototyping</strong>
 <p>This structure facilitates other developers to quickly get into the project and efficiently create prototypes.</p>
-<p>No 3rd Party PHP Libraries are used. Doxygen is integrated for automatic HTML documentation.</p>
+<p>No 3rd Party PHP Libraries are used for essential workload. Doxygen is integrated for automatic HTML documentation.</p>
 <p>The software can be customized and extended as desired, as it is intended to save time for developers.</p>
 
 <h2>Inspiration</h2>
