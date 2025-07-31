@@ -47,6 +47,7 @@
 <h2>Rendering with Devworx Cascade</h2>
 <p>Devworx comes with a powerful rendering engine named <code>Cascade</code>, that allows the user to perform logic and math inside the template, without switching to PHP.</p>
 <p>Cascade parses a template character-wise with lookahead to identify nodes for the <code>Abstract Syntax Tree</code>. The code is interpreted into Nodes that can be compiled and evaluated.</p>
+<p>Test-Szenarios: <code>Context/Development/Resources/Private/Templates/Backend/Cascade.php</code></p>
 <ul>
   <li>Parser
     <ul>
