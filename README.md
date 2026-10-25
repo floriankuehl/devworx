@@ -3,8 +3,6 @@
 <strong>PHP framework for rapid prototyping</strong>
 <p>This structure facilitates other developers to quickly get into the project and efficiently create prototypes with fast database access and a flexible environment for own extensions.</p>
 <p>No 3rd Party PHP Libraries are used for the essential workload of a MVC driven PHP engine.</p>
-<p>Doxygen is integrated in the <code>Documentation</code> context for automatic HTML documentation.</p>
-<p>The L10n mechanic will be integrated via Cascade ViewHelper.</p>
 <p>The software can be customized and extended as desired, as it is intended to save time for developers.</p>
 
 <h2>Inspiration</h2>
