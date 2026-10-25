@@ -22,9 +22,16 @@
 <p>The solution can be configured via JSON files, based on the provided context, that are stored in the Configuration folder. These files are used to configurate the system itself, as well as as the frontend page.</p>
 <p>See <code>Context/Devworx/Resources/Private/Layouts/Page.php</code> and <code>Context/Devworx/Configuration/Context.json</code></p>
 
+<h2>Rendering</h2>
+<p>The rendering logic follows the Layout &rarr; Template &rarr; Partial pattern. The Devworx configurations are used to provide basic interfaces for content placeholders.</p>
+<p>The basic Renderer builds a page array and performs string replacement (<code>{var}</code> = ...) on ob-buffered outputs in a seperate context.</p>
+<p>Variables are extracted from an array, so any data can be provided for Templates and Partials.</p>
+
 <h2>Cascade</h2>
-<p>Devworx comes with a powerful rendering engine named <code>Cascade</code>, that allows the user to perform logic and math inside the template, without switching to PHP.</p>
+<p><strong>Partially integrated!</strong></p>
+<p>Devworx comes with a powerful rendering engine named <code>Cascade</code> (in development), that performs logic, loops and math inside the template, without switching to PHP.</p>
 <p>Cascade parses a template character-wise with lookahead to identify nodes for the <code>Abstract Syntax Tree</code>. The code is interpreted into Nodes that can be compiled and evaluated.</p>
+<p>Templates, Layouts and Partials can be compiled to native PHP and can therefore be cached for maximum performance.</p>
 <p>Test-Szenarios: <code>Context/Development/Resources/Private/Templates/Backend/Cascade.php</code></p>
 <ul>
   <li>Parser
