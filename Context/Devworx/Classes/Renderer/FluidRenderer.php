@@ -233,7 +233,14 @@ class FluidRenderer extends AbstractRenderer {
 	 * @return string
 	 */
 	public function renderFile(string $fileName,array $variables,string $renderContext='',string $encoding=''): string {
-		return $this->render(file_get_contents($fileName), $variables, $renderContext,$encoding);
+		ob_start();
+		$result = include($fileName);
+		if( is_numeric($result) )
+			$result = ob_get_clean();
+		else
+			ob_end_flush();
+
+		return $this->render($result, $variables, $renderContext,$encoding);
 	}	
 }
 
