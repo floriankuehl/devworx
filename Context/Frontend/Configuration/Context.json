@@ -1,6 +1,6 @@
 {
   "head": {
-    "title": "Storytime",
+    "title": "Devworx Demo",
 	"favicon": "",
     "meta": {
       "description": ""
@@ -28,11 +28,11 @@
   },
   "system": {
     "defaultNamespace": "Frontend",
-    "defaultController": "Story",
-    "defaultAction": "List"
+    "defaultController": "Default",
+    "defaultAction": "Index"
   },
   "view": {
-    "renderer": "Cascade\\Renderer\\CascadeRenderer"
+    "renderer": "Cascade\\Renderer\\FluidRenderer"
   },
   "namespaces": {
     "fe": "Frontend\\ViewHelpers"
