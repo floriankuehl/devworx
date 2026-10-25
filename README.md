@@ -19,9 +19,10 @@
 <p>See <code>./Public/.htaccess</code> and <code>Devworx\Cache\HtaccessCache</code> to learn, how the context is determined by URI.</p>
 
 <h3>Configuration</h3>
-<p>The solution can be configured via JSON files, based on the provided context, that are stored in the Configuration folder. These files are used to configurate the system itself, as well as as the frontend page.</p>
+<p>The system can be configured via JSON files, based on the provided context, that are stored in the Configuration folder. These files are used to configurate the system itself, as well as as the frontend page.</p>
 <p>See <code>Context/Devworx/Resources/Private/Layouts/Page.php</code> and <code>Context/Devworx/Configuration/Context.json</code></p>
-<p>The global PHP configuration can be used to change basic behaviour of Devworx, like naming of the Controller-Action-Parameters.</p>
+<p>The global PHP configuration can be used to change basic the basic Enum-driven system-wide naming convention in Devworx.</p>
+<p>See <code>./devworx.php</code></p>
 
 <h2>Contexts</h2>
 
@@ -30,7 +31,7 @@
 
 <h3>Frontend Context</h3>
 <p>This context is used for the "normal" processing of the user frontend, like a Dashboard or the customized routines of your project.</p>
-<p>For standard rendering, the <code>Cascade\Renderer\CascadeRenderer</code> is used.</p>
+<p>For standard rendering, the <code>Cascade\Renderer\FluidRenderer</code> is used.</p>
 
 <h3>API Context</h3>
 <p>This context is used for <code>JSON</code> based interaction, with controllers. To use the api context, you can either request <code>./api/</code> or provide the <code>X-Devworx-Context</code> header with the login hash of the user as the value.</p>
