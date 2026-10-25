@@ -228,7 +228,7 @@ class ApiUtility {
 	 * @param bool $raw Flag to determine if the result of the request should be undecoded
 	 * @return string|array
 	 */
-	public static function POST(
+	public static function PUT(
 		string $controller,
 		string $action,
 		array $arguments=null,
