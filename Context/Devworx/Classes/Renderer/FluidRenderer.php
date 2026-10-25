@@ -201,8 +201,8 @@ class FluidRenderer extends AbstractRenderer {
 	 *
 	 * @param mixed $source The given source template text
 	 * @param array $variables The provided variables for this renderer
-	 * @param string $encoding The standard encoding for this renderer
 	 * @param string $renderContext the context of the renderer
+	 * @param string $encoding The standard encoding for this renderer
 	 * @return string
 	 */
 	public function render(mixed $template,array $variables,string $renderContext='',string $encoding=''): string {
@@ -222,6 +222,19 @@ class FluidRenderer extends AbstractRenderer {
 		}
 		return (string) $template;
 	}
+	
+	/**
+	 * Renders a file content
+	 *
+	 * @param string $fileName The given source file
+	 * @param array $variables The provided variables for this renderer
+	 * @param string $renderContext the context of the renderer
+	 * @param string $encoding The standard encoding for this renderer
+	 * @return string
+	 */
+	public function renderFile(string $fileName,array $variables,string $renderContext='',string $encoding=''): string {
+		return $this->render(file_get_contents($fileName), $variables, $renderContext,$encoding);
+	}	
 }
 
 ?>
