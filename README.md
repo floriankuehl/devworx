@@ -80,13 +80,12 @@
 <p>The codes like classes and private resources are located in the root folder of the solution, but the frontend files are located in the <code>Public</code> folder, aswell as the JavaScript classes for all custom HTML elements and the API integration. The domain for the projects should point to the <code>./Public</code> folder.</p>
 
 <h4>Security Features</h4>
-<p><code>AuthUtility</code> provides basic security functions that can be quickly integrated.</p>
-
-<h4>Credential Hashing</h4>
-<p>The <code>LoginHash</code> consists of the login name and password. The passwords are NOT stored in the database, only the hashes. The hash is used directly to retrieve user information from the database, also as the API key for JSON access.</p>
+<p><code>AuthUtility</code> provides basic security functions that can be quickly integrated and changed for further improvements.</p>
+<p>The user passwords are NOT stored in the database, only the hashes. A MD5-hash is used by default <code>md5(user|password)</code> as a unique identificator for a user, and also as the API key for JSON access. To change hashing method, see <code>Context/Devworx/Classes/Utility/AuthUtility.php</code>.</p>
 
 <h2>Rendering</h2>
 <p>The render-pipeline follows the Layout &rarr; Template &rarr; Partial pattern with buffered outputs for each instance.</p>
+<p>The <code>ConfigurationRenderer</code> collects data from the Context-Configurations and provides included resource paths, meta data and basic page data for rendering.</p>
 <p>The Layout provides the outer frame that is the same for all results and renders the corresponding Template of the requested action.</p>
 <p><code>?controller=Foo&action=bar</code> will render the Template <code>./Resources/Private/Templates/Foo/Bar.php</code></p>
 <p>Partials are meant for reusable snippets, that can be called in loops.</p>
@@ -97,10 +96,6 @@
   <li>The <code>JSONRenderer</code> allows direct output in JSON. Templates are used to allow specific field keys of the result array.</li>
   <li>The <code>CascadeRenderer</code> uses Cascade Syntax in templates <strong>in Development!</strong></li>
 </ul>
-
-<h3>Templating</h3>
-<p>The solution uses the principle of layout, template, and partial. </p>
-<p>See <code>Devworx\View</code> class for further clearance.</p>
 
 <h3>Resources</h3>
 <p>A distinction is made between private and public resources. Private resources are, for example, layouts, templates, and partials. Public resources are all styles, images, icons, and scripts. All private resources are located in the <code>Context/{Context}/Resources/Private</code> folder. The public resources are located in the <code>Context/{Context}/Resources/Public</code> folder. All root paths can be configured in the <code>Context/{Context}/Configuration/Context.json</code> files.</p>
